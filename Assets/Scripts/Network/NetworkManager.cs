@@ -15,6 +15,7 @@ public class NetworkManager : MonoBehaviour {
 
 	public static string strCreateID,
 				  		 strCreatePW,
+						 strUserName, strBirthday, strEmail, strNickname,
 				 		 strPhoneNumber 	= null,
 				 		 strPhoneNumberC 	= null;
 
@@ -54,14 +55,6 @@ public class NetworkManager : MonoBehaviour {
 		_rl = new Rect(_px, _py, _dx, _dy);
 		if (GUI.Button (_rl, _str)) {
 			sendCode (Protocol.PTC_CREATEID, null);
-			strCreateID 		= "mtbaseballid";
-			strCreatePW 		= SSUtil.setPassword( "a1s2d3f4" );
-			strPhoneNumber		= "01012345678";
-			strPhoneNumberC		= SSUtil.setPhoneNumber(strPhoneNumber);
-			Debug.Log ("strCreateID:" + strCreateID);
-			Debug.Log ("strCreatePW:" + strCreatePW);
-			Debug.Log ("strPhoneNumber:" + strPhoneNumber);
-			Debug.Log ("strPhoneNumberC:" + strPhoneNumberC);
 		}
 
 		_str = "PTC_LOGIN";
@@ -103,13 +96,28 @@ public class NetworkManager : MonoBehaviour {
 				Debug.Log("[C -> S] PTC_CREATEID");
 				#endif
 				//1. make URL
-				url = urlbase + Protocol.PTC_CREATEID;
+				url = urlbase + Protocol.PTG_CREATEID;
 
 				//2. setting form
-				_form.AddField("gameid", strCreateID);
-				_form.AddField("password", strCreatePW);
+				strCreateID 		= "mtxxxx3";
+				strCreatePW 		= SSUtil.setPassword( "a1s2d3f4" );
+				strUserName 		= "mtusername3";
+				strBirthday 		= "19980813";
+				strPhoneNumber		= "01012345673";
+				strPhoneNumberC 	= SSUtil.setPhoneNumber (strPhoneNumber);
+				strEmail			= "mtxxxx3@xxx.xxx";
+				strNickname	 		= "ntnickname3";
+				//Debug.Log ("strCreatePW :" + strCreatePW);
+				//Debug.Log ("strPhoneNumber :" + strPhoneNumber + " > " + strPhoneNumberC);
+
+				_form.AddField("gameid", 	strCreateID);
+				_form.AddField("password",	strCreatePW);
+				_form.AddField("username", 	strUserName);
+				_form.AddField("birthday", 	strBirthday);
+				_form.AddField("phone", 	strPhoneNumberC);
+				_form.AddField("email", 	strEmail);
+				_form.AddField("nickname", 	strNickname);
 				_form.AddField("version", "" + Protocol.VERSION);
-				_form.AddField("phone", strPhoneNumberC);
 
 				//3. sending
 				#if NET_DEBUG_MODE
@@ -233,9 +241,32 @@ public class NetworkManager : MonoBehaviour {
 				SaveIdPwToLocalDB(strCreateID, strCreatePW);
 
 				break;
+			case Protocol.RESULT_ERROR_BLOCK_USER:
+				#if NET_DEBUG_MODE
+				Debug.Log("PTS_CREATEID > error > 블럭처리된 아이디 입니다.");
+				#endif
+				break;
+
 			case Protocol.RESULT_ERROR_ID_DUPLICATE:
 				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CREATEID > error > 아이디 중복");
+				#endif
+				break;
+			case Protocol.RESULT_ERROR_ID_CREATE_MAX:
+				#if NET_DEBUG_MODE
+				Debug.Log("PTS_CREATEID > error > 전화 번호로 허용갯수 초과입니다.");
+				#endif
+				break;
+
+			case Protocol.RESULT_ERROR_EMAIL_DUPLICATE:
+				#if NET_DEBUG_MODE
+				Debug.Log("PTS_CREATEID > error > 이메일이 중복입니다.");
+				#endif
+				break;
+
+			case Protocol.RESULT_ERROR_NICKNAME_DUPLICATE:
+				#if NET_DEBUG_MODE
+				Debug.Log("PTS_CREATEID > error > 닉네임이 중복입니다.");
 				#endif
 				break;
 			default:

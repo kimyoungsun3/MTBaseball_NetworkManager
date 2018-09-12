@@ -137,10 +137,13 @@ public class NetworkManager : MonoBehaviour {
 				url = urlbase + Protocol.PTG_LOGIN;			
 			
 				//2. setting form
-				strCreateID = "";
-				strCreatePW = "";
+				strCreateID = "mtxxxx3";
+				strCreatePW = "049000s1i0n7t8445289";
+
 				_form.AddField("gameid", strCreateID);			
-				_form.AddField("password", strCreatePW);	
+				_form.AddField("password", strCreatePW);
+				_form.AddField("version", "" + Protocol.VERSION);
+				_form.AddField("password", "192.168.0.8");
 			
 				//3. sending			
 				#if NET_DEBUG_MODE			
@@ -288,23 +291,85 @@ public class NetworkManager : MonoBehaviour {
 				Debug.Log("PTS_LOGIN > success");
 				#endif
 
-				GameData.pathUrl = _parser.getString("patchurl");	//패치URLDebug.Log ( parser.getString("patchurl") );.
-				//현재 서버 시간 2014-11-14 10:49:57.
-				//Callendar.SetServerTime( DateTime.Parse( parser.getString("curdate") ) );
-
-				//유져인포.
+				//userinfo.
 				_parser.parsing ( _xml , "userinfo" );
-
 				if (_parser.next ())
 				{
-					//UserData.ins.cashcost = parser.getInt ( "cashcost" );
+					//이시간을 토대로 시간을 계산한다.
+					DateTime.Parse( _parser.getString("curdate") );	//2018-09-12 18:07:28.53
+
+					//유저 개인정보...
+					_parser.getInt("cashcost");						//캐쉬.(다이아) -> 반드시 property로 2개 이상으로 분해해서 저장하세요.
+					_parser.getInt("sid");							//세션ID값 -> 이값으로 서버에 요청하는 경우가 있다.
+					_parser.getInt("level");			
+					_parser.getInt("exp");				
+					_parser.getInt("tutorial");						//tutorial -> 튜토리얼 안봄(0), 봄(1)
+
+					//유저가 가입에 입력한 정보.
+					_parser.getString("username");					//
+					_parser.getString("birthday");					//
+					_parser.getString("email");						//
+					_parser.getString("nickname");					//
+					_parser.getString("phone");						//
+
+					//착용아이템의 리스트 인덱스 .
+					//listidx -> 보유테이블의 listidx 검색해서 해당 아이템을 찾는다.
+					_parser.getInt("helmetlistidx");				//
+					_parser.getInt("shirtlistidx");					//
+					_parser.getInt("pantslistidx");					//
+					_parser.getInt("gloveslistidx");				//
+					_parser.getInt("shoeslistidx");					//
+					_parser.getInt("batlistidx");					//
+					_parser.getInt("balllistidx");					//
+					_parser.getInt("gogglelistidx");				//
+					_parser.getInt("wristbandlistidx");				//
+					_parser.getInt("elbowpadlistidx");				//
+					_parser.getInt("beltlistidx");					//
+					_parser.getInt("kneepadlistidx");				//
+					_parser.getInt("sockslistidx");					//
+
+					//개별저장 파라미터(필요에 의해 클라이언트가 저장해서 사용하시면 됩니다.)...
+					_parser.getInt("param0");						//
+					_parser.getInt("param1");						//
+					_parser.getInt("param2");						//
+					_parser.getInt("param3");						//
+					_parser.getInt("param4");						//
+					_parser.getInt("param5");						//
+					_parser.getInt("param6");						//
+					_parser.getInt("param7");						//
+					_parser.getInt("param8");						//
+					_parser.getInt("param9");						//
 				}
 
-				//선물정보.
-				//GameData.ReadGiftItem ( parser , _xml , "giftitem" );
+				//itemowner(보유템).
+				_parser.parsing ( _xml , "itemowner" );
+				while (_parser.next ())
+				{
+					_parser.getInt("listidx");						//
+					_parser.getInt("invenkind");					//
+					_parser.getInt("itemcode");						//
+					_parser.getInt("cnt");							//
+					_parser.getInt("randserial");					//
+				}
 
-				//현재대전내용(1건).
-				//UserData.battleRnk_current.Parser(parser, _xml, "rkcurrank");
+				//선물정보(우편함 -> 선물, 메세지).
+				//GameData.ReadGiftItem ( parser , _xml , "giftitem" );
+				_parser.parsing ( _xml , "giftitem" );
+				while (_parser.next ())
+				{
+					_parser.getInt("idx");					
+					_parser.getInt("giftkind");				
+					_parser.getString("message");			
+					_parser.getInt("itemcode");					
+					_parser.getInt("giftdate");					
+					_parser.getString("giftid");					
+					_parser.getInt("cnt");
+				}
+
+				//GameData.pathUrl = _parser.getString("patchurl");	//패치URLDebug.Log ( parser.getString("patchurl") );.
+				//공지사항 정보...
+
+
 				break;
 			case Protocol.RESULT_ERROR_SERVER_CHECKING:
 				#if NET_DEBUG_MODE

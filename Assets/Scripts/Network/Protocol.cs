@@ -190,8 +190,59 @@ public class Protocol{
 						MODE_RETURN_STATE_SENDED			= 1, 	// 이미요청.		
 						MODE_RETURN_STATE_LONG				= 2, 	// 장기미접속.
 
+						XXXXXXXXXXXXXXXXXXXXXXXXXX1			= -1;
 
-						XXXXXXXXXXXXXXXXXXXXXXXXXX			= -1;
+	public const int 	//아이템의 인벤, 대분류, 중분류.
+						//인벤의 종류.
+						USERITEM_INVENKIND_WEAR				= 1,	//착용인벤.
+						USERITEM_INVENKIND_PIECE			= 2,	//조각인벤.
+						USERITEM_INVENKIND_CONSUME			= 3,	//소비인벤.
+
+						//아이템 대분류...
+						ITEM_MAINCATEGORY_WEARPART 			= 1,	//장착템(1)
+						ITEM_MAINCATEGORY_PIECEPART			= 15,	//조각템(15)
+						ITEM_MAINCATEGORY_COMSUME			= 40,	//소모품(40)
+						ITEM_MAINCATEGORY_CASHCOST 			= 50,	//캐쉬선물(50)
+						ITEM_MAINCATEGORY_STATICINFO 		= 500,	//정보수집(500)
+						ITEM_MAINCATEGORY_LEVELUPREWARD		= 510,	//레벨업 보상(510)
+
+						//MT 아이템 소분류.
+						ITEM_SUBCATEGORY_WEAR_HELMET		= 1,	//헬멧(1)
+						ITEM_SUBCATEGORY_WEAR_SHIRT			= 2,	//상의(2)
+						ITEM_SUBCATEGORY_WEAR_PANTS			= 3,	//하의(3)
+						ITEM_SUBCATEGORY_WEAR_GLOVES		= 4,	//장갑(4)
+						ITEM_SUBCATEGORY_WEAR_SHOES			= 5,	//신발(5)
+						ITEM_SUBCATEGORY_WEAR_BAT			= 6,	//방망이(6)
+						ITEM_SUBCATEGORY_WEAR_BALL			= 7,	//색깔공(7)
+						ITEM_SUBCATEGORY_WEAR_GOGGLE		= 8,	//고글(8)
+						ITEM_SUBCATEGORY_WEAR_WRISTBAND		= 9,	//손목 아대(9)
+						ITEM_SUBCATEGORY_WEAR_ELBOWPAD		= 10,	//팔꿈치 보호대(10)
+						ITEM_SUBCATEGORY_WEAR_BELT			= 11,	//벨트(11)
+						ITEM_SUBCATEGORY_WEAR_KNEEPAD		= 12,	//무릎 보호대(12)
+						ITEM_SUBCATEGORY_WEAR_SOCKS			= 13,	//양말(13)
+						ITEM_SUBCATEGORY_PIECE_HELMET	   	= 15,	//헬멧 조각(15)
+						ITEM_SUBCATEGORY_PIECE_SHIRT	    = 16,	//상의 조각(16)
+						ITEM_SUBCATEGORY_PIECE_PANTS	   	= 17,	//하의 조각(17)
+						ITEM_SUBCATEGORY_PIECE_GLOVES	    = 18,	//장갑 조각(18)
+						ITEM_SUBCATEGORY_PIECE_SHOES	    = 19,	//신발 조각(19)
+						ITEM_SUBCATEGORY_PIECE_BAT		    = 20,	//방망이 조각(20)
+						ITEM_SUBCATEGORY_PIECE_BALL			= 21,	//색깔공 조각(21)
+						ITEM_SUBCATEGORY_PIECE_GOGGLE	   	= 22,	//고글 조각(22)
+						ITEM_SUBCATEGORY_PIECE_WRISTBAND   	= 23,	//손목 아대 조각(23)
+						ITEM_SUBCATEGORY_PIECE_ELBOWPAD		= 24,	//팔꿈치 보호대 조각(24)
+						ITEM_SUBCATEGORY_PIECE_BELT			= 25,	//벨트 조각(25)
+						ITEM_SUBCATEGORY_PIECE_KNEEPAD	    = 26,	//무릎 보호대 조각(26)
+						ITEM_SUBCATEGORY_PIECE_SOCKS	    = 27,	//양말 조각(27)
+						ITEM_SUBCATEGORY_BOX_WEAR			= 40,	//조각 랜덤박스(40)
+						ITEM_SUBCATEGORY_BOX_PIECE			= 41,	//의상 랜덤박스(41)
+						ITEM_SUBCATEGORY_BOX_ADVICE			= 42,	//조언 패키지 박스(42)
+						ITEM_SUBCATEGORY_SCROLL_EVOLUTION	= 45,	//합성초월주문서(45)
+						ITEM_SUBCATEGORY_SCROLL_COMMISSION	= 46,	//수수료주문서(46)
+						ITEM_SUBCATEGORY_CASHCOST			= 50,	//다이아(50)
+						ITEM_SUBCATEGORY_STATICINFO			= 500,	//정보수집(500)
+						ITEM_SUBCATEGORY_LEVELUPREWARD		= 900,	//레벨업 보상(510)
+
+						XXXXXXXXXXXXXXXXXXXXXXXXXX2			= -1;
 		
 	#endregion
 }

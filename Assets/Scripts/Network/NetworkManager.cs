@@ -290,30 +290,36 @@ public class NetworkManager : MonoBehaviour {
 				#if NET_DEBUG_MODE
 				Debug.Log("PTS_LOGIN > success");
 				#endif
-
+				//-----------------------------------------------------
 				//userinfo.
+				// > 유저의 일반 적인 정보가 들어 있음...
+				//-----------------------------------------------------
 				_parser.parsing ( _xml , "userinfo" );
 				if (_parser.next ())
 				{
+					//************************************
 					//이시간을 토대로 시간을 계산한다.
+					// > 가장 중요한 부분입니다. 
+					// > 별도로 시간 싱크는 계속 보내주면 별도로 맞추고 싶을 때를 위해 별도 프로 토콜을 사용할 수 있습니다.
+					//************************************
 					DateTime.Parse( _parser.getString("curdate") );	//2018-09-12 18:07:28.53
 
 					//유저 개인정보...
 					_parser.getInt("cashcost");						//캐쉬.(다이아) -> 반드시 property로 2개 이상으로 분해해서 저장하세요.
 					_parser.getInt("sid");							//세션ID값 -> 이값으로 서버에 요청하는 경우가 있다.
-					_parser.getInt("level");			
-					_parser.getInt("exp");				
+					_parser.getInt("exp");							//누적된 경험치 이다.
+					_parser.getInt("level");								
 					_parser.getInt("tutorial");						//tutorial -> 튜토리얼 안봄(0), 봄(1)
 
 					//유저가 가입에 입력한 정보.
-					_parser.getString("username");					//
-					_parser.getString("birthday");					//
+					_parser.getString("username");					//유저이름.
+					_parser.getString("birthday");					//19980801
 					_parser.getString("email");						//
-					_parser.getString("nickname");					//
+					_parser.getString("nickname");					//닉네임(중복검사된것)
 					_parser.getString("phone");						//
 
 					//착용아이템의 리스트 인덱스 .
-					//listidx -> 보유테이블의 listidx 검색해서 해당 아이템을 찾는다.
+					//listidx -> 유저 아이템 보유 테이블의 listidx 검색해서 해당 아이템을 찾는다.
 					_parser.getInt("helmetlistidx");				//
 					_parser.getInt("shirtlistidx");					//
 					_parser.getInt("pantslistidx");					//
@@ -329,6 +335,8 @@ public class NetworkManager : MonoBehaviour {
 					_parser.getInt("sockslistidx");					//
 
 					//개별저장 파라미터(필요에 의해 클라이언트가 저장해서 사용하시면 됩니다.)...
+					//저장을 하기 위해서 별도의 클라이언트에 저장하시지 마시고 이 변수를 통해서 저장 읽어 들이세요.
+					//별도의 저장 읽기 프로 토콜이 제공됩니다.
 					_parser.getInt("param0");						//
 					_parser.getInt("param1");						//
 					_parser.getInt("param2");						//
@@ -341,33 +349,76 @@ public class NetworkManager : MonoBehaviour {
 					_parser.getInt("param9");						//
 				}
 
+				//-----------------------------------------------------
 				//itemowner(보유템).
-				_parser.parsing ( _xml , "itemowner" );
+				//_parser.parsing ( "itemowner" );
+				//_parser.parsing ( _xml, "itemowner" );
+				//-----------------------------------------------------
+				_parser.parsing ( "itemowner" );
 				while (_parser.next ())
 				{
-					_parser.getInt("listidx");						//
-					_parser.getInt("invenkind");					//
-					_parser.getInt("itemcode");						//
-					_parser.getInt("cnt");							//
-					_parser.getInt("randserial");					//
+					_parser.getInt("listidx");						//인벤에서의 인덱스이다. 
+					_parser.getInt("invenkind");					//인벤의 종류...
+																	//착용인벤 Protocol.USERITEM_INVENKIND_WEAR
+																	//조각인벤 Protocol.USERITEM_INVENKIND_PIECE
+																	//소비인벤 Protocol.USERITEM_INVENKIND_CONSUME
+					_parser.getInt("itemcode");						//아이템 코드.
+					_parser.getInt("cnt");							//수량.
+					_parser.getInt("randserial");					//랜덤 시리얼을 만들어 두세요...
+																	//1. 구매시에는...
+																	// SSUtil.getRandSerial() 호출해서 달리 보내면 구매동작을 합니다.
+																	// 동일한 씨리어을 보내시면 구매되어 있으면 재구매 안하고...
+																	// 안되어 있으면 구매한다.
+																	//2. 동일 제품을 구매 할 경우.
+																	// > 다른 씨리얼을 보내야한다. 안그러면 구매 안해줌...
 				}
 
+				//-----------------------------------------------------
 				//선물정보(우편함 -> 선물, 메세지).
 				//GameData.ReadGiftItem ( parser , _xml , "giftitem" );
-				_parser.parsing ( _xml , "giftitem" );
+				//_parser.parsing ( "giftitem" );
+				//-----------------------------------------------------
+				_parser.parsing ( "giftitem" );
 				while (_parser.next ())
 				{
-					_parser.getInt("idx");					
-					_parser.getInt("giftkind");				
-					_parser.getString("message");			
-					_parser.getInt("itemcode");					
-					_parser.getInt("giftdate");					
-					_parser.getString("giftid");					
-					_parser.getInt("cnt");
+					_parser.getInt("idx");				//선물 인덱스 번호.			
+					_parser.getInt("giftkind");			//선물의 종류. (아이템선물, 메세지).
+					_parser.getString("message");		//  메세지 일경우 메세지 내용.
+					_parser.getInt("itemcode");			//  아이템 선물일 경우 아이템 코드.
+					_parser.getInt("cnt");				//            수량.
+					_parser.getString("giftdate");		//보낸날짜.
+					_parser.getString("giftid");		//보낸이.		
 				}
 
-				//GameData.pathUrl = _parser.getString("patchurl");	//패치URLDebug.Log ( parser.getString("patchurl") );.
-				//공지사항 정보...
+
+				//-----------------------------------------------------
+				// 공지사항 정보...
+				// 공지사항은 이미지를 웹에서 끌어오니까...
+				// 1. 관리 페이지에서 등록 수정 해서 확인하시면됩니다.
+				//
+				// 2-1. 이미지를 로컬에서 검색 있으면 로컬것 사용...
+				// 2-2. 없으면 웹에서 가져오시면 됩니다.
+				//
+				// 3. 간단한 텍스트 공지를 위해서 comment를 제공합니다.
+				//    commnet를 이용해서 텍스트 공지 처리 하시면됩니다.
+				//-----------------------------------------------------
+				_parser.parsing ( "notice" );
+				if (_parser.next ())
+				{
+					_parser.getString("comfile1");		//이미지 URL.
+					_parser.getString("comurl1");		// > 클릭시 점프 URL.
+														// > Empty로 오면 없음...
+					_parser.getString("comfile2");		
+					_parser.getString("comurl2");		
+					_parser.getString("comfile3");		
+					_parser.getString("comurl3");		
+					_parser.getString("comfile4");		
+					_parser.getString("comurl4");		
+					_parser.getString("comfile5");		
+					_parser.getString("comurl5");
+
+					_parser.getString("comment");			
+				}
 
 
 				break;
@@ -382,7 +433,6 @@ public class NetworkManager : MonoBehaviour {
 				#endif
 				break;
 			case Protocol.RESULT_NEWVERION_CLIENT_DOWNLOAD:		
-//				Debug.Log ( parser.getString("patchurl") );
 				GameData.pathUrl = _parser.getString("patchurl");		//패치URL.
 				#if NET_DEBUG_MODE
 				Debug.Log("PTS_LOGIN > error > 클라이언트가 새로나왔습니다. > 다시 받아주세요.");

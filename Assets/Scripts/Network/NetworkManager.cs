@@ -70,6 +70,13 @@ public class NetworkManager : MonoBehaviour {
 		if (GUI.Button (_rl, _str)) {
 			sendCode (Protocol.PTC_SERVERTIME, null);
 		}
+
+		_str = "PTC_USERPARAM";
+		_py += _dy;
+		_rl = new Rect(_px, _py, _dx, _dy);
+		if (GUI.Button (_rl, _str)) {
+			sendCode (Protocol.PTC_USERPARAM, null);
+		}
 	}
 	#endif
 	
@@ -152,23 +159,68 @@ public class NetworkManager : MonoBehaviour {
 				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
 			}
 			break;
-		case Protocol.PTC_SERVERTIME:
-			{
-				#if NET_DEBUG_MODE
-				Debug.Log("[C -> S] PTC_SERVERTIME");
+		case Protocol.PTC_SERVERTIME:		
+			{			
+				#if NET_DEBUG_MODE			
+				Debug.Log("[C -> S] PTC_SERVERTIME");			
 				#endif
-				//1. make URL
-				url = urlbase + Protocol.PTG_SERVERTIME;
+
+				//1. make URL			
+				url = urlbase + Protocol.PTG_SERVERTIME;			
 
 				//2. setting form
-				_form.AddField("gameid", strCreateID);
+				strCreateID = "mtxxxx3";
+				strCreatePW = "049000s1i0n7t8445289";
+
+				_form.AddField("gameid", strCreateID);			
 				_form.AddField("password", strCreatePW);
 
-				//3. sending
-				#if NET_DEBUG_MODE
-				Debug.Log(" _form:" + SSUtil.getString(_form.data));
+				//3. sending			
+				#if NET_DEBUG_MODE			
+				Debug.Log(" _form:" + SSUtil.getString(_form.data));			
 				#endif
-				StartCoroutine(Handle(new WWW(url, _form ), _onResult));
+				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
+			}
+			break;
+		case Protocol.PTC_USERPARAM:		
+			{			
+				#if NET_DEBUG_MODE			
+				Debug.Log("[C -> S] PTC_USERPARAM");			
+				#endif
+
+				//1. make URL			
+				url = urlbase + Protocol.PTG_USERPARAM;			
+
+				//2. setting form
+				strCreateID = "mtxxxx3";
+				strCreatePW = "049000s1i0n7t8445289";
+
+				//-----------------------------------
+				//읽기 사용법.
+				//파라미터에 공백을 보내시면 됩니다.
+				//-----------------------------------
+				//_form.AddField("gameid", strCreateID);			
+				//_form.AddField("password", strCreatePW);		
+				//_form.AddField("mode", "" + Protocol.USERPARAM_MODE_READ);			
+				//_form.AddField("listset", "");					
+
+				//-----------------------------------
+				//저장 사용법.
+				//-----------------------------------
+				_form.AddField("gameid", strCreateID);			
+				_form.AddField("password", strCreatePW);		
+				_form.AddField("mode", "" + Protocol.USERPARAM_MODE_SAVE);		
+				_form.AddField("listset", "0:0;1:1;2:2;3:3;4:4;5:5;6:6;7:7;8:8;9:9;");
+				//							paramX자리 / 구분자(:) / 데이타 / 구분자(;)
+				//							paramX자리 / 구분자(:) / 데이타 / 구분자(;)
+				//							....
+				//							9자리를 전송할 수 있다.
+
+				//3. sending			
+				#if NET_DEBUG_MODE			
+				Debug.Log(" _form:" + SSUtil.getString(_form.data));			
+				#endif
+				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
 			}
 			break;
 		default:
@@ -215,9 +267,10 @@ public class NetworkManager : MonoBehaviour {
 					#if NET_DEBUG_MODE
 					Debug.Log(" > 서버시간 > 성공.");				
 					#endif
+					DateTime.Parse (_parser.getString ("curdate"));
 
 					//현재 서버 시간 2014-11-14 10:49:57.				
-					//Callendar.SetServerTime( DateTime.Parse( parser.getString("curdate") ) );				
+					//Callendar.SetServerTime( DateTime.Parse( _parse.getString("curdate") ) );				
 					break;
 				default:
 					#if NET_DEBUG_MODE
@@ -449,6 +502,39 @@ public class NetworkManager : MonoBehaviour {
 				Debug.Log("PTS_LOGIN > error > not found error");
 				#endif
 				break;
+			}
+			break;
+		case Protocol.PTS_USERPARAM:
+			{
+				#if NET_DEBUG_MODE	
+				Debug.Log("[C <- S] PTS_USERPARAM _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);			
+				#endif
+
+				switch(_resultcode){
+				case Protocol.RESULT_SUCCESS:
+					#if NET_DEBUG_MODE
+					Debug.Log(" > 서버시간 > 성공.");				
+					#endif
+
+					//저장한 정보을 읽어서 보내준다.
+					_parser.getInt("param0");
+					_parser.getInt("param1");
+					_parser.getInt("param2");
+					_parser.getInt("param3");
+					_parser.getInt("param4");
+					_parser.getInt("param5");
+					_parser.getInt("param6");
+					_parser.getInt("param7");
+					_parser.getInt("param8");
+					_parser.getInt("param9");	
+
+					break;
+				default:
+					#if NET_DEBUG_MODE
+					Debug.Log(" > 서버시간 실패. > 팝업처리.");
+					#endif
+					break;				
+				}
 			}
 			break;
 		

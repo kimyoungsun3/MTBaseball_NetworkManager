@@ -54,17 +54,16 @@ public class Protocol{
 	/////////////////////////////////////////////////////////////////////
 	#region PTC, PTS
 	public const int 	
-						PTC_NOTICE			= 0,	//notice.jsp
-						PTS_NOTICE			= 0,
-
+						//PTC_NOTICE		= 0,	//notice.jsp
+						//PTS_NOTICE		= 0,
 						PTC_CREATEID		= 1,	//createid.jsp
 						PTS_CREATEID		= 1,
-
 						PTC_LOGIN			= 2,	//login.jsp
 						PTS_LOGIN			= 2,
-
 						PTC_SERVERTIME		= 3,	//servertime.jsp
-						PTS_SERVERTIME		= 3,
+						PTS_SERVERTIME		= 3,	
+						PTC_USERPARAM		= 4,	//userparam.jsp
+						PTS_USERPARAM		= 4,
 
 						PTC_XXXXX			= 99,	
 						PTS_XXXXX			= 99;
@@ -80,7 +79,7 @@ public class Protocol{
 						PTG_CREATEID		= "createid.jsp",
 						PTG_LOGIN			= "login.jsp",
 						PTG_SERVERTIME		= "servertime.jsp",
-
+						PTG_USERPARAM		= "userparam.jsp",
 
 						PTG_XXXXX			= "_xxxxx.jsp";
 
@@ -189,6 +188,11 @@ public class Protocol{
 						MODE_RETURN_STATE_NON				= 0, 	// 활동.
 						MODE_RETURN_STATE_SENDED			= 1, 	// 이미요청.		
 						MODE_RETURN_STATE_LONG				= 2, 	// 장기미접속.
+
+						//유저 파라미터 사용방법.
+						USERPARAM_MODE_SAVE					= 1,	//저장, 
+						USERPARAM_MODE_READ					= 2,	//읽기모드.
+
 
 						XXXXXXXXXXXXXXXXXXXXXXXXXX1			= -1;
 

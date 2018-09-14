@@ -77,6 +77,13 @@ public class NetworkManager : MonoBehaviour {
 		if (GUI.Button (_rl, _str)) {
 			sendCode (Protocol.PTC_USERPARAM, null);
 		}
+
+		_str = "PTC_GIFTGAIN";
+		_py += _dy;
+		_rl = new Rect(_px, _py, _dx, _dy);
+		if (GUI.Button (_rl, _str)) {
+			sendCode (Protocol.PTC_GIFTGAIN, null);
+		}
 	}
 	#endif
 	
@@ -152,6 +159,92 @@ public class NetworkManager : MonoBehaviour {
 				_form.AddField("version", "" + Protocol.VERSION);
 				_form.AddField("password", "192.168.0.8");
 			
+				//3. sending			
+				#if NET_DEBUG_MODE			
+				Debug.Log(" _form:" + SSUtil.getString(_form.data));			
+				#endif
+				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
+			}
+			break;
+
+		case Protocol.PTC_GIFTGAIN:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C -> S] PTC_GIFTGAIN");
+				#endif
+				//1. make URL
+				url = urlbase + Protocol.PTG_GIFTGAIN;
+
+				//2. setting form	
+				//---------------------------------------------
+				//1. 1번에 메세지 > 보았다는 상태로 변경하기.
+				//---------------------------------------------
+				_form.AddField("gameid", "xxxx2" );										//유저 아이디.
+				_form.AddField("password", "049000s1i0n7t8445289" );					//유저 패스워드.
+				_form.AddField("sid", "333" );											//로그인때 받은 sid값
+				_form.AddField("giftkind", "" + Protocol.GIFTLIST_GIFT_KIND_MESSAGE_DEL ); //메세지 삭제(-1).				Protocol.GIFTLIST_GIFT_KIND_MESSAGE_DEL		
+																						//선물 받기(해당템만 전송)(-3)		Protocol.GIFTLIST_GIFT_KIND_GIFT_GET		
+				_form.AddField("idx", "" + 1 );											//선물번호 인덱스.
+
+				//---------------------------------------------
+				//2-1. 나무헬멧 받기 > 하나씩만 들어간다.	
+				//---------------------------------------------
+				//gameid=xxx
+				//password=xxx
+				//sid=xxx
+				//giftkind=xxx
+				//idx=xxx(선물 번호)
+				//_form.AddField("gameid", "xxxx2" );										//유저 아이디.
+				//_form.AddField("password", "049000s1i0n7t8445289" );						//유저 패스워드.
+				//_form.AddField("sid", "333" );											//로그인때 받은 sid값
+				//_form.AddField("giftkind", "" + Protocol.GIFTLIST_GIFT_KIND_GIFT_GET );	//선물 받기(해당템만 전송)(-3)		Protocol.GIFTLIST_GIFT_KIND_GIFT_GET			
+				//_form.AddField("idx", "" + 2 );											//선물번호 인덱스.
+				//
+				//---------------------------------------------
+				//2-2. 나무 헬멧 조각A > 수량 누적.
+				//---------------------------------------------
+				//gameid=xxx
+				//password=xxx
+				//sid=xxx
+				//giftkind=xxx
+				//idx=xxx(선물 번호)
+				//_form.AddField("gameid", "xxxx2" );										//유저 아이디.
+				//_form.AddField("password", "049000s1i0n7t8445289" );						//유저 패스워드.
+				//_form.AddField("sid", "333" );											//로그인때 받은 sid값
+				//_form.AddField("giftkind", "" + Protocol.GIFTLIST_GIFT_KIND_GIFT_GET );	//선물 받기(해당템만 전송)(-3)		Protocol.GIFTLIST_GIFT_KIND_GIFT_GET			
+				//_form.AddField("idx", "" + 3 );											//선물번호 인덱스.
+				//
+				//---------------------------------------------
+				//2-2. 나무 조각 랜덤박스, 나무 의상 랜덤박스, 조언 패키지 박스, 조합 주문서, 초월 주문서, 응원의 소리, 코치의 조언 주문서, 감독의 조언 주문서> 수량 누적.
+				//---------------------------------------------
+				//gameid=xxx
+				//password=xxx
+				//sid=xxx
+				//giftkind=xxx
+				//idx=xxx(선물 번호)
+				//_form.AddField("gameid", "xxxx2" );										//유저 아이디.
+				//_form.AddField("password", "049000s1i0n7t8445289" );						//유저 패스워드.
+				//_form.AddField("sid", "333" );											//로그인때 받은 sid값
+				//_form.AddField("giftkind", "" + Protocol.GIFTLIST_GIFT_KIND_GIFT_GET );	//선물 받기(해당템만 전송)(-3)		Protocol.GIFTLIST_GIFT_KIND_GIFT_GET			
+				//_form.AddField("idx", "" + 4 );											//선물번호 인덱스.
+				//
+				//---------------------------------------------
+				//2-3. 다이아 > cashcost에 누적.
+				// * 다이아는 멀티가 있으면 cnt으로 표시
+				//   다이아가 싱글로 있으면 buyamount가 올라간다.
+				//   캐쉬 해킹을 방지하기 위해서....
+				//---------------------------------------------
+				//gameid=xxx
+				//password=xxx
+				//sid=xxx
+				//giftkind=xxx
+				//idx=xxx(선물 번호)
+				//_form.AddField("gameid", "xxxx2" );										//유저 아이디.
+				//_form.AddField("password", "049000s1i0n7t8445289" );						//유저 패스워드.
+				//_form.AddField("sid", "333" );											//로그인때 받은 sid값
+				//_form.AddField("giftkind", "" + Protocol.GIFTLIST_GIFT_KIND_GIFT_GET );	//선물 받기(해당템만 전송)(-3)		Protocol.GIFTLIST_GIFT_KIND_GIFT_GET			
+				//_form.AddField("idx", "" + 12 );											//선물번호 인덱스.
+
 				//3. sending			
 				#if NET_DEBUG_MODE			
 				Debug.Log(" _form:" + SSUtil.getString(_form.data));			
@@ -502,6 +595,100 @@ public class NetworkManager : MonoBehaviour {
 				Debug.Log("PTS_LOGIN > error > not found error");
 				#endif
 				break;
+			}
+			break;
+
+		case Protocol.PTS_GIFTGAIN:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_GIFTGAIN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
+				#endif
+
+				switch(_resultcode){
+				case Protocol.RESULT_SUCCESS:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_GIFTGAIN > success");
+					#endif	
+
+					_parser.getInt("cashcost");		//캐쉬.
+
+					//-----------------------------------------------------
+					// 로그인 선물하고 동일
+					// 1. 100개가 있어도 최대 전송 수량은 20개까지만 보내준다.
+					// 2. 한꺼번에 받기는 하나씩 받는 것을 처리하시면 됩니다.(별도 없음)
+					//-----------------------------------------------------
+					_parser.parsing ( "giftitem" );
+					while (_parser.next ())
+					{
+						_parser.getInt("idx");				//선물 인덱스 번호.			
+						_parser.getInt("giftkind");			//선물의 종류. (아이템선물, 메세지).
+						_parser.getString("message");		//  메세지 일경우 메세지 내용.
+						_parser.getInt("itemcode");			//  아이템 선물일 경우 아이템 코드.
+						_parser.getInt("cnt");				//            수량.
+						_parser.getString("giftdate");		//보낸날짜.
+						_parser.getString("giftid");		//보낸이.		
+					}	
+
+
+					//-----------------------------------------------------
+					// 로그인 동일한 모양이지만 변화된것만 온다.
+					// 우편함으로 새롭게 추가된 템리스트만 하나 올 수 있다.
+					// 새로운것 -> listidx가 새로운것...
+					// 기존것   -> listidx가 기존것을 알려준다.
+					//-----------------------------------------------------
+					_parser.parsing ( "itemowner" );
+					while (_parser.next ())
+					{
+						_parser.getInt("listidx");						//인벤에서의 인덱스이다. 
+						_parser.getInt("invenkind");					//인벤의 종류...
+																		//착용인벤 Protocol.USERITEM_INVENKIND_WEAR
+																		//조각인벤 Protocol.USERITEM_INVENKIND_PIECE
+																		//소비인벤 Protocol.USERITEM_INVENKIND_CONSUME
+						_parser.getInt("itemcode");						//아이템 코드.
+						_parser.getInt("cnt");							//수량.
+						_parser.getInt("randserial");					//랜덤 시리얼을 만들어 두세요...
+						//1. 구매시에는...
+						// SSUtil.getRandSerial() 호출해서 달리 보내면 구매동작을 합니다.
+						// 동일한 씨리어을 보내시면 구매되어 있으면 재구매 안하고...
+						// 안되어 있으면 구매한다.
+						//2. 동일 제품을 구매 할 경우.
+						// > 다른 씨리얼을 보내야한다. 안그러면 구매 안해줌...
+					}
+
+
+					break;
+				case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_GIFTGAIN > error > 아이디를 확인해라.");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE:		
+					Debug.LogError (" >>> 강제 로그 아웃 처리 해주세요(구현우 이것 삭제)");
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_GIFTGAIN > error > 세션이 만기 강제로 로그아웃 처리 해야합니다..");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_GIFTITEM_NOT_FOUND:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_GIFTGAIN > error > 선물아이템 존재자체를 안함.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_GIFTITEM_ALREADY_GAIN:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_GIFTGAIN > error > 지급 및 삭제되었습니다.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_GIFTGAIN > error > 지원하지 않는 모드값입니다.");
+					#endif
+					break;
+				default:	
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_GIFTGAIN > error > not found error");
+					#endif
+					break;
+				}
 			}
 			break;
 		case Protocol.PTS_USERPARAM:

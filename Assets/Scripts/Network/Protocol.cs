@@ -64,6 +64,8 @@ public class Protocol{
 						PTS_SERVERTIME		= 3,	
 						PTC_USERPARAM		= 4,	//userparam.jsp
 						PTS_USERPARAM		= 4,
+						PTC_GIFTGAIN		= 21, 	//giftgain.jsp
+						PTS_GIFTGAIN		= 21,
 
 						PTC_XXXXX			= 99,	
 						PTS_XXXXX			= 99;
@@ -80,6 +82,7 @@ public class Protocol{
 						PTG_LOGIN			= "login.jsp",
 						PTG_SERVERTIME		= "servertime.jsp",
 						PTG_USERPARAM		= "userparam.jsp",
+						PTG_GIFTGAIN		= "giftgain.jsp",
 
 						PTG_XXXXX			= "_xxxxx.jsp";
 

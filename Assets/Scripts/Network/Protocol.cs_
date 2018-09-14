@@ -80,21 +80,6 @@ public class Protocol{
 	#endif
 	#endregion
 
-
-	#region SERVER_MODE
-	/////////////////////////////////////////////////////////////////////
-	//	실서버와 테스트서버
-	/////////////////////////////////////////////////////////////////////
-	/// http://222.106.88.198:40009/Game4Farm/goo/anihoslist.jsp?gameid=farm45&password=7108249n7g1z6l824391
-	#if SERVER_MODE_TEST_FREE
-		public const string SERVER 			= "http://121.138.201.251:40012/Game4FarmVill5/" + MARKET_BRANCH + "/";
-		public const int 	BUYTYPE 		= BUYTYPE_FREE;
-	#elif SERVER_MODE_REAL_FREE
-		public const string SERVER 			=  "http://175.117.144.244:8882/Game4FarmVill5/" + MARKET_BRANCH + "/";
-		public const int 	BUYTYPE 		= BUYTYPE_FREE;
-	#endif
-	#endregion
-
 	#region PLATFORM_MODE
 	/////////////////////////////////////////////////////////////////////
 	//	플랫폼.

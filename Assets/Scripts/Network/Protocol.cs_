@@ -1,0 +1,1099 @@
+#define MARKET_MODE_SKT
+//#define MARKET_MODE_GOOGLE
+//#define MARKET_MODE_IPHONE
+//#define MARKET_MODE_NHN
+
+//#define SERVER_MODE_TEST_FREE
+#define SERVER_MODE_REAL_FREE
+
+#define PLATFORM_MODE_ANDROID
+//#define PLATFORM_MODE_IPHONE
+
+#define COMPANY_SANGSANG
+//#define COMPANY_PICTOSOFT
+
+#define MONEY_MODE_WON
+//#define MONEY_MODE_DOLLAR
+
+using UnityEngine;
+using System.Collections;
+
+public class Protocol{
+	#region MODE_VALUE
+	/////////////////////////////////////////////////////////
+	/// 기존정의값.
+	public const int 	SKT 				= 1,
+						GOOGLE 				= 5,
+						NHN					= 6,
+						IPHONE				= 7,
+
+						XXXXXXXXXXXXXXXXXXX	= 99;
+
+	public const int 	BUYTYPE_FREE		= 0,	//무료가입 : 리워드 최소.
+					 	BUYTYPE_PAY 		= 1;	//유료가입 : 리워드 많음.
+
+	public const int 	AGREEMENT_KO		= 0,	//한글 약관동의.
+					 	AGREEMENT_EN 		= 1;	//영문 약관동의.
+
+	public const int 	PLATFORM_ANDROID 	= 1,
+						PLATFORM_IPHONE 	= 2;
+
+	public const int 	MONEY_WON			= 1;
+	public const int 	MONEY_DOLLAR		= 2;
+
+	public const float LIMIT_CONNECT_TIME 	= 30f;	//40초.
+	public const string NULL_VALUE_STR		= "-1";
+	#endregion
+
+	#region MARKET_MODE
+	/////////////////////////////////////////////////////////////////////
+	//	통신사
+	/////////////////////////////////////////////////////////////////////
+	
+	// 아이템 정보를 공통으로 뺀 이유는.
+	// 아이템정보가 클라이언트에 고정이 되야하기 때문이다.
+	// 이버젼으로 배포된 클라이언트는 아래와같은 아이템 테이블을 써야만 한다.
+	
+	// 안드로이드와 아이폰 버젼의 파일이 틀린이유는.
+	// 번들 파일 제작시. 아이폰과 안드로이드 번들이 호완이 되지 않기 때문.
+	// 				   파일이름만 틀리고, 내용은 같다.	
+	//#if MARKET_MODE_IPHONE
+	//	public const string ITEM_INFO		= "111_iteminfo_ios.dat";
+	//#else
+	//	public const string ITEM_INFO		= "111_iteminfo_ad.dat";
+	//#endif
+	
+	public const int 	VERSION			= 115;	
+	public const string MARKET_BRANCH	= "goo";	
+	#if MARKET_MODE_SKT
+		public const int MARKET				= SKT;
+		public const string VERSION_AFTER	= "tk";
+	#elif MARKET_MODE_GOOGLE
+		public const int MARKET				= GOOGLE;
+		public const string VERSION_AFTER	= "gk";	
+	#elif MARKET_MODE_NHN
+		public const int MARKET				= NHN;
+		public const string VERSION_AFTER	= "nhn";
+	#elif MARKET_MODE_IPHONE
+		public const int MARKET				= IPHONE;
+		public const string VERSION_AFTER	= "";
+	#endif
+	#endregion
+
+
+	#region SERVER_MODE
+	/////////////////////////////////////////////////////////////////////
+	//	실서버와 테스트서버
+	/////////////////////////////////////////////////////////////////////
+	/// http://222.106.88.198:40009/Game4Farm/goo/anihoslist.jsp?gameid=farm45&password=7108249n7g1z6l824391
+	#if SERVER_MODE_TEST_FREE
+		public const string SERVER 			= "http://121.138.201.251:40012/Game4FarmVill5/" + MARKET_BRANCH + "/";
+		public const int 	BUYTYPE 		= BUYTYPE_FREE;
+	#elif SERVER_MODE_REAL_FREE
+		public const string SERVER 			=  "http://175.117.144.244:8882/Game4FarmVill5/" + MARKET_BRANCH + "/";
+		public const int 	BUYTYPE 		= BUYTYPE_FREE;
+	#endif
+	#endregion
+
+	#region PLATFORM_MODE
+	/////////////////////////////////////////////////////////////////////
+	//	플랫폼.
+	/////////////////////////////////////////////////////////////////////
+	#if PLATFORM_MODE_ANDROID
+		public const int PLATFORM			= PLATFORM_ANDROID;
+	#elif PLATFORM_MODE_IPHONE
+		public const int PLATFORM			= PLATFORM_IPHONE;
+	#endif
+	#endregion
+
+
+	#if MONEY_MODE_WON
+		public const int MONEY_MODE			= MONEY_WON;
+	#elif MONEY_MODE_DOLLAR
+		public const int MONEY_MODE			= MONEY_DOLLAR;
+	#else
+		public const int MONEY_MODE			= MONEY_WON;	
+	#endif
+
+
+	#region PTC
+	//Client -> Server Request.
+	//(PTC_ Protocol To Client)
+	//(PTS_ Protocol To Server)
+	public const int 	PTC_NOTICE			= 28,	//[notice.jsp]
+						PTS_NOTICE			= 28,
+						PTC_AGREEMENT		= 81,	//sysagreement.jsp
+						PTS_AGREEMENT		= 81,
+						PTC_SYSINQUIRE		= 82,	//sysinquire.jsp
+						PTS_SYSINQUIRE		= 82,
+	
+						PTC_CREATEID		= 0,	//createid.jsp
+						PTS_CREATEID		= 0,
+						PTC_CREATEGUEST		= 22,	//createguest.jsp
+						PTS_CREATEGUEST		= 22,
+						PTC_NEWSTART		= 87,	//newstart.jsp
+						PTS_NEWSTART		= 87,
+						PTC_KFADD			= 88,	//kfadd.jsp
+						PTS_KFADD			= 88,
+	
+						PTC_KFRESET			= 96,	//kfreset.jsp
+						PTS_KFRESET			= 96,
+	
+						PTC_KFINVITE		= 89,	//kfinvite.jsp
+						PTS_KFINVITE		= 89,
+						PTC_KFHELP			= 90,	//kfhelp.jsp
+						PTS_KFHELP			= 90,
+	
+						PTC_KFHELPLIST		= 98,	//kfhelplist.jsp
+						PTS_KFHELPLIST		= 98,
+
+						PTC_KCHECKNN		= 91,	//kchecknn.jsp
+						PTS_KCHECKNN		= 91,
+	
+						PTC_LOGIN			= 1,	//login.jsp
+						PTS_LOGIN			= 1,
+						PTC_CHANGEPW		= 32,	//changepw.jsp
+						PTS_CHANGEPW		= 32,
+						PTC_DELETEID		= 11, 	//deleteid.jsp
+						PTS_DELETEID		= 11,
+						PTC_DAILYREWARD		= 41, 	//dailyreward.jsp
+						PTS_DAILYREWARD		= 41,
+						PTC_GIFTGAIN		= 21, 	//giftgain.jsp
+						PTS_GIFTGAIN		= 21,
+
+						PTC_ITEMBUY			= 8,	//itembuy.jsp
+						PTS_ITEMBUY			= 8,
+						PTC_ITEMSELL		= 50,	//itemsell.jsp
+						PTS_ITEMSELL		= 50,	
+						PTC_ITEMSELLLIST	= 111,	//itemselllist.jsp
+						PTS_ITEMSELLLIST	= 111,
+						PTC_ITEMQUICK		= 51,	//itemquick.jsp
+						PTS_ITEMQUICK		= 51,
+						PTC_ITEMACC			= 52,	//itemacc.jsp
+						PTS_ITEMACC			= 52,
+						PTC_ITEMACCNEW		= 102,	//itemaccnew.jsp
+						PTS_ITEMACCNEW		= 102,
+						PTC_ITEMINVENEXP	= 53,	//iteminvenexp.jsp
+						PTS_ITEMINVENEXP	= 53,
+
+						PTC_FACUPGRADE		= 54,	//facupgrade.jsp
+						PTS_FACUPGRADE		= 54,
+
+						PTC_SEEDBUY			= 55,	//seedbuy.jsp
+						PTS_SEEDBUY			= 55,
+						PTC_SEEDPLANT		= 56,	//seedplant.jsp
+						PTS_SEEDPLANT		= 56,
+						PTC_SEEDHARVEST		= 57,	//seedharvest.jsp
+						PTS_SEEDHARVEST		= 57,
+
+						PTC_TRADE			= 58,	//trade.jsp
+						PTS_TRADE			= 58,
+						PTC_SAVE			= 59,	//save.jsp
+						PTS_SAVE			= 59,
+						PTC_TRADECASH		= 71,	//tradecash.jsp
+						PTS_TRADECASH		= 71,
+						PTC_TRADECONTINUE	= 74,	//tradecontinue.jsp
+						PTS_TRADECONTINUE	= 74,
+
+						PTC_TRADECHANGE		= 103,	//tradechange.jsp
+						PTS_TRADECHANGE		= 103,
+						
+						PTC_RANKLIST		= 124, 	//ranklist.jsp
+						PTS_RANKLIST		= 124,
+
+
+						PTC_PACKBUY			= 60,	//packbuy.jsp
+						PTS_PACKBUY			= 60,
+						PTC_ROULBUY			= 61,	//roulbuy.jsp
+						PTS_ROULBUY			= 61,
+						PTC_TREASUREBUY		= 112,	//treasurebuy.jsp
+						PTS_TREASUREBUY		= 112,
+						PTC_ROULACC			= 94,	//roulacc.jsp
+						PTS_ROULACC			= 94,
+						
+						PTC_TREASUREUPGRADE	= 113,	//treasureupgrade.jsp
+						PTS_TREASUREUPGRADE	= 113,
+						PTC_TREASUREWEAR	= 114,	//treasurewear.jsp
+						PTS_TREASUREWEAR	= 114,
+	
+						PTC_DOGAMREWARD		= 42, 	//dogamreward.jsp
+						PTS_DOGAMREWARD		= 42,
+						PTC_DOGAMLIST		= 44, 	//dogamlist.jsp
+						PTS_DOGAMLIST		= 44,
+	
+						PTC_TUTORIAL		= 30,	//tutorial.jsp
+						PTS_TUTORIAL		= 30,
+						PTC_TUTOSTEP		= 75,	//tutostep.jsp
+						PTS_TUTOSTEP		= 75,
+						PTC_COMPETITION		= 63,	//competition.jsp
+						PTS_COMPETITION		= 63,
+						PTC_USERPARAM		= 64,	//userparam.jsp
+						PTS_USERPARAM		= 64,
+						PTC_CHANGEINFO		= 7,	//changeinfo.jsp
+						PTS_CHANGEINFO		= 7,
+	
+						PTC_ANISET			= 46,	//aniset.jsp
+						PTS_ANISET			= 46,
+						PTC_ANIDIE			= 47,	//anidie.jsp
+						PTS_ANIDIE			= 47,
+						PTC_ANIREVIVAL		= 48,	//anirevival.jsp
+						PTS_ANIREVIVAL		= 48,
+						PTC_ANIUSEITEM		= 49,	//aniuseitem.jsp
+						PTS_ANIUSEITEM		= 49,
+						PTC_ANIREPREG		= 43,	//anirepreg.jsp
+						PTS_ANIREPREG		= 43,
+
+						PTC_ANIHOSLIST		= 45,	//anihoslist.jsp
+						PTS_ANIHOSLIST		= 45,
+
+						PTC_ANIURGENCY		= 62,	//aniurgency.jsp
+						PTS_ANIURGENCY		= 62,
+						PTC_ANIRESTORE		= 92,	//anirestore.jsp
+						PTS_ANIRESTORE		= 92,
+
+						PTC_ANICOMPOSE		= 97,	//anicompose.jsp
+						PTS_ANICOMPOSE		= 97,
+						PTC_ANICOMPOSEINIT	= 100,	//anicomposeinit.jsp
+						PTS_ANICOMPOSEINIT	= 100,	
+						PTC_ANIPROMOTE		= 117,	//anipromote.jsp
+						PTS_ANIPROMOTE		= 117,
+	
+						PTC_ANIUPGRADE		= 108, 	//aniupgrade.jsp
+						PTS_ANIUPGRADE		= 108,
+						PTC_ANIBATTLESTART	= 109, 	//anibattlestart.jsp
+						PTS_ANIBATTLESTART	= 109,
+						PTC_ANIBATTLERESULT	= 110, 	//anibattleresult.jsp
+						PTS_ANIBATTLERESULT	= 110,
+						PTC_ANIBATTLEPLAYCNTBUY	= 115, 	//anibattleplaycntbuy.jsp
+						PTS_ANIBATTLEPLAYCNTBUY	= 115,
+						PTC_APARTITEMCODE	= 116, 	//apartitemcode.jsp
+						PTS_APARTITEMCODE	= 116,
+	
+						PTC_UBBOXOPENOPEN	= 118, 	//ubboxopenopen.jsp
+						PTS_UBBOXOPENOPEN	= 118,
+						PTC_UBBOXOPENCASH	= 119, 	//ubboxopencash.jsp
+						PTS_UBBOXOPENCASH	= 119,
+
+						PTC_UBBOXOPENCASH2	= 125, 	//ubboxopencash2.jsp
+						PTS_UBBOXOPENCASH2	= 125,
+
+						PTC_UBBOXOPENGETITEM= 120, 	//ubboxopengetitem.jsp
+						PTS_UBBOXOPENGETITEM= 120,
+						PTC_UBSEARCH		= 121, 	//ubsearch.jsp
+						PTS_UBSEARCH		= 121,
+						PTC_UBRESULT		= 122, 	//ubresult.jsp
+						PTS_UBRESULT		= 122,
+
+	PTC_WHEEL			= 126, 	//wheel.jsp
+	PTS_WHEEL			= 126,
+
+	PTC_RKRANK			= 127,	//rkrank.jsp
+	PTS_RKRANK			= 127,
+	PTC_ZCPCHANCE		= 128,	//zcpchance.jsp
+	PTS_ZCPCHANCE		= 128,
+	PTC_ZCPBUY			= 129,	//zcpbuy.jsp
+	PTS_ZCPBUY			= 129,
+
+						PTC_FWBUY			= 68,	//fwbuy.jsp
+						PTS_FWBUY			= 68,
+						PTC_FWSELL			= 69,	//fwsell.jsp
+						PTS_FWSELL			= 69,
+						PTC_FWINCOME		= 70,	//fwincome.jsp
+						PTS_FWINCOME		= 70,
+						PTC_FWINCOMEALL		= 95,	//fwincomeall.jsp
+						PTS_FWINCOMEALL		= 95,
+
+						PTC_FSEARCH			= 16, 	//fsearch.jsp
+						PTS_FSEARCH			= 16,
+						PTC_FADD			= 17, 	//fadd.jsp
+						PTS_FADD			= 17,
+						PTC_FDELETE			= 18, 	//fdelete.jsp
+						PTS_FDELETE			= 18,
+						PTC_FAPPROVE		= 65, 	//fapprove.jsp
+						PTS_FAPPROVE		= 65,
+						PTC_FHEART			= 66, 	//fheart.jsp
+						PTS_FHEART			= 66,	
+						PTC_FPROUD			= 123, 	//fproud.jsp
+						PTS_FPROUD			= 123,
+						PTC_FPOINT			= 67,	//fpoint.jsp
+						PTS_FPOINT			= 67,
+						PTC_FMYFRIEND		= 19, 	//fmyfriend.jsp
+						PTS_FMYFRIEND		= 19,
+						PTC_FVISIT			= 20, 	//fvisit.jsp
+						PTS_FVISIT			= 20,	
+						PTC_PUSHMSG			= 34,	//sendpush.jsp
+						PTS_PUSHMSG			= 34,
+						PTC_FBWRITE			= 72,	//fbwrite.jsp
+						PTS_FBWRITE			= 72,
+						PTC_FBREAD			= 73,	//fbread.jsp
+						PTS_FBREAD			= 73,
+						PTC_FRENT			= 93, 	//frent.jsp
+						PTS_FRENT			= 93,
+						PTC_FRETURN			= 107, 	//freturn.jsp
+						PTS_FRETURN			= 107,
+
+						PTC_SCHOOLSEARCH	= 76,	//schoolsearch.jsp
+						PTS_SCHOOLSEARCH	= 76,
+						PTC_SCHOOLJOIN		= 77,	//schooljoin.jsp
+						PTS_SCHOOLJOIN		= 77,
+						PTC_SCHOOLTOP		= 78,	//schooltop.jsp
+						PTS_SCHOOLTOP		= 78,
+						PTC_SCHOOLUSERTOP	= 79,	//schoolusertop.jsp
+						PTS_SCHOOLUSERTOP	= 79,
+
+						PTC_CERTNO			= 80,	//certno.jsp
+						PTS_CERTNO			= 80,
+	
+						PTC_CASHBUY			= 14,	//cashbuy.jsp
+						PTS_CASHBUY			= 14,
+	
+						PTC_PETTODAY		= 83,	//pettoday.jsp
+						PTS_PETTODAY		= 83,
+						PTC_PETROLL			= 84,	//petroll.jsp
+						PTS_PETROLL			= 84,
+						PTC_PETUPGRADE		= 85,	//petupgrade.jsp
+						PTS_PETUPGRADE		= 85,
+						PTC_PETWEAR			= 86,	//petwear.jsp
+						PTS_PETWEAR			= 86,
+
+						PTC_PETEXP			= 101,	//petexp.jsp
+						PTS_PETEXP			= 101,
+
+						PTC_YABAUCHANGE		= 104,	//yabauchange.jsp
+						PTS_YABAUCHANGE		= 104,
+						PTC_YABAUREWARD		= 105,	//yabaureward.jsp
+						PTS_YABAUREWARD		= 105,
+						PTC_YABAU			= 106,	//yabau.jsp
+						PTS_YABAU			= 106,
+	
+						PTC_XXXXX			= 99,	
+						PTS_XXXXX			= 99,
+	
+						PTC_ROULETTE		= 6,	//roulette.jsp
+						PTS_ROULETTE		= 6,
+						PTC_ROULETTE2		= 37,	//roulette2.jsp
+						PTS_ROULETTE2		= 37,
+
+
+
+						PTC_RECHARGEACTION	= 12, 	//rechargeaction.jsp
+						PTS_RECHARGEACTION	= 12,
+
+						PTC_RANK			= 13,	//rank.jsp
+						PTS_RANK			= 13,
+	
+						PTC_SENDSMS			= 33,	//sendsms.jsp
+						PTS_SENDSMS			= 33;
+	#endregion
+
+	#region PTG
+	public const string	PTG_NOTICE			= "notice.jsp",
+						PTG_AGREEMENT		= "sysagreement.jsp",
+						PTG_SYSINQUIRE		= "sysinquire.jsp",
+	
+						PTG_CREATEID		= "createid.jsp",
+						PTG_CREATEGUEST		= "createguest.jsp",
+						PTG_NEWSTART		= "newstart.jsp",	
+						PTG_KFADD			= "kfadd.jsp",
+						PTG_KFRESET			= "kfreset.jsp",
+						PTG_KFINVITE		= "kfinvite.jsp",
+						PTG_KFHELP			= "kfhelp.jsp",	
+
+						PTG_KFHELPLIST		= "kfhelplist.jsp",
+	
+						PTG_KCHECKNN		= "kchecknn.jsp",
+						PTG_LOGIN			= "login.jsp",
+						PTG_CHANGEPW		= "changepw.jsp",
+						PTG_DELETEID		= "deleteid.jsp",
+						PTG_DAILYREWARD		= "dailyreward.jsp",
+						PTG_GIFTGAIN		= "giftgain.jsp",
+	
+						PTG_ITEMBUY			= "itembuy.jsp",
+						PTG_ITEMSELL		= "itemsell.jsp",	
+						PTG_ITEMSELLLIST	= "itemselllist.jsp",
+						PTG_ITEMQUICK		= "itemquick.jsp",
+						PTG_ITEMACC			= "itemacc.jsp",
+						PTG_ITEMACCNEW		= "itemaccnew.jsp",
+						PTG_ITEMINVENEXP	= "iteminvenexp.jsp",
+	
+						PTG_FACUPGRADE		= "facupgrade.jsp",
+						PTG_SEEDBUY			= "seedbuy.jsp",
+						PTG_SEEDPLANT		= "seedplant.jsp",
+						PTG_SEEDHARVEST		= "seedharvest.jsp",
+
+						PTG_TRADE			= "trade.jsp",
+						PTG_SAVE			= "save.jsp",
+						PTG_TRADECASH		= "tradecash.jsp",
+						PTG_TRADECONTINUE	= "tradecontinue.jsp",
+						PTG_TRADECHANGE		= "tradechange.jsp",
+						PTG_RANKLIST		= "ranklist.jsp",
+						PTG_PACKBUY			= "packbuy.jsp",
+
+						PTG_ROULBUY			= "roulbuy.jsp",
+						PTG_TREASUREBUY		= "treasurebuy.jsp",
+						PTG_ROULACC			= "roulacc.jsp",
+						PTG_TREASUREUPGRADE	= "treasureupgrade.jsp",	
+						PTG_TREASUREWEAR	= "treasurewear.jsp",
+
+						PTG_DOGAMLIST		= "dogamlist.jsp",
+						PTG_DOGAMREWARD		= "dogamreward.jsp",
+	
+						PTG_TUTORIAL		= "tutorial.jsp",
+						PTG_TUTOSTEP		= "tutostep.jsp",
+						PTG_COMPETITION		= "competition.jsp",
+						PTG_USERPARAM		= "userparam.jsp",
+						PTG_CHANGEINFO		= "changeinfo.jsp",
+	
+						PTG_ANISET			= "aniset.jsp",
+						PTG_ANIDIE			= "anidie.jsp",
+						PTG_ANIREVIVAL		= "anirevival.jsp",
+						PTG_ANIUSEITEM		= "aniuseitem.jsp",
+						PTG_ANIREPREG		= "anirepreg.jsp",
+						PTG_ANIHOSLIST		= "anihoslist.jsp",
+						PTG_ANIURGENCY		= "aniurgency.jsp",
+						PTG_ANIRESTORE		= "anirestore.jsp",
+						PTG_ANICOMPOSE		= "anicompose.jsp",
+						PTG_ANICOMPOSEINIT	= "anicomposeinit.jsp",		
+						PTG_ANIPROMOTE		= "anipromote.jsp",
+						PTG_ANIUPGRADE		= "aniupgrade.jsp",
+						PTG_ANIBATTLESTART	= "anibattlestart.jsp",
+						PTG_ANIBATTLERESULT	= "anibattleresult.jsp",
+						PTG_ANIBATTLEPLAYCNTBUY	= "anibattleplaycntbuy.jsp",
+						PTG_APARTITEMCODE	= "apartitemcode.jsp",
+	
+						PTG_UBBOXOPENOPEN	= "ubboxopenopen.jsp",
+						PTG_UBBOXOPENCASH	= "ubboxopencash.jsp",
+
+						PTG_UBBOXOPENCASH2	= "ubboxopencash2.jsp",
+
+						PTG_UBBOXOPENGETITEM= "ubboxopengetitem.jsp",
+						PTG_UBSEARCH		= "ubsearch.jsp",
+						PTG_UBRESULT		= "ubresult.jsp",
+
+	PTG_WHEEL			= "wheel.jsp",
+	PTG_RKRANK			= "rkrank.jsp",
+	PTG_ZCPCHANCE		= "zcpchance.jsp",
+	PTG_ZCPBUY			= "zcpbuy.jsp",
+						PTG_FWBUY			= "fwbuy.jsp",
+						PTG_FWSELL			= "fwsell.jsp",
+						PTG_FWINCOME		= "fwincome.jsp",
+						PTG_FWINCOMEALL		= "fwincomeall.jsp",
+	
+						PTG_FSEARCH			= "fsearch.jsp",
+						PTG_FADD			= "fadd.jsp",
+						PTG_FDELETE			= "fdelete.jsp",	
+						PTG_FAPPROVE		= "fapprove.jsp",
+						PTG_FHEART			= "fheart.jsp",		
+						PTG_FPROUD			= "fproud.jsp",
+						PTG_FPOINT			= "fpoint.jsp",
+						PTG_FMYFRIEND		= "fmyfriend.jsp",
+						PTG_FVISIT			= "fvisit.jsp",
+						PTG_FBWRITE			= "fbwrite.jsp",
+						PTG_FBREAD			= "fbread.jsp",
+						PTG_FRENT			= "frent.jsp",
+						PTG_FRETURN			= "freturn.jsp",
+	
+						PTG_SCHOOLSEARCH	= "schoolsearch.jsp",
+						PTG_SCHOOLJOIN		= "schooljoin.jsp",
+						PTG_SCHOOLTOP		= "schooltop.jsp",
+						PTG_SCHOOLUSERTOP	= "schoolusertop.jsp",
+	
+						PTG_CERTNO			= "certno.jsp",
+	
+						PTG_PUSHMSG			= "sendpush.jsp",
+						PTG_CASHBUY			= "cashbuy.jsp",
+	
+						PTG_PETTODAY		= "pettoday.jsp",
+						PTG_PETROLL			= "petroll.jsp",
+						PTG_PETUPGRADE		= "petupgrade.jsp",
+						PTG_PETWEAR			= "petwear.jsp",
+						PTG_PETEXP			= "petexp.jsp",
+
+						PTG_YABAUCHANGE		= "yabauchange.jsp",
+						PTG_YABAUREWARD		= "yabaureward.jsp",
+						PTG_YABAU			= "yabau.jsp",
+						
+						
+						PTG_XXXXX			= "_xxxxx.jsp",
+	
+						PTG_ROULETTE		= "roulette.jsp",
+						PTG_ROULETTE2		= "roulette2.jsp",
+						PTG_RECHARGEACTION	= "rechargeaction.jsp",
+						PTG_RANK			= "rank.jsp",
+						PTG_SENDSMS			= "sendsms.jsp";
+
+	#endregion
+
+	#region RESULT_CODE
+	//Clinet <- Server Response.(Result)
+	public const int 	RESULT_SUCCESS 						=  1,	//일반성공.
+						RESULT_ERROR						= -1,	//일반실패.
+
+						//가입 오류.
+						RESULT_ERROR_ID_DUPLICATE			= -2,
+						RESULT_ERROR_ID_CREATE_MAX			= -3,
+
+						//로그인 오류.
+						RESULT_ERROR_BLOCK_USER 			= -11, 		//블럭유저 > 팝업처리후 인트로로 빼버린다.
+						RESULT_ERROR_DELETED_USER 			= -12, 		//삭제유저 > 팝업처리후 인트로로 빼버린다.
+						RESULT_ERROR_NOT_FOUND_GAMEID		= -13,		//해당유저를 찾지 못함.
+						RESULT_ERROR_NOT_FOUND_PASSWORD		= -17,
+						RESULT_ERROR_SERVER_CHECKING		= -14,		//서버를 점검하고 있다.
+						RESULT_NEWVERION_CLIENT_DOWNLOAD 	= -15,		//신버젼이 나왔다 > 새버젼을 받아라 메세지 처리후 링크처리.
+						RESULT_NEWVERION_FILE_DOWNLOAD 		= -16, 		//신버젼이 나왔다 > 새버젼을 받아라 메세지 처리후 종료.
+						RESULT_ERROR_NOT_FOUND_PHONE		= -76,
+
+						//게임중에 부족.
+						RESULT_ERROR_HEART_LACK				= -20,	//하트가 부족하다.
+						RESULT_ERROR_GAMECOST_LACK			= -21,	//실버가 부족하다.
+						RESULT_ERROR_CASHCOST_LACK			= -22,	//골드가 부족하다.
+						RESULT_ERROR_ITEM_LACK				= -23,	//아이템이부족하다.
+						RESULT_ERROR_FPOINT_LACK			= -124,	//fpoint 부족하다.
+
+						//아이템 구매, 변경.
+						RESULT_ERROR_BUY_ALREADY			= -31, //이미 구매했습니다.
+						RESULT_ERROR_NOT_HAVE				= -32,	//보유하지 않고 있다.
+						RESULT_ERROR_UPGRADE_FULL			= -35,	//업그레이드가 풀로되었다.
+						RESULT_ERROR_ITEM_NOSALE_KIND		= -37,	//판매하지 않는 아이템.
+	
+						//캐쉬구매.
+						RESULT_ERROR_CASH_COPY				= -40,
+						RESULT_ERROR_CASH_OVER				= -41,
+						RESULT_ERROR_MONTH_OVER				= -42, //한달동안 구매한도를 검사.
+
+						//아이템 선물.
+						RESULT_ERROR_NOT_FOUND_ITEMCODE 	= -50,	//아이템코드못찾음.
+						RESULT_ERROR_GIFTITEM_NOT_FOUND		= -51,	//선물아이템을 못찾음.
+						RESULT_ERROR_GIFTITEM_ALREADY_GAIN	= -52,	//선물을 이미 가져감.
+						RESULT_ERROR_NOT_FOUND_GIFTID		= -75,	//캐쉬 > 선물할 아이디를 못찾음.
+
+						//SMS.
+						RESULT_ERROR_SMS_NOT_MATCH_PHONE	= -80,	//문자추천.
+						RESULT_ERROR_SMS_KEY_DUPLICATE		= -81,
+						RESULT_ERROR_SMS_REJECT				= -84,	//리젝된 폰번호입니다.
+						RESULT_ERROR_SMS_DOUBLE_PHONE		= -85,	//중복된 폰번호입니다.
+						RESULT_ERROR_KEY_DUPLICATE			= -86,	//일반 키가 중복되었다.
+
+						//기타오류.
+						RESULT_ERROR_RESULT_COPY			= -53,	//결과카피시도.
+						RESULT_ERROR_GAMECOST_COPY			= -54,	//실버카피시도.
+						RESULT_ERROR_NOT_SUPPORT_MODE		= -70,	//지원하지않는모드.
+						RESULT_ERROR_ACTION_FULL			= -71,	//행동치가 맥스입니다.
+						RESULT_ERROR_TUTORIAL_ALREADY		= -73,	//투토리얼 이미 보상.
+						RESULT_ERROR_NOT_FOUND_OTHERID		= -83,	//
+						RESULT_ERROR_INVEN_FULL				= -101,	//
+						RESULT_ERROR_DAILY_REWARD_ALREADY	= -102, //일일보상 이미 보상.
+						RESULT_ERROR_NOT_FOUND_DOGAMIDX		= -103, //도감번호를 찾을수 없음.
+						RESULT_ERROR_DOGAM_ALREADY_REWARD	= -104, //도감을 이미 지급했음.
+						RESULT_ERROR_DOGAM_LACK				= -105,	//도감중에 동물번호가 부족함.
+						RESULT_ERROR_ANIMAL_NOT_FOUND		= -106,	//대표동물 못찾음.
+						RESULT_ERROR_ANIMAL_NOT_INVEN		= -107,	//인벤에 없음(창고).
+						RESULT_ERROR_ANIMAL_NOT_ALIVE		= -108,	//살아 있지 않음.
+						RESULT_ERROR_ANIMAL_IS_ALIVE		= -116, //동물이 살아있다.
+						RESULT_ERROR_ANIMAL_FIELDIDX		= -117, //필드인덱스오류.
+						RESULT_ERROR_NOT_MATCH				= -110,	//무엇인가 매치가 안되었다.
+						RESULT_ERROR_DOUBLE_RANDSERIAL		= -111,	//랜덤시리얼 중복.
+						RESULT_ERROR_MAXCOUNT				= -112, //맥스카운터.
+						RESULT_ERROR_ITEMCOST_WRONG			= -113, //아이템 가격이 이상함.
+						RESULT_ERROR_LISTIDX_NOT_FOUND		= -114, //리스트 번호를 못찾음.
+						RESULT_ERROR_NOT_ENOUGH				= -115,	//무엇인가 충분하지 않음.
+						RESULT_ERROR_NOT_FOUND_SEEDIDX		= -118, //파라미터 오류.
+						RESULT_ERROR_PLANT_ALREADY			= -119, //이미 씨앗이 심어져있음.
+						RESULT_ERROR_NEED_BUY				= -120, //경작지가 미구매상태.
+						RESULT_ERROR_HARVEST_TIME_REMAIN	= -121, //아직 시간이 남음.
+						RESULT_ERROR_PARAMETER				= -122, //파라미터오류.
+						RESULT_ERROR_TIME_REMAIN			= -123, //아직 시간이 남음.
+						RESULT_ERROR_NOT_FOUND_USERFARM		= -125, //목장리스트가 미구매.
+						RESULT_ERROR_ALREADY_REWARD			= -126, //무엇인가 이미보상했음.
+						RESULT_ERROR_CANNT_CHANGEDAY_SCHOOL	= -127,	//학교대항전을 변경못함.
+						RESULT_ERROR_CANNT_JOINDAY_SCHOOL	= -128,	//학교대항전을 가입불가.
+						RESULT_ERROR_CANNT_FIND_SCHOOL		= -129,	//학교대항전을 학교를 찾을수 없음.
+						RESULT_ERROR_CANNT_JOINMAX_SCHOOL	= -130,	//학교대항전을 학교가 맥스입니다.
+						RESULT_ERROR_FRIEND_WAIT_MAX		= -131,	//친구 대기 맥스(더이상 친구 신청을 할 수 없습니다.).
+						RESULT_ERROR_FRIEND_AGREE_MAX		= -132,	//친구 맥스(더 이상 친구를 맺을 수 없습니다.).
+						RESULT_ERROR_NOT_FOUND_CERTNO		= -133,	//쿠폰 번호가 없음.
+						RESULT_ERROR_NO_MORE_PET			= -134,	//더이상 펫이 없다.
+						RESULT_ERROR_HELP_TIME_REMAIN		= -140,	//Help 타임이 아직남음.
+						RESULT_ERROR_CANNOT_USED_NICKNAME	= -141,	//닉네임 사용불가.
+						RESULT_ERROR_JOIN_WAIT				= -142,	//가입시간대기.
+						RESULT_ERROR_ALREADY_REWARD_COUPON	= -143, //쿠폰은 1인 1매.
+						RESULT_ERROR_ACC_SAMEPART			= -144,	//악세사리가 동일 파트이다.
+						RESULT_ERROR_ACC_EMPTY_CREATE		= -145,	//악세사리가 빈곳에 생성할려고한다.						
+						RESULT_CLIENT_AUTO_EQUIP_PET_FAIL	= -800, // 펫 자동 장착 실패.
+						RESULT_ERROR_CANNT_CHANGE			= -146, //무엇인가를 변경할 수 없습니다.
+						RESULT_ERROR_ALIVE_USER				= -147,	//현재 활동하는 유저입니다.
+						RESULT_ERROR_WAIT_RETURN			= -148,	//요청 대기중입니다.
+						RESULT_ERROR_NOT_CLEAR_BEFORE_FARM	= -149, //목장도전불가.
+						RESULT_ERROR_TICKET_LACK			= -150, //티켓수량부족.
+						RESULT_ERROR_PLAY_COUNT_ZERO		= -151,	//플레이 횟수가 없습니다.
+						RESULT_ERROR_HEART_DAILY_FULL		= -152,	//하트 일일지원량을 초과했습니다.
+						RESULT_ERROR_ANIMAL_DAILY_FULL		= -153, //1일 동물 구매 수량을 초과.
+						RESULT_ERROR_DIFFERENT_GRADE		= -154,	//동물의 등급이 다릅니다.
+						RESULT_ERROR_ANIMAL_LACK			= -155,	//동물의 수량이 부족합니다.
+
+						RESULT_ERROR_NOT_FOUND_BOX			= -156,	//박스를 찾을 수 없습니다.
+						RESULT_ERROR_OPERATE_OTHER_BOX		= -157,	//박스중 다른것이 작동중.
+						RESULT_ERROR_NOT_OPERATE_BOX		= -158,	//박스가 현재 미작동중입니다.
+						RESULT_ERROR_KAKAO_MESSAGE_BLOCK	= -159,	//메세지 수신거부상태입니다.
+						RESULT_ERROR_TIME_PASSED			= -160,	//시간이 지났습니다.
+	RESULT_ERROR_NOT_FOUND_ZCPCHANCE	= -161,	//짜요쿠폰조각 획득판이 존재안합니다.
+	RESULT_ERROR_ZCP_LACK				= -162,	//짜요쿠폰 부족합니다.
+	RESULT_ERROR_ZCP_EXPIRE				= -163,	//짜요쿠폰이 만기 되었습니다.
+	RESULT_ERROR_PRODUCT_EXPIRE			= -165,	//해당상품이 만기되었습니다.
+	RESULT_ERROR_PRODUCT_EXHAUSTED		= -166,	//해당상품이 모두 판매되었거나 및 조기종영되었습니다.	
+
+						RESULT_XXXXXX						= -999;
+	#endregion
+
+	
+	#region 정의값들.
+	public const int 	CONNECT_STATE_NON					= 0,
+						CONNECT_STATE_TRY					= 1,
+						CONNECT_STATE_SUCCESS				= 2,
+						CONNECT_STATE_FAIL					= -1;
+	
+	public const int 	//유저 인벤의 종류.
+						USERITEM_INVENKIND_ANI				= 1,	//동물.
+						USERITEM_INVENKIND_CONSUME			= 3, 	//소비템.
+						USERITEM_INVENKIND_ACC				= 4,	//악세사리.
+						USERITEM_INVENKIND_DIRECT			= 40,	//다이렉트로 이미 지급됨.(클라이언트는 사용안함.)
+						USERITEM_INVENKIND_INFO				= 60,	//정보용.(클라이언트는 사용안함.)		
+						USERITEM_INVENKIND_PET				= 1000,	//펫.				
+						USERITEM_INVENKIND_STEMCELL			= 1040,	//줄기세포.	
+						USERITEM_INVENKIND_TREASURE			= 1200, //보물..
+
+						//선물 종류.
+						GIFTLIST_GIFT_KIND_MESSAGE			= 1,	//선물(메세지).
+						GIFTLIST_GIFT_KIND_GIFT				= 2,	//선물(아이템).
+						GIFTLIST_GIFT_KIND_MESSAGE_DEL		= -1,	//메세지 삭제.
+						GIFTLIST_GIFT_KIND_GIFT_DEL			= -2,	//선물 삭제(안받고 삭제).
+						GIFTLIST_GIFT_KIND_GIFT_GET			= -3,	//선물 받기(해당템만 전송).
+						GIFTLIST_GIFT_KIND_GIFT_SELL		= -4,	//선물 바로판매.
+						GIFTLIST_GIFT_KIND_LIST				= -5,	//리스트.
+		
+						MARKET_BOARD_NOT_WRITE				= 0,	//마켓에 추천의 글 작성하기.
+					 	MARKET_BOARD_WRITEED				= 1,
+	
+						//게임서버 상태값.
+					 	SYSTEM_CHECK_SERVICE				= 0,	//게임서버 서비스.
+					 	SYSTEM_CHECK_CHECKING				= 1,	//        점검중.	
+		
+		
+						//동물정보.
+						//필드동물 0 ~ 8.
+						USERITEM_FIELDIDX_INVEN				= -1,	//창고.
+						USERITEM_FIELDIDX_HOSPITAL			= -2,	//병원.
+		
+						//유저의 동물이 친구 도움으로 부활했는가?
+						KAKAO_NEED_HELP_ALIVE_NON			= -1,	//아님.
+						KAKAO_NEED_HELP_ALIVE_OK			=  1,	//친구가 도와서 부활함.
+							
+						PUSH_MODE_MSG						= 1,	//퓌쉬에 관련된것들.
+						PUSH_MODE_PEACOCK					= 2,
+						PUSH_MODE_URL						= 3,
+		
+						MODE_SAVE							= 1,	//.
+						MODE_READ							= 2,
+
+						//합성의 종류.
+						MODE_ANI_COMPOSE_FULL				= 1,	//준비만족 > 무료 돌리기.
+						MODE_ANI_COMPOSE_LACK_HAKROUL		= 2,	//준비부족 > 확률 돌리기.
+						MODE_ANI_COMPOSE_LACK_CASHCOST		= 3,	//준비부족 > 수정 돌리기.
+						
+						//합성의 결과.
+						COMPOSE_RESULT_SUCCESS				= 1,	//성공.
+						COMPOSE_RESULT_FAIL					= 0,	//실패.
+
+						//tutorail 옵션.
+						MODE_TUTORIAL_INIT					= 0,
+						MODE_TUTORIAL_OK					= 1,
+						MODE_TUTORIAL_RETRY					= 2,
+						MODE_TUTORIAL_SKIP					= 3,
+		
+						//친구관련.
+						USERFRIEND_MODE_SEARCH				= 1,	//검색.
+						USERFRIEND_MODE_ADD					= 2,	//친구 신청.
+						USERFRIEND_MODE_DELETE				= 3,	//친구 삭제(친구상태에서도 삭제됨).
+						USERFRIEND_MODE_MYLIST				= 4,	//내친구 리스트.
+						USERFRIEND_MODE_VISIT				= 5,	//방문.
+						USERFRIEND_MODE_APPROVE				= 6,	//친구 신청수락(친구 신청을 받은 사람이 수락해줌).
+						USERFRIEND_MODE_HEARD				= 7,	//친구에게 하트 보내주기(동물에 따라서 하트의 량과 우정포인트가 다름).
+		
+						//친구상태값.
+						USERFRIEND_STATE_PROPOSE_WAIT		= 0,	//친구신청대기.
+						USERFRIEND_STATE_APPROVE_WAIT		= 1,	//친구수락대기.
+						USERFRIEND_STATE_FRIEND				= 2,	//상호친구.
+		
+	ZAYO_PIECE_CHANCE_ONE		= 1,	//짜요쿠폰조각 룰렛 등장.
+	ZAYO_PIECE_CHANCE_NON		= -1,	//짜요쿠폰조각 룰렛   꽝.
+		
+						//죽은 or 부활모드.
+						USERITEM_MODE_DIE_INIT				= -1, 	// 초기상태.
+						USERITEM_MODE_DIE_PRESS				= 1,	// 눌러 죽음.
+						USERITEM_MODE_DIE_EAT_WOLF			= 2, 	// 늑대 죽음.
+						USERITEM_MODE_DIE_EXPLOSE			= 3,	// 터져 죽음.
+						USERITEM_MODE_DIE_DISEASE			= 4,	// 질병 죽음.
+		
+						//부활.
+						USERITEM_MODE_REVIVAL_FIELD			= 1, 	// 필드부활.
+						USERITEM_MODE_REVIVAL_HOSPITAL		= 2,	// 병원부활.
+						USERITEM_MODE_REVIVAL_DELETE		= 3,	// 병원삭제.
+		
+						USERMASTER_UPGRADE_STATE_NON		= -1,	// 미진행, 완료중.(유저).
+						USERMASTER_UPGRADE_STATE_ING		=  1,	// 다음단계진행중.
+		
+						USERMASTER_UPGRADE_KIND_NEXT		= 1,	//업그레이드 시작(1).
+						USERMASTER_UPGRADE_KIND_RIGHTNOW	= 2,	//업그레이드 즉시완료(2).
+		
+						//경작지.
+						// >= 0 이면 해당 씨앗.
+						USERSEED_NEED_EMPTY					= -1,	//구매, 빈곳.
+						USERSEED_NEED_BUY					= -2,	//미구매.
+		
+						//농장상태.
+						USERFARM_BUYSTATE_NOBUY				= -1,	//미구매상태.
+						USERFARM_BUYSTATE_BUY				=  1,	//무매상태.
+		
+						//농장모드.
+						USERFARM_MODE_BUY					=  1,	//구매모드.
+						USERFARM_MODE_INCOME				=  2,	//수익모드.
+						USERFARM_MODE_SELL					=  3,	//판매모드.
+		
+						USERSEED_HARVEST_MODE_NORMAL		= 1,	//일반수확.
+						USERSEED_HARVEST_MODE_RIGHTNOW		= 2,	//즉시수확.
+						USERSEED_HARVEST_MODE_GIVEUP		= 3,	//버리기.
+
+						//동물뽑기.
+						MODE_ROULETTE_GRADE1				= 1,	// 일반뽑기.
+						MODE_ROULETTE_GRADE2				= 2,	// 루비뽑기.
+						MODE_ROULETTE_GRADE4				= 4,	// 루비뽑기 10 + 1.
+						//MODE_ROULETTE_GRADE2_FREE			= 12,	// 루비뽑기			(무료).
+						//MODE_ROULETTE_GRADE4_FREE			= 14,	// 루비뽑기 10 + 1	(무료).
+						//MODE_ROULETTE_GRADE1_TICKET		= 21,	// 일반뽑기			(티켓).
+						//MODE_ROULETTE_GRADE2_TICKET		= 22,	// 루비뽑기			(티켓).
+						//MODE_ROULETTE_GRADE4_TICKET		= 24,	// 루비뽑기 10 + 1 	(티켓).
+				
+						//보물뽑기 상수.
+						MODE_TREASURE_GRADE1				= 1,	// 일반뽑기.
+						MODE_TREASURE_GRADE2				= 2,	// 루비뽑기.
+						MODE_TREASURE_GRADE4				= 4,	// 루비뽑기 10 + 1.
+						//MODE_TREASURE_GRADE2_FREE			= 12,	// 루비뽑기          (무료).
+						//MODE_TREASURE_GRADE4_FREE			= 14,	// 루비뽑기 10 + 1	(무료).
+						//MODE_TREASURE_GRADE1_TICKET		= 21,	// 일반뽑기          (티켓).
+						//MODE_TREASURE_GRADE2_TICKET		= 22,	// 루비뽑기          (티켓).
+						//MODE_TREASURE_GRADE4_TICKET		= 24,	// 루비뽑기 10 + 1 	(티켓).
+
+						MODE_COMPOSE						= 3,	//합성.
+						
+						//보물강화 모드.
+						MODE_TSUPGRADE_NORMAL				= 1,	//일반강화.
+						MODE_TSUPGRADE_PREMINUM				= 2,	//캐쉬강화.
+		
+						//보물강화의 결과.
+						TSUPGRADE_RESULT_SUCCESS			= 1,	//성공.
+						TSUPGRADE_RESULT_FAIL				= 0,	//실패.
+
+						//푸쉬설정값.
+						INFOMATION_NO						= -1,	//푸쉬안받음.
+						INFOMATION_YES						=  1,	//푸쉬받음.		
+		
+	//회전판 상수.
+	MODE_WHEEL_NORMAL					= 20,	//일일룰렛(20)
+	MODE_WHEEL_PREMINUM					= 21,	//황금룰렛(21)
+	MODE_WHEEL_PREMINUMFREE				= 22,	//황금무료(22)
+	MODE_ZCPCHANCE_FREE					= 1,	//무료모드(1)
+	MODE_ZCPCHANCE_CASH					= 2,	//유료모드(2)
+						//세이브값종류.
+						SAVE_USERINFO_GAMEYEAR				= 0,
+						SAVE_USERINFO_MONTH					= 1,
+						SAVE_USERINFO_FRAMETIME				= 2,
+						SAVE_USERINFO_FEVERGAUGE			= 4,
+						SAVE_USERINFO_BOTTLELITTLE			= 10,
+						SAVE_USERINFO_BOTTLEFRESH			= 11,
+						SAVE_USERINFO_TANKLITTLE			= 12,
+						SAVE_USERINFO_TANKFRESH				= 13,
+						SAVE_USERINFO_USEFEED				= 30,
+						SAVE_USERINFO_BOOSTERUSE			= 40,
+						SAVE_USERINFO_ALBAUSE				= 41,
+						SAVE_USERINFO_ALBAUSE_SECOND		= 44,
+						SAVE_USERINFO_ALBAUSE_THIRD			= 45,		
+						SAVE_USERINFO_WOLFAPPEAR			= 42,
+						SAVE_USERINFO_WOLFKILLCNT			= 43,
+						SAVE_USERINFO_PETCOOLTIME			= 46,
+					
+						SAVE_TRADEINFO_FAME					= 0,
+						SAVE_TRADEINFO_FAMELV				= 1,
+						SAVE_TRADEINFO_TRADECNT				= 10,
+						SAVE_TRADEINFO_PRIZECNT				= 11,
+						SAVE_TRADEINFO_PRIZECOIN			= 12,
+						SAVE_TRADEINFO_PLAYCOIN				= 20,
+						SAVE_TRADEINFO_SALETRADER			= 30,
+						SAVE_TRADEINFO_SALEDANGA			= 31,
+						SAVE_TRADEINFO_SALEPLUSDANGA		= 32,
+						SAVE_TRADEINFO_SALEBARREL			= 33,
+						SAVE_TRADEINFO_SALEFRESH			= 34,
+						SAVE_TRADEINFO_SALECOST				= 35,
+						SAVE_TRADEINFO_SALEITEMCODE			= 40,
+						SAVE_TRADEINFO_PLUSHEART			= 50,
+						SAVE_TRADEINFO_ORDERBARREL			= 51,
+						SAVE_TRADEINFO_ORDERFRESH			= 52,
+						SAVE_TRADEINFO_DEALEROPEN			= 61, //상인풀기:(>=0 이상번호), 아님(-1).
+						SAVE_TRADEINFO_TRADESUCCESS			= 62, //거래성공:성공(1), 실패(-1).
+						SAVE_TRADEINFO_DEALERCLOSE			= 63, //잠김상인: 상인번호(>= 0 이상번호), -1:안잠금.
+						SAVE_TRADEINFO_DEALERSTATE			= 64, //열림(1), 닫힘(-1)
+						SAVE_TRADEINFO_GOLDTICKETUSED		= 70, //사용(1), 미사용(-1).
+		
+						TRADEINFO_PRIZECOIN_MAX				= 3000,	//연속거래에 대한 max설정.
+
+						TRADEINFO_SUCCESS					= 1,	//상인거래 성공.
+						TRADEINFO_FAIL						= -1,	//상인거래 실패.
+		
+						//경쟁모드(서버에서 자료수집).
+						BKT_WOLF_KILL_CNT					= 1,	//누적늑대잡이(1).
+						BKT_SALE_COIN						= 11,	//누적판매금액(11).
+						BKT_HEART 							= 12,	//누적하트획득(12).
+						BKT_FEED 							= 13,	//누적건초획득(13).
+						BKT_SUCCESS_CNT 					= 14,	//최고거래성공횟수(14).
+						BKT_BEST_FRESH 						= 15,	//최고신선도(15).
+						BKT_BEST_BARREL 					= 16,	//최고배럴(16).
+						BKT_BEST 							= 17,	//최고판매금액(17).
+						BKT_BARREL							= 18,	//누적배럴(18).
+						BKT_CROSS_NORMAL 					= 21,	//누적일반교배(21).
+						BKT_CROSS_PREMIUM 					= 22,	//누적프리미엄교배(22).		
+		
+						//경쟁모드(사용순간)
+						BKT_FIELD_ANI_COUNT					= 30,	//필드동물수량(30)(사용순간)
+						BKT_USER_FAME_LV 					= 31,	//명성레벨(31)
+						BKT_USER_FRIEND_ADD 				= 32,	//친구추가(32)
+						BKT_USER_FRIEND_HEART				= 33,	//친구하트선물(33)
+		
+						//(인벤정보참조)
+						BKT_USER_EXTEND_SEED 				= 40,	//경작지확장(40)(인벤정보참조)
+						BKT_USER_EXTEND_ANI 				= 41,	//동물인벤확장(41)
+						BKT_USER_EXTEND_CONSUME 			= 42,	//소비인벤확장(42)
+						BKT_USER_EXTEND_ACC					= 43,	//악세인벤확장(43)
+		
+						//(업그레이드 정보참조)
+						BKT_UPGRADE_HOUSE 					= 50,	//집(50)(업그레이드 정보참조)
+						BKT_UPGRADE_MILKTANK 				= 51,	//탱크(51)
+						BKT_UPGRADE_BASKET 					= 52,	//양동이(52)
+						BKT_UPGRADE_PUMP 					= 53,	//착유기(53)
+						BKT_UPGRADE_TRANSFER				= 54,	//주입기(54)
+						BKT_UPGRADE_PURE 					= 55,	//정화시설(55)
+						BKT_UPGRADE_FRESHCOOl				= 56,	//저온보관(56)
+		
+						//경쟁모드(소모템 사용순간.)
+						BKT_USED_BOOSTER 					= 61,	//소모템일반 촉진제(61)(소모템 사용순간.)
+						BKT_USED_VACCINE 					= 62,	//소모템일반 치료제(62)
+						BKT_USED_ALBA 						= 63,	//소모템농부(63)
+						BKT_USED_BULLET 					= 64,	//소모템늑대용 공포탄(64)
+						BKT_USED_HELPER						= 65,	//소모템긴급지원(65)
+		
+						//게시판 모드.
+						USERBOARD_MODE_WRITE				= 1,	// 글쓰기.
+						USERBOARD_MODE_READ					= 2,	// 읽기.
+		
+						//게시판 종류.
+						USERBOARD_KIND_NORMAL				= 1,	// 일반게시판.
+						USERBOARD_KIND_FRIEND				= 2,	// 친추게시판.
+						USERBOARD_KIND_GROUP				= 3,	// 대항게시판.
+		
+						//소모템 > 퀵슬롯에 착용위치.
+						USERMASTER_QUICKKIND_NON			= -1,	// 없음.
+						USERMASTER_QUICKKIND_SETTING		=  1,	// 총알, 백신, 촉진, 알바(아이템 보고 세팅해줌).
+		
+						//튜토리얼 상태값(신모델).
+						TUTOSTEP_ISPASS_PASS				=  1,	// 1:패스.
+						TUTOSTEP_ISPASS_MARK				= -1,	// -1:사전보상 or 완료보상.
+		
+						//유저 정보 변경모드.
+						USERMASTER_CHANGEINOF_MODE_BOARDWRITE	= 1,	//게시판 추천글을 작성했음.
+						USERMASTER_CHANGEINOF_MODE_PICTURE		= 2,	//사진변경.
+						USERMASTER_CHANGEINOF_MODE_NICKNAME		= 3,	//닉네임 변경.
+						USERMASTER_CHANGEINOF_MODE_KKOPUSHALLOW	= 11,	//푸쉬 변경.	
+						USERMASTER_CHANGEINOF_MODE_KKOMSGBLOCKED= 12,	//카카오톡 메세지블럭.	
+				
+						//학교대항(종류).
+						SCHOOLKIND_ELEMENTARY_SCHOOL 		= 1,	// 초등.
+						SCHOOLKIND_JUNIOR_SCHOOL 			= 2,	// 중등.
+						SCHOOLKIND_HIGH_SCHOOL 				= 3,	// 고등.
+						SCHOOLKIND_COLLEGE_SCHOOL 			= 4,	// 대학.
+						
+						//액세서리 교체 정보.
+						// >= 0										// >= 0 listidx 정보.
+						ACC_STATE_STRIP						= -1,	//악세해제.
+						ACC_STATE_KEEP						= -2,	//악세유지.
+
+						//행운의 주사위 모드.
+						MODE_YABAU_RESET					= 1,	//리스트 갱신.
+						MODE_YABAU_NORMAL					= 2,	//일반야바위.
+						MODE_YABAU_PREMINUM					= 3,	//프리미엄야바위.
+						MODE_YABAU_REWARD					= 4,	//받아가기 갱신.
+
+						//에피소드 상태.
+						EPISODE_GRADE_NON 					= 0,	// 없음.
+						EPISODE_GRADE_BAD 					= 1,	// Bad.
+						EPISODE_GRADE_NORMAL 				= 2,	// Normal.
+						EPISODE_GRADE_GOOD 					= 3,	// Good.
+						EPISODE_GRADE_EXCELLENT 			= 4,	// Excellent.
+
+						//복귀유저 정보.
+						MODE_RETURN_STATE_NON				= 0, 	//활동.
+						MODE_RETURN_STATE_SENDED			= 1, 	//이미요청.
+						MODE_RETURN_STATE_LONG				= 2, 	//장기미접속.
+
+						//배틀결과.
+						BATTLE_RESULT_WIN					=  1, 	//
+						BATTLE_RESULT_LOSE					= -1,
+						BATTLE_RESULT_DRAW					=  0,
+
+						NICKNAME_CHANGE_MODE_FREE			= 1,	//무료변경.
+						NICKNAME_CHANGE_MODE_CASHCOST		= 2,	//유료변경.
+
+						//남아도는 동물과 보물 분해모드.
+						MODE_APART_ANIMAL					= 1,	//동물분해.
+						MODE_APART_TREASURE					= 2,	//보물분해.
+
+						CCCCCCCCCCCCCCCCCCCCCCCCCCCCC		= -1;
+		
+		
+	#endregion
+
+	/////////////////////////////////////////////////////////
+	// 과금,
+	/////////////////////////////////////////////////////////
+	#if MARKET_MODE_SKT
+		#if COMPANY_SANGSANG
+			public const string AID 					= "OA00700316";
+			public const string PID 					= "0910047079";
+			public const string SERVER_IP 				= "127.0.0.1";
+			public const int 	SERVER_PORT 			= 0;
+			public const string ITEM_BUY_3300			= "0910047079", 
+								ITEM_BUY_5500			= "0910047080", 
+								ITEM_BUY_11000			= "0910047081", 
+								ITEM_BUY_33000			= "0910047082", 
+								ITEM_BUY_55000			= "0910047083", 
+								ITEM_BUY_110000			= "0910047084"; 
+		#else
+			public const string AID 					= "";
+			public const string PID 					= "";
+			public const string SERVER_IP 				= "127.0.0.1";
+			public const int 	SERVER_PORT 			= 0;
+			public const string ITEM_BUY_3300			= "", 
+								ITEM_BUY_5500			= "", 
+								ITEM_BUY_11000			= "", 
+								ITEM_BUY_33000			= "", 
+								ITEM_BUY_55000			= "", 
+								ITEM_BUY_110000			= ""; 
+		#endif	
+		public const string IAP_KEY					= "";
+		public const string BASE64PULBIC_KEY		= "";
+	#elif MARKET_MODE_GOOGLE
+		#if COMPANY_SANGSANG
+			public const string AID 					= "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgFtheYGJgJXRpWQZsgnjzc8POS0x3EvImvCTzx+SvGBAtNZOm7mqv2odxPJUkalEGSfMn823DeAQeaD2LKDCvylMTuE9YJfZlsbB2qe3IfG3E4cL/XeG9oXhFoCJD+2+rSeZqLcDvnqDG7Pj23PLaowz3zi5IKndnP45Ox1EVPa8ofWj/IrQ8PQL6alhy4ADOkRdYraAU0lHijfNjcBV7TQHxpKCUPS7y/4aO7BkXk88xEBE64T3xu03lbiOJzb16luXDMRlRcTibe83DpDL19qDNRky5iVoJ89W8+bq/Dd13E+/EJxnmACpjH5UAfEsxOusgCCssAwmKj6i4lBq8wIDAQAB";
+			public const string PID 					= "";
+			public const string SERVER_IP 				= "127.0.0.1";
+			public const int 	SERVER_PORT 			= 0;
+			public const string ITEM_BUY_3300			= "farm_3300", 
+								ITEM_BUY_5500			= "farm_5500", 
+								ITEM_BUY_11000			= "farm_11000", 
+								ITEM_BUY_33000			= "farm_33000",
+								ITEM_BUY_55000			= "farm_55000",
+								ITEM_BUY_110000			= "farm_110000";
+		#else		
+			public const string CID 					= "";
+			public const string AID 					= "";
+			public const string PID 					= "";
+			public const string SERVER_IP 				= "127.0.0.1";
+			public const int 	SERVER_PORT 			= 0;
+			public const string ITEM_BUY_3300			= "", 
+								ITEM_BUY_5500			= "", 
+								ITEM_BUY_11000			= "", 
+								ITEM_BUY_33000			= "", 
+								ITEM_BUY_55000			= "", 
+								ITEM_BUY_110000			= ""; 
+		#endif
+
+		public const string IAP_KEY					= "";
+		public const string BASE64PULBIC_KEY		= "";
+		#elif MARKET_MODE_NHN
+			#if COMPANY_SANGSANG
+				public const string AID 					= "TCTK407241403247287967";	//lib에서 세팅되어 있음.
+				public const string PID 					= "1000007929";	
+				public const string SERVER_IP 				= "127.0.0.1";
+				public const int 	SERVER_PORT 			= 0;
+				public const string ITEM_BUY_3300			= "1000007929",
+									ITEM_BUY_5500			= "1000007928",
+									ITEM_BUY_11000			= "1000007927",
+									ITEM_BUY_33000			= "1000007926",
+									ITEM_BUY_55000			= "1000007925",
+									ITEM_BUY_110000			= "1000007924";	
+			#else		
+				public const string CID 					= "";
+				public const string AID 					= "";
+				public const string PID 					= "";
+				public const string SERVER_IP 				= "127.0.0.1";
+				public const int 	SERVER_PORT 			= 0;
+				public const string ITEM_BUY_3300			= "", 
+									ITEM_BUY_5500			= "", 
+									ITEM_BUY_11000			= "", 
+									ITEM_BUY_33000			= "", 
+									ITEM_BUY_55000			= "", 
+									ITEM_BUY_110000			= ""; 
+			#endif	
+		public const string IAP_KEY					= "30I5y3jgQQ";		//B9jcySRvkN(test) 30I5y3jgQQ(real) > lib에서 세팅되어 있음.
+		public const string BASE64PULBIC_KEY		= "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCQHCIRg/Yo2g6rZFJsAVOSa5z35qGrxXGlt2sPxosyDU9Dq3gkgUJ5Oi6v6AZNSP14QX/kde8ji6ERn1V94+ezrxXmwAYOXY4Ecyp6eQd0y81v8RP+tjletQRsCr471K8DhjZjhVCKz1IJqaw6Poh2bCGDtNMOyTGnOcvql9whXQIDAQAB";//lib에서 세팅되어 있음.
+	#elif MARKET_MODE_IPHONE
+		#if COMPANY_SANGSANG
+			public const string AID 					= "";	//.
+			public const string PID 					= "";
+			public const string SERVER_IP 				= "127.0.0.1";
+			public const int 	SERVER_PORT 			= 0;
+			public const string ITEM_BUY_3300			= "farm_3300", 
+								ITEM_BUY_5500			= "farm_5500", 
+								ITEM_BUY_11000			= "farm_11000",
+								ITEM_BUY_33000			= "farm_33000",
+								ITEM_BUY_55000			= "farm_55000",
+								ITEM_BUY_110000			= "farm_110000"; 
+		#else		
+			public const string CID 					= "";
+			public const string AID 					= "";
+			public const string PID 					= "";
+			public const string SERVER_IP 				= "127.0.0.1";
+			public const int 	SERVER_PORT 			= 0;
+			public const string ITEM_BUY_3300			= "", 
+								ITEM_BUY_5500			= "", 
+								ITEM_BUY_11000			= "", 
+								ITEM_BUY_33000			= "", 
+								ITEM_BUY_55000			= "", 
+								ITEM_BUY_110000			= ""; 
+		#endif
+		public const string IAP_KEY					= "";
+		public const string BASE64PULBIC_KEY		= "";
+	#endif
+	
+	public const int 	CASH_MODE_BUYMODE			= 1,
+						CASH_MODE_GIFTMODE			= 2;
+
+	public const string ITEM_BUY_STATE_NON 			= "0",
+						ITEM_BUY_STATE_TRY 			= "1",
+						ITEM_BUY_STATE_ERROR 		= "-2",
+						ITEM_BUY_STATE_SUCCESS 		= "3";
+	
+	public const int 	ITEM_BUY_3300_INT			= 3300,
+						ITEM_BUY_5500_INT			= 5500,
+						ITEM_BUY_11000_INT			= 11000,
+						ITEM_BUY_33000_INT			= 33000,
+						ITEM_BUY_55000_INT			= 55000,
+						ITEM_BUY_110000_INT			= 110000;
+
+	public const int 	ITEM_BUY_3300_GOLD			=   310,
+						ITEM_BUY_5500_GOLD			=   550,
+						ITEM_BUY_11000_GOLD			=  1120,
+						ITEM_BUY_33000_GOLD			=  3450,
+						ITEM_BUY_55000_GOLD			=  5900,
+						ITEM_BUY_110000_GOLD		= 12500;
+
+	public const int 	TARGET_MODE_NO				= 0,
+						TARGET_MODE_YES				= 1;
+}

@@ -64,8 +64,11 @@ public class Protocol{
 						PTS_SERVERTIME		= 3,	
 						PTC_USERPARAM		= 4,	//userparam.jsp
 						PTS_USERPARAM		= 4,
+
 						PTC_GIFTGAIN		= 21, 	//giftgain.jsp
 						PTS_GIFTGAIN		= 21,
+						PTC_SYSINQUIRE		= 22, 	//sysinquire.jsp
+						PTS_SYSINQUIRE		= 22,
 
 						PTC_XXXXX			= 99,	
 						PTS_XXXXX			= 99;
@@ -83,6 +86,7 @@ public class Protocol{
 						PTG_SERVERTIME		= "servertime.jsp",
 						PTG_USERPARAM		= "userparam.jsp",
 						PTG_GIFTGAIN		= "giftgain.jsp",
+						PTG_SYSINQUIRE		= "sysinquire.jsp",
 
 						PTG_XXXXX			= "_xxxxx.jsp";
 
@@ -245,6 +249,7 @@ public class Protocol{
 						ITEM_SUBCATEGORY_BOX_ADVICE			= 42,	//조언 패키지 박스(42)
 						ITEM_SUBCATEGORY_SCROLL_EVOLUTION	= 45,	//합성초월주문서(45)
 						ITEM_SUBCATEGORY_SCROLL_COMMISSION	= 46,	//수수료주문서(46)
+						ITEM_SUBCATEGORY_ETC_ITEM	= 47,	//기타템들(47)
 						ITEM_SUBCATEGORY_CASHCOST			= 50,	//다이아(50)
 						ITEM_SUBCATEGORY_STATICINFO			= 500,	//정보수집(500)
 						ITEM_SUBCATEGORY_LEVELUPREWARD		= 900,	//레벨업 보상(510)

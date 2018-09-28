@@ -84,6 +84,15 @@ public class NetworkManager : MonoBehaviour {
 		if (GUI.Button (_rl, _str)) {
 			sendCode (Protocol.PTC_GIFTGAIN, null);
 		}
+
+		_str = "PTC_SYSINQUIRE";
+		_py += _dy;
+		_rl = new Rect(_px, _py, _dx, _dy);
+		if (GUI.Button (_rl, _str)) {
+			sendCode (Protocol.PTC_SYSINQUIRE, null);
+		}
+
+
 	}
 	#endif
 	
@@ -312,6 +321,33 @@ public class NetworkManager : MonoBehaviour {
 				//3. sending			
 				#if NET_DEBUG_MODE			
 				Debug.Log(" _form:" + SSUtil.getString(_form.data));			
+				#endif
+				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
+			}
+			break;
+		case Protocol.PTC_SYSINQUIRE:
+			{
+				#if NETDEBGU_MODE
+				Debug.Log("[C -> S] PTC_SYSINQUIRE");
+				#endif
+				//1. make URL
+				url = urlbase + Protocol.PTG_SYSINQUIRE;
+
+				//2. setting form
+				//---------------------------------------
+				//유저 정보.
+				strCreateID = "mtxxxx3";
+				strCreatePW = "049000s1i0n7t8445289";
+				string strMessage = "문의드립니다.";
+				//---------------------------------------
+
+				_form.AddField("gameid", strCreateID );
+				_form.AddField("password", strCreatePW );
+				_form.AddField("message", strMessage );					
+
+				//3. sending
+				#if NETDEBGU_MODE
+				Debug.Log(" _form:" + SSUtil.getString(_form.data));
 				#endif
 				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
 			}
@@ -721,6 +757,26 @@ public class NetworkManager : MonoBehaviour {
 					Debug.Log(" > 서버시간 실패. > 팝업처리.");
 					#endif
 					break;				
+				}
+			}
+			break;
+		case Protocol.PTS_SYSINQUIRE:
+			{
+				#if NETDEBGU_MODE
+				Debug.Log("[C <- S] PTS_SYSINQUIRE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+				#endif
+
+				switch(_resultcode){
+				case Protocol.RESULT_SUCCESS:
+					#if NETDEBGU_MODE
+					Debug.Log(" > 게임 문의를 등록했습니다.");
+					#endif
+					break;
+				default:
+					#if NETDEBGU_MODE
+					Debug.Log(" > 팝업처리.");
+					#endif
+					break;
 				}
 			}
 			break;

@@ -92,6 +92,13 @@ public class NetworkManager : MonoBehaviour {
 			sendCode (Protocol.PTC_SYSINQUIRE, null);
 		}
 
+		_str = "PTC_SGREADY";
+		_py += _dy;
+		_rl = new Rect(_px, _py, _dx, _dy);
+		if (GUI.Button (_rl, _str)) {
+			sendCode (Protocol.PTC_SGREADY, null);
+		}
+
 
 	}
 	#endif
@@ -349,6 +356,33 @@ public class NetworkManager : MonoBehaviour {
 				#if NETDEBGU_MODE
 				Debug.Log(" _form:" + SSUtil.getString(_form.data));
 				#endif
+				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
+			}
+			break;
+		case Protocol.PTC_SGREADY:
+			{
+				#if NETDEBGU_MODE
+				Debug.Log("[C -> S] PTC_SGREADY");
+				#endif
+				//1. make URL
+				url = urlbase + Protocol.PTG_SGREADY;
+
+				//2. setting form
+				//---------------------------------------
+				//유저 정보.
+				strCreateID = "mtxxxx3";
+				strCreatePW = "049000s1i0n7t8445289";
+				//---------------------------------------
+				_form.AddField("gameid", strCreateID );
+				_form.AddField("password", strCreatePW );
+				_form.AddField("sid", "333" );								//login에서 받은 sid
+				_form.AddField("gmode", "" + Protocol.GAME_MODE_SINGLE );	//연습, 싱글, 멀티.
+				_form.AddField("listidx", "" + -1 );						//아이템은 리스트 번호.
+
+				//3. sending
+				//#if NETDEBGU_MODE
+				Debug.Log(" _form:" + SSUtil.getString(_form.data));
+				//#endif
 				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
 			}
 			break;
@@ -757,6 +791,69 @@ public class NetworkManager : MonoBehaviour {
 					Debug.Log(" > 서버시간 실패. > 팝업처리.");
 					#endif
 					break;				
+				}
+			}
+			break;
+		case Protocol.PTS_SGREADY:
+			{
+				#if NETDEBGU_MODE
+				Debug.Log("[C <- S] PTS_SGREADY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+				#endif
+
+				switch(_resultcode){
+				case Protocol.RESULT_SUCCESS:
+					#if NETDEBGU_MODE
+					Debug.Log(" > 게임을 할려고 들어왔다.");
+					#endif
+					//************************************
+					//이시간을 토대로 시간을 계산한다.
+					// > 가장 중요한 부분입니다. 
+					// > 별도로 시간 싱크는 계속 보내주면 별도로 맞추고 싶을 때를 위해 별도 프로 토콜을 사용할 수 있습니다.
+					//************************************
+					DateTime.Parse( _parser.getString("curdate") );	//2018-09-12 18:07:28.53
+
+					//유저 개인정보...
+					_parser.getInt("curturntime");		//현재 진행중인 회차.
+					_parser.getString("curturndate");	//현재 진행중인 회차가 완료되는 시간.
+
+					break;
+				case Protocol.RESULT_ERROR_SERVER_CHECKING:		
+					#if NETDEBGU_MODE
+					Debug.Log("PTS_SGREADY > error > 시스템 점검중입니다. > 게임 종료.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGREADY > error > 아이디를 확인해라.");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_BLOCK_USER:		
+					#if NETDEBGU_MODE
+					Debug.Log("PTS_SGREADY > error > 블럭처리된 아이디입니다. > 게임 종료.");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE:		
+					Debug.LogError (" >>> 강제 로그 아웃 처리 해주세요(구현우 이것 삭제)");
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGREADY > error > 세션이 만기 강제로 로그아웃 처리 해야합니다..");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_CALCULATE_LOTTO_WAIT_LOBBY:		
+					Debug.LogError (" ERROR 결과를 계산중이여서 (로비에서 대기해서 잠시후에 들어와주세요.)");
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGREADY > error > 결과를 계산중이여서 (로비에서 대기해서 잠시후에 들어와주세요.)");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_ITEM_LACK:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGREADY > error > 아이템이 부족합니다.");
+					#endif
+					break;
+				default:
+					#if NETDEBGU_MODE
+					Debug.Log(" > 팝업처리.");
+					#endif
+					break;
 				}
 			}
 			break;

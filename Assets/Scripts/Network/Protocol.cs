@@ -70,6 +70,13 @@ public class Protocol{
 						PTC_SYSINQUIRE		= 22, 	//sysinquire.jsp
 						PTS_SYSINQUIRE		= 22,
 
+						PTC_SGREADY			= 31, 	//sgready.jsp
+						PTS_SGREADY			= 31,
+						PTC_SGBET			= 32, 	//sgbet.jsp
+						PTS_SGBET			= 32,
+						PTC_SGRESULT		= 33, 	//sgresult.jsp
+						PTS_SGRESULT		= 33,	
+
 						PTC_XXXXX			= 99,	
 						PTS_XXXXX			= 99;
 	#endregion
@@ -87,6 +94,10 @@ public class Protocol{
 						PTG_USERPARAM		= "userparam.jsp",
 						PTG_GIFTGAIN		= "giftgain.jsp",
 						PTG_SYSINQUIRE		= "sysinquire.jsp",
+
+						PTG_SGREADY			= "sgready.jsp",
+						PTG_SGBET			= "sgbet.jsp",
+						PTG_SGRESULT		= "sgresult.jsp",
 
 						PTG_XXXXX			= "_xxxxx.jsp";
 
@@ -166,6 +177,15 @@ public class Protocol{
 						RESULT_ERROR_PRODUCT_EXHAUSTED		= -166,	//해당상품이 모두 판매되었거나 및 조기종영되었습니다.
 						RESULT_ERROR_NOT_FOUND_OTHERID		= -83,	//
 						RESULT_ERROR_SESSION_ID_EXPIRE		= -151,	//세션이 만료되었습니다.WWW
+						RESULT_ERROR_DOUBLE_IP				= -201, //IP중복...
+						RESULT_ERROR_TURNTIME_WRONG			= -203, //회차정보가 잘못되었다
+						RESULT_ERROR_NOT_BET_ITEMLACK		= -204, //아이템을 배팅하지 않고 배팅할려고하였습니다.
+						RESULT_ERROR_NOT_BET_SAFETIME		= -205, //30초 ~ 결과 ~ 10초 이시간에는 배팅금지
+						RESULT_ERROR_NOT_INPUT_SUPERBALL_5TRY		= -207,		// 슈퍼볼 데이터가 아직 안들어옴… > 5초후에 다시 요청
+						RESULT_ERROR_NOT_ING_TURNTIME				= -	208,	// 강제로 로그 아웃을 시켜주세요… (이미 타임을 지나간 것을 결과 요청이라서)
+						RESULT_ERROR_NOT_CALCULATE_LOTTO_WAIT_LOBBY	= -209,		// 로또에서 회차 정보가 5분이 되어도 안옴… > 잠시후에 접속해주세요.
+						RESULT_ERROR_NOT_CALCULATE_LOTTO_WAIT_LOBBY2= -210,		// 로또에서 회차 정보가 5분이 되어도 안옴… > 잠시후에 접속해주세요. 내부취소마킹, 로비로이동, 점검중…
+
 
 						RESULT_XXXXXX						= -999;
 	#endregion
@@ -200,6 +220,10 @@ public class Protocol{
 						USERPARAM_MODE_SAVE					= 1,	//저장, 
 						USERPARAM_MODE_READ					= 2,	//읽기모드.
 
+						//MT 게임모드.
+						GAME_MODE_PRACTICE					= 0,	//연습모드.
+						GAME_MODE_SINGLE					= 1, 	//싱글모드.
+						GAME_MODE_MULTI						= 2,	//멀티모드.
 
 						XXXXXXXXXXXXXXXXXXXXXXXXXX1			= -1;
 

@@ -69,7 +69,7 @@ public class NetErrMsg {
 		case Protocol.RESULT_ERROR_PRODUCT_EXPIRE:		_errMent = Msg.NET_RESULT_ERROR_PRODUCT_EXPIRE; break;
 		case Protocol.RESULT_ERROR_PRODUCT_EXHAUSTED:	_errMent = Msg.NET_RESULT_ERROR_PRODUCT_EXHAUSTED; break;
 		case Protocol.RESULT_ERROR_NOT_FOUND_OTHERID:	_errMent = Msg.NET_RESULT_ERROR_NOT_FOUND_OTHERID; break;
-		case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE:	_errMent = Msg.NET_RESULT_ERROR_SESSION_ID_EXPIRE; break;
+		case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE_LOGOUT:	_errMent = Msg.NET_RESULT_ERROR_SESSION_ID_EXPIRE; break;
 
 		default :
 			_errMent = Msg.NET_NOT_FOUND_ERR + "\n( code : "+ _resultCode.ToString () +" )"; break;

@@ -1,8 +1,11 @@
+//@@@@ 0018 start 
+//@@@@ 0018 end
+
 #if UNITY_EDITOR
-//#define NETDEBGU_MODE_BASE
-#define NETDEBGU_MODEx
-#define NETDEBGU_MODE2x
-#define NETDEBGU_MODE3x
+//#define NET_DEBUG_MODE_BASE
+#define NET_DEBUG_MODEx
+#define NET_DEBUG_MODE2x
+#define NET_DEBUG_MODE3x
 #endif
 
 using UnityEngine;
@@ -77,7 +80,7 @@ public class NetworkManager : MonoBehaviour {
 	#endregion
 	
 	void Awake(){
-		#if NETDEBGU_MODE
+		#if NET_DEBUG_MODE
 		//Debug.Log("MARKET:" + Protocol.MARKET + " BUYTYPE:" + Protocol.BUYTYPE + " VERSION:" + Protocol.VERSION + " PLATFORM:" + Protocol.PLATFORM);
 		//Debug.Log("개발버젼에서는 세이브데이타 삭제함.");
 		//Debug.Log("SERVER:" + Protocol.SERVER);
@@ -147,11 +150,11 @@ public class NetworkManager : MonoBehaviour {
 	// DELEGATE_INT	: 응답후 함수(delegate).
 	// _bPopup		: 팝업을 띄울것인가?
 	//--------------------------------------------
-	public bool sendCode(int _code, DELEGATE_INTINT _callbackFun , bool _bPopup)
+	public bool sendCode(int _code, VOID_FUN_INTINT _onResult )
 	{
 		
 		//Ui_Debug.SetText ( "sendCode callBack ( "+ _callbackFun +" ) " );
-		//#if NETDEBGU_MODE
+		//#if NET_DEBUG_MODE
 		//	Debug.Log("sendCode _code:" + _code);
 		//#endif
 		
@@ -167,7 +170,7 @@ public class NetworkManager : MonoBehaviour {
 		{	
 		case Protocol.PTC_FRETURN:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FRETURN");
 			#endif
 			//1. make URL
@@ -179,15 +182,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("friendid", ServerData.sendCode_friendId );					//삭제할 친구아이디.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_YABAUCHANGE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_YABAUCHANGE");
 			#endif
 			//1. make URL
@@ -199,15 +202,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("randserial", "" + GameData.serial_diceRefresh );				// 랜덤 씨리얼 여기서 호출하지 마세요. 콜하는 쪽에서 호출하세요.
 			// SSUtil.getRandSerial()
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_YABAUREWARD:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_YABAUREWARD");
 			#endif
 			//1. make URL
@@ -218,15 +221,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW);
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_YABAU:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_YABAU");
 			#endif
 			//1. make URL
@@ -241,15 +244,15 @@ public class NetworkManager : MonoBehaviour {
 			// SSUtil.getRandSerial()
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_TRADECHANGE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_TRADECHANGE");
 			#endif
 			//1. make URL
@@ -264,16 +267,16 @@ public class NetworkManager : MonoBehaviour {
 			//번호:상인인덱스;
 			//....
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_RANKLIST:
 			{
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("[C -> S] PTC_RANKLIST");
 				#endif
 				//1. make URL
@@ -284,16 +287,16 @@ public class NetworkManager : MonoBehaviour {
 				_form.AddField("password", strCreatePW);
 
 				//3. sending
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" _form:" + SSUtil.getString(_form.data));
 				#endif
-				StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+				StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 			}
 			break;
 
 		case Protocol.PTC_PETEXP:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_PETEXP");
 			#endif
 			//1. make URL
@@ -304,15 +307,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW);
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_ANICOMPOSEINIT:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANICOMPOSEINIT");
 			#endif
 			//1. make URL
@@ -324,15 +327,15 @@ public class NetworkManager : MonoBehaviour {
 			//시간과 비용은 서버에서 계산한다.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_ANICOMPOSE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANICOMPOSE");
 			#endif
 			//1. make URL
@@ -355,16 +358,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("randserial", ServerData.sendCode_randSerial );				//(중복구매 방지를 위해서)랜덤 씨리얼 여기서 호출하지 마세요. 콜하는 쪽에서 호출하세요.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		//@@@@ start 0095
 		case Protocol.PTC_ANIPROMOTE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANIPROMOTE");
 			#endif
 			//1. make URL
@@ -387,16 +390,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("randserial", ServerData.sendCode_randSerial );	//(중복구매 방지를 위해서)랜덤 씨리얼 여기서 호출하지 마세요. 콜하는 쪽에서 호출하세요.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 		break;
 		//@@@@ end
 		case Protocol.PTC_ANIHOSLIST:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANIHOSLIST");
 			#endif
 			//1. make URL
@@ -407,17 +410,17 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW);
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 			
 		}
 			break;
 			
 		case Protocol.PTC_ANIUPGRADE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANIUPGRADE");
 			#endif
 			//1. make URL
@@ -431,17 +434,17 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("randserial", GameData.serial_aniUpgrade );		//여기서 호출하면 안되고 외부에서 만들어서 보내야함.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 			
 			//@@@@ start 0080
 		case Protocol.PTC_APARTITEMCODE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_APARTITEMCODE");
 			#endif
 			//1. make URL
@@ -458,17 +461,17 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("randserial", GameData.serial_Decompound );						//여기서 호출하면 안되고 외부에서 만들어서 보내야함.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 			//@@@@ end
 
 		case Protocol.PTC_UBBOXOPENOPEN:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_UBBOXOPENOPEN");
 			#endif
 			//1. make URL
@@ -480,16 +483,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("boxslotidx", ServerData.send_boxslotidx);		//박스 슬롯 번호. 1 ~ 4번까지만 존재함.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_UBBOXOPENCASH:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_UBBOXOPENCASH");
 			#endif
 			//1. make URL
@@ -501,16 +504,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("boxslotidx", ServerData.send_boxslotidx);		//현재 작동중인 박스 슬롯 번호. 1 ~ 4번까지만 존재함.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_UBBOXOPENCASH2:
 			{
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("[C -> S] PTC_UBBOXOPENCASH2");
 				#endif
 				//1. make URL
@@ -522,16 +525,16 @@ public class NetworkManager : MonoBehaviour {
 				_form.AddField("boxslotidx", ServerData.send_boxslotidx);		//현재 미작동중인 박스 슬롯 번호. 1 ~ 4번까지만 존재함.
 
 				//3. sending
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" _form:" + SSUtil.getString(_form.data));
 				#endif
-				StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+				StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 			}
 			break;
 
 		case Protocol.PTC_UBBOXOPENGETITEM:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_UBBOXOPENGETITEM");
 			#endif
 			//1. make URL
@@ -543,16 +546,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("boxslotidx", ServerData.send_boxslotidx);		//현재 작동중인 박스 슬롯 번호. 1 ~ 4번까지만 존재함.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_UBSEARCH:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_UBSEARCH");
 			#endif
 			//1. make URL
@@ -565,16 +568,16 @@ public class NetworkManager : MonoBehaviour {
 			//선택한 동물(순번:동물listidx;)반복.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_UBRESULT:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_UBRESULT");
 			#endif
 			//1. make URL
@@ -591,16 +594,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("playtime", ServerData.sendCode_userbattleplaytime);						//플레이 타임.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_WHEEL:
 			{
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("[C -> S] PTC_WHEEL");
 				#endif
 				//1. make URL
@@ -622,16 +625,16 @@ public class NetworkManager : MonoBehaviour {
 				_form.AddField("randserial", GameData.serial_wheel );// 랜덤 씨리얼 여기서 호출하지 마세요. 콜하는 쪽에서 호출하세요.
 
 				//3. sending
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" _form:" + SSUtil.getString(_form.data));
 				#endif
-				StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+				StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 			}
 			break;
 
 		case Protocol.PTC_ZCPCHANCE:
 			{
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("[C -> S] PTC_ZCPCHANCE");
 				#endif
 				//1. make URL
@@ -650,16 +653,16 @@ public class NetworkManager : MonoBehaviour {
 				_form.AddField("randserial", GameData.serial_zcpchance );// 랜덤 씨리얼 여기서 호출하지 마세요. 콜하는 쪽에서 호출하세요.
 
 				//3. sending
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" _form:" + SSUtil.getString(_form.data));
 				#endif
-				StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+				StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 			}
 			break;
 
 		case Protocol.PTC_ZCPBUY:
 			{
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("[C -> S] PTC_ZCPBUY");
 				#endif
 				//1. make URL
@@ -672,16 +675,16 @@ public class NetworkManager : MonoBehaviour {
 				_form.AddField("randserial", GameData.serial_zcpbuy );	// 랜덤 씨리얼 여기서 호출하지 마세요. 콜하는 쪽에서 호출하세요.
 
 				//3. sending
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" _form:" + SSUtil.getString(_form.data));
 				#endif
-				StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+				StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 			}
 			break;
 
 		case Protocol.PTC_RKRANK:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_RKRANK");
 			#endif
 			//1. make URL
@@ -692,16 +695,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW);
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_ANIBATTLESTART:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANIBATTLESTART");
 			#endif
 			//1. make URL
@@ -716,16 +719,16 @@ public class NetworkManager : MonoBehaviour {
 			//Debug.Log (ServerData.sendCode_animallistset);
 
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_ANIBATTLEPLAYCNTBUY:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANIBATTLEPLAYCNTBUY");
 			#endif
 			//1. make URL
@@ -737,16 +740,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("farmidx", ServerData.sendCode_farmidx.ToString());			//목장번호 (목장아이템코드)
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_ANIBATTLERESULT:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANIBATTLERESULT");
 			#endif
 			//1. make URL
@@ -766,16 +769,16 @@ public class NetworkManager : MonoBehaviour {
 			//start2	안이면 별2개
 			//그외는 		   별1개
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_KFHELPLIST:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_KFHELPLIST");
 			#endif
 			//1. make URL
@@ -787,15 +790,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW);
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_KFRESET:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_KFRESET");
 			#endif
 			//1. make URL
@@ -816,15 +819,15 @@ public class NetworkManager : MonoBehaviour {
 			//}
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_ROULACC:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ROULACC");
 			#endif
 			//1. make URL
@@ -836,15 +839,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("randserial", GameData.serial_acc_bbopgi );
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_ANIRESTORE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANIRESTORE");
 			#endif
 			//1. make URL
@@ -855,15 +858,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW);
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_KFHELP:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_KFHELP");
 			#endif
 			//1. make URL
@@ -877,15 +880,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("friendid", ServerData.sendCode_friendId );		//친구 아이디.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_KFINVITE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_KFINVITE");
 			#endif
 			//1. make URL
@@ -897,15 +900,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("kakaouuid", ServerData.sendCode_kakaouuId );
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_KFADD:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_KFADD");
 			#endif
 			//1. make URL
@@ -920,15 +923,15 @@ public class NetworkManager : MonoBehaviour {
 			ServerData.sendCode_refreshFriendsA = null;
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_KCHECKNN:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_KCHECKNN");
 			#endif
 			//1. make URL
@@ -941,16 +944,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("kakaonickname", ServerData.sendCode_kakaonickname );//유저가 입력한 닉네임 검사.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 			
 		}
 			break;
 		case Protocol.PTC_NEWSTART:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_NEWSTART");
 			#endif
 			//1. make URL
@@ -964,16 +967,16 @@ public class NetworkManager : MonoBehaviour {
 			
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 			
 		}
 			break;
 		case Protocol.PTC_SYSINQUIRE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_SYSINQUIRE");
 			#endif
 			//1. make URL
@@ -985,15 +988,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("message", ServerData.sendCode_asMsg );					
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_TUTOSTEP:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_TUTOSTEP");
 			#endif
 			//1. make URL
@@ -1010,15 +1013,15 @@ public class NetworkManager : MonoBehaviour {
 			//	사전보상 or 완료보상	Protocol.TUTOSTEP_ISPASS_MARK
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_CERTNO:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_CERTNO");
 			#endif
 			//1. make URL
@@ -1034,15 +1037,15 @@ public class NetworkManager : MonoBehaviour {
 			//893EFE31693D4309, 	CE1953746AFB43D5, 	F254629BD53744D2, 	8950744B208E41A3
 			//1A13 0B99 B6DB 41D8
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_AGREEMENT:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_AGREEMENT");
 			#endif
 			
@@ -1054,15 +1057,15 @@ public class NetworkManager : MonoBehaviour {
 			//Protocol.AGREEMENT_EN		영문 약관동의.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form), _onResult));
 		}
 			break;
 		case Protocol.PTC_PETROLL:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_PETROLL");
 			#endif
 			//1. make URL
@@ -1075,15 +1078,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("randserial", GameData.serial_pet_bbopgi );
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;	
 		case Protocol.PTC_PETUPGRADE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_PETUPGRADE");
 			#endif
 			//1. make URL
@@ -1095,15 +1098,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("paramint", "" + ServerData.sendCode_petValue );					//listidx를 보내준다.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_PETWEAR:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_PETWEAR");
 			#endif
 			//1. make URL
@@ -1115,15 +1118,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("paramint", "" + ServerData.sendCode_petValue );					//장착할 listidx를 보내준다.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_PETTODAY:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_PETTODAY");
 			#endif
 			//1. make URL
@@ -1136,15 +1139,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("randserial", GameData.serial_pet_today );
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;		
 		case Protocol.PTC_SCHOOLUSERTOP:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_SCHOOLUSERTOP");
 			#endif
 			//1. make URL
@@ -1155,16 +1158,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW );
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
 			Ui_Debug.SetText ( "send ok" );
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_SCHOOLTOP:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_SCHOOLTOP");
 			#endif
 			//1. make URL
@@ -1175,15 +1178,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW );
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_SCHOOLJOIN:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_SCHOOLJOIN");
 			#endif
 			//1. make URL
@@ -1195,15 +1198,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("schoolidx", "" + ServerData.sendCode_schoolIdx );					//학교번호.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_SCHOOLSEARCH:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_SCHOOLSEARCH");
 			#endif
 			//1. make URL
@@ -1223,15 +1226,15 @@ public class NetworkManager : MonoBehaviour {
 			//공백 	> 임의의 10개를 검색.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_TRADECONTINUE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_TRADECONTINUE");
 			#endif
 			//1. make URL
@@ -1242,15 +1245,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW );
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_TRADECASH:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_TRADECASH");
 			#endif
 			//1. make URL
@@ -1261,15 +1264,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW );
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_FBWRITE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FBWRITE");
 			#endif
 			//1. make URL
@@ -1306,15 +1309,15 @@ public class NetworkManager : MonoBehaviour {
 			//_form.AddField("message", "서울대생 모이세요.");	
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;	
 		case Protocol.PTC_FBREAD:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FBREAD");
 			#endif
 			//1. make URL
@@ -1351,15 +1354,15 @@ public class NetworkManager : MonoBehaviour {
 			//_form.AddField("page", "" + 1);	
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;	
 		case Protocol.PTC_FVISIT:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FVISIT");
 			#endif
 			//1. make URL
@@ -1371,15 +1374,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("friendid", ServerData.sendCode_friendId );					//방문할 친구아이디.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_CHANGEINFO:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_CHANGEINFO");
 			#endif
 			//1. make URL
@@ -1394,15 +1397,15 @@ public class NetworkManager : MonoBehaviour {
 			//닉네임변경	Protocol.USERMASTER_CHANGEINOF_MODE_NICKNAME
 			//USERMASTER_CHANGEINOF_MODE_KKOMSGBLOCKED
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_USERPARAM:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_USERPARAM");
 			#endif
 			//1. make URL
@@ -1437,15 +1440,15 @@ public class NetworkManager : MonoBehaviour {
 			
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_COMPETITION:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_COMPETITION");
 			#endif
 			//1. make URL
@@ -1536,15 +1539,15 @@ public class NetworkManager : MonoBehaviour {
 			
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_FWSELL:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FWSELL");
 			#endif
 			//1. make URL
@@ -1556,15 +1559,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("itemcode", "" + ServerData.sendCode_itemCode );					//목장아이템코드.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_FWINCOME:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FWINCOME");
 			#endif
 			//1. make URL
@@ -1576,15 +1579,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("itemcode", "" + ServerData.sendCode_itemCode );					//목장아이템코드.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_FWBUY:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FWBUY");
 			#endif
 			//1. make URL
@@ -1596,15 +1599,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("itemcode", "" + ServerData.sendCode_itemCode );					//목장아이템코드.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_FMYFRIEND:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FMYFRIEND");
 			#endif
 			//1. make URL
@@ -1615,15 +1618,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW );
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;	
 		case Protocol.PTC_FAPPROVE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FAPPROVE");
 			#endif
 			//1. make URL
@@ -1635,15 +1638,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("friendid", ServerData.sendCode_friendId );
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_FHEART:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FHEART");
 			#endif
 			//1. make URL
@@ -1655,16 +1658,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("friendid", ServerData.sendCode_friendId );					//삭제할 친구아이디.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_FPROUD:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FPROUD");
 			#endif
 			//1. make URL
@@ -1676,16 +1679,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("friendid", ServerData.sendCode_friendId );					//삭제할 친구아이디.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_FPOINT:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FPOINT");
 			#endif
 			//1. make URL
@@ -1696,15 +1699,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW );
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_TUTORIAL:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_TUTORIAL");
 			#endif
 			//1. make URL
@@ -1719,15 +1722,15 @@ public class NetworkManager : MonoBehaviour {
 			//Protocol.MODE_TUTORIAL_SKIP
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_CASHBUY:
 		{			
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_CASHBUY 통신사 과금후");
 			#endif
 			
@@ -1798,15 +1801,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("cashcost", SSUtil.setEncode4("" + _cashcost));				
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));	
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));	
 		}
 			break;
 		case Protocol.PTC_ROULBUY:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ROULBUY");
 			#endif
 			//1. make URL
@@ -1825,16 +1828,16 @@ public class NetworkManager : MonoBehaviour {
 			
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_TREASUREBUY:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_TREASUREBUY");
 			#endif
 			//1. make URL
@@ -1850,16 +1853,16 @@ public class NetworkManager : MonoBehaviour {
 			//3번 버튼 	MODE_TREASURE_GRADE4				= 4,	// 루비뽑기 10 + 1.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_TREASUREWEAR:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_TREASUREWEAR");
 			#endif
 			//1. make URL
@@ -1883,16 +1886,16 @@ public class NetworkManager : MonoBehaviour {
 			/////////////////////////////////////////////////////////////////
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_TREASUREUPGRADE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_TREASUREUPGRADE");
 			#endif
 			//1. make URL
@@ -1907,16 +1910,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("randserial", ServerData.sendCode_TsReinforce_randSerialA );	//(중복구매 방지를 위해서)랜덤 씨리얼 여기서 호출하지 마세요. 콜하는 쪽에서 호출하세요.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_ANIURGENCY:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANIURGENCY");
 			#endif
 			//1. make URL
@@ -1927,15 +1930,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW );			
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_PACKBUY:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_PACKBUY");
 			#endif
 			//1. make URL
@@ -1949,15 +1952,15 @@ public class NetworkManager : MonoBehaviour {
 			// SSUtil.getRandSerial()
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;	
 		case Protocol.PTC_SAVE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_SAVE");
 			#endif
 			//1. make URL
@@ -2008,15 +2011,15 @@ public class NetworkManager : MonoBehaviour {
 			//
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_TRADE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_TRADE");
 			#endif
 			//1. make URL
@@ -2098,15 +2101,15 @@ public class NetworkManager : MonoBehaviour {
 			
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_SEEDHARVEST:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_SEEDHARVEST");
 			#endif
 			//1. make URL
@@ -2122,15 +2125,15 @@ public class NetworkManager : MonoBehaviour {
 			//즉시/캐쉬수확(2)	Protocol.USERSEED_HARVEST_MODE_RIGHTNOW
 			// 작물 제거. Protocol.USERSEED_HARVEST_MODE_GIVEUP
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_SEEDPLANT:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_SEEDPLANT");
 			#endif
 			//1. make URL
@@ -2148,15 +2151,15 @@ public class NetworkManager : MonoBehaviour {
 			//촉진 > 소모(선물함).
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_SEEDBUY:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_SEEDBUY");
 			#endif
 			//1. make URL
@@ -2168,15 +2171,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("seedidx", "" + ServerData.sendCode_seedIdx );						//경작지 번호.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_DELETEID:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_DELETEID");
 			#endif
 			//1. make URL
@@ -2187,16 +2190,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW );
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 			
 		}
 			break;
 		case Protocol.PTC_FACUPGRADE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FACUPGRADE");
 			#endif
 			//1. make URL
@@ -2213,15 +2216,15 @@ public class NetworkManager : MonoBehaviour {
 			//업그레이드 즉시완료(2)		Protocol.USERMASTER_UPGRADE_KIND_RIGHTNOW	
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_ITEMACC:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ITEMACC");
 			#endif
 			//1. make URL
@@ -2235,15 +2238,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("acc2listidx", "" + ServerData.sendCode_listIdxs2 );					//악세(등, 옆구리).
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_ITEMACCNEW:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ITEMACCNEW");
 			#endif
 			//1. make URL
@@ -2274,15 +2277,15 @@ public class NetworkManager : MonoBehaviour {
 			//_form.AddField("randserial", "" + 7772);
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_ITEMINVENEXP:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ITEMINVENEXP");
 			#endif
 			//1. make URL
@@ -2301,15 +2304,15 @@ public class NetworkManager : MonoBehaviour {
 			//보물(1200)		Protocol.USERITEM_INVENKIND_TREASURE
 
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_ITEMQUICK:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ITEMQUICK");
 			#endif
 			//1. make URL
@@ -2324,15 +2327,15 @@ public class NetworkManager : MonoBehaviour {
 			//장착(1)		Protocol.USERMASTER_QUICKKIND_SETTING
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_ANIREPREG:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANIREPREG");
 			#endif
 			//1. make URL
@@ -2350,16 +2353,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("listidx", "" + ServerData.sendCode_listIdx );						//아이템의 listidx 번호(서버에서 생성해서 보내준 고유번호).
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 			
 		}
 			break;
 		case Protocol.PTC_ANIUSEITEM:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANIUSEITEM");
 			#endif
 			//1. make URL
@@ -2380,15 +2383,15 @@ public class NetworkManager : MonoBehaviour {
 			// 12:1;13:3
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_ANIREVIVAL:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANIREVIVAL");
 			#endif
 			//1. make URL
@@ -2410,15 +2413,15 @@ public class NetworkManager : MonoBehaviour {
 			//필드부활(부활석x1 or 캐쉬+1)			gameid=xxxx2&password=049000s1i0n7t8445289&mode=1&listidx=1&fieldidx=1 
 			//병원부활(부활석x2 or (캐쉬+1)*2)		gameid=xxxx2&password=049000s1i0n7t8445289&mode=2&listidx=4&fieldidx=-1 
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;	
 		case Protocol.PTC_FDELETE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FDELETE");
 			#endif
 			//1. make URL
@@ -2431,15 +2434,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("friendid", ServerData.sendCode_friendId );					//추가할 친구아이디.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_FADD:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FADD");
 			#endif
 			//1. make URL
@@ -2451,15 +2454,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("friendid", ServerData.sendCode_friendId );					//추가할 친구아이디.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_FSEARCH:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_FSEARCH");
 			#endif
 			//1. make URL
@@ -2477,15 +2480,15 @@ public class NetworkManager : MonoBehaviour {
 			//공백 	> 임의의 10개를 검색.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_ITEMSELL:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ITEMSELL");
 			#endif
 			//1. make URL
@@ -2498,16 +2501,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("sellcnt", "" + ServerData.sendCode_sellCount );							//판매 수량.
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_ITEMSELLLIST:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ITEMSELLLIST");
 			#endif
 			//1. make URL
@@ -2519,16 +2522,16 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("listset", ServerData.sendCode_StemCelllistset);	//번호:리스트인덱스;
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 
 		case Protocol.PTC_ITEMBUY:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ITEMBUY");
 			#endif
 			//1. make URL
@@ -2626,15 +2629,15 @@ public class NetworkManager : MonoBehaviour {
 			//exec spu_ItemBuy 'xxxx7', '049000s1i0n7t8445289', 2000, -1, -1, -1, 7789	-- 하트
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_CHANGEPW:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_CHANGEPW");
 			#endif
 			//1. make URL
@@ -2650,15 +2653,15 @@ public class NetworkManager : MonoBehaviour {
 			
 			//Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;	
 		case Protocol.PTC_XXXXX:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_XXXXX");
 			//Debug.Log("url:" + urlbase + Protocol.PTG_XXXXX);
 			#endif
@@ -2670,15 +2673,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("serial", "" + (++debugSerial));
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form), _onResult));
 		}
 			break;
 		case Protocol.PTC_DAILYREWARD:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_DAILYREWARD");
 			#endif
 			//1. make URL
@@ -2689,15 +2692,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("password", strCreatePW );	//strCreatePW
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_NOTICE: 
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_NOTICE");
 			#endif
 			
@@ -2709,15 +2712,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("buytype", "" + Protocol.BUYTYPE);
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form), _onResult));
 		}
 			break;
 		case Protocol.PTC_CREATEID:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_CREATEID");
 			#endif
 			//1. make URL
@@ -2740,15 +2743,15 @@ public class NetworkManager : MonoBehaviour {
 			_form.AddField("pushid", strPushID);
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_CREATEGUEST:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_CREATEGUEST");
 			#endif
 			//1. make URL
@@ -2838,22 +2841,22 @@ public class NetworkManager : MonoBehaviour {
 			}
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_PUSHMSG:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_PUSHMSG");
 			#endif
 			
 			//1. make URL
 			url = urlbase + Protocol.PTG_PUSHMSG;
 			
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("#### 상대 게임아이디 입력.");
 			#endif
 			//2. setting form
@@ -2877,15 +2880,15 @@ public class NetworkManager : MonoBehaviour {
 			//_form.AddField("msgmsg", "http://m.naver.com");
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_LOGIN:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_LOGIN");
 			#endif
 			//1. make URL
@@ -2925,15 +2928,15 @@ public class NetworkManager : MonoBehaviour {
 			}
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_GIFTGAIN:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_GIFTGAIN");
 			#endif
 			//1. make URL
@@ -3017,15 +3020,15 @@ public class NetworkManager : MonoBehaviour {
 			//exec spu_GiftGain 'xxxx6', '049000s1i0n7t8445289', -3, 72, -1, -1, -1, -1	-- 코인.	
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_ANISET:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANISET");
 			#endif
 			//1. make URL
@@ -3050,15 +3053,15 @@ public class NetworkManager : MonoBehaviour {
 																		//				동물1;동물2;
 																		*/
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_ANIDIE:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_ANIDIE");
 			#endif
 			//1. make URL
@@ -3082,15 +3085,15 @@ public class NetworkManager : MonoBehaviour {
 				*/
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		case Protocol.PTC_DOGAMREWARD:
 		{
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log("[C -> S] PTC_DOGAMREWARD");
 			#endif
 			//1. make URL
@@ -3104,10 +3107,10 @@ public class NetworkManager : MonoBehaviour {
 			//Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			
 			//3. sending
-			#if NETDEBGU_MODE
+			#if NET_DEBUG_MODE
 			Debug.Log(" _form:" + SSUtil.getString(_form.data));
 			#endif
-			StartCoroutine(Handle(new WWW(url, _form ), _callbackFun, _bPopup));
+			StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 		}
 			break;
 		default:{
@@ -4258,18 +4261,18 @@ public class NetworkManager : MonoBehaviour {
 		//Ui_Debug.SetText ( "parseCode _idx ( "+_idx+" )" );
 		//string _xml 	= queue[_idx].data;
 		
-		#if NETDEBGU_MODE2
+		#if NET_DEBUG_MODE2
 		Debug.Log ( _xml );
-		string _debugXml = _xml;
+		string _xml = _xml;
 		#endif
 		
-		//_debugXml  = "<?xml version='1.0' encoding='utf-8'?>";
-		//_debugXml += "<rows>";
-		//_debugXml += "	<result>";
-		//_debugXml += "<resultcode>-2</resultcode>";
-		//_debugXml += "<resultmsg> DEBUG (생성)아이디가 중복되었습니다.</resultmsg>";
-		//_debugXml += "</result>";
-		//_debugXml += "</rows>";
+		//_xml  = "<?xml version='1.0' encoding='utf-8'?>";
+		//_xml += "<rows>";
+		//_xml += "	<result>";
+		//_xml += "<resultcode>-2</resultcode>";
+		//_xml += "<resultmsg> DEBUG (생성)아이디가 중복되었습니다.</resultmsg>";
+		//_xml += "</result>";
+		//_xml += "</rows>";
 		
 		//1. 변수 선언 및 할당.
 		//bool _bPopup 				= queue[_idx].popup;
@@ -4287,7 +4290,7 @@ public class NetworkManager : MonoBehaviour {
 		int _resultcode = parser.getInt("resultcode");
 		string _msg 	= parser.getString("resultmsg");
 		
-		#if NETDEBGU_MODE2
+		#if NET_DEBUG_MODE2
 		Debug.Log( 
 		          //"Queue _idx:" + _idx
 		          //+ " _bPopup:" + _bPopup
@@ -4297,7 +4300,7 @@ public class NetworkManager : MonoBehaviour {
 		          );
 		#endif	
 		
-		#if NETDEBGU_MODE2
+		#if NET_DEBUG_MODE2
 		Debug.Log ( _xml );
 		#endif	
 		
@@ -4305,13 +4308,13 @@ public class NetworkManager : MonoBehaviour {
 		switch(_code){	
 		case Protocol.PTS_FRETURN:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_FRETURN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_FRETURN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구하트주기 > 성공.");
 				#endif
 				
@@ -4328,32 +4331,32 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구하트주기 > 아이디를 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_OTHERID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구하트주기 > 친구의 정보를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구하트주기 > 신청 받은 사람만이 승인 처리 할 수 있습니다");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ALIVE_USER:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 현재 활동하는 유저입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_WAIT_RETURN:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 현재 요청 대기중입니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 팝업처리.");
 				#endif
 				break;
@@ -4364,13 +4367,13 @@ public class NetworkManager : MonoBehaviour {
 		case Protocol.PTS_YABAUREWARD:
 		case Protocol.PTS_YABAU:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_YABAUCHANGE, PTS_YABAUREWARD, PTS_YABAU _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_YABAUCHANGE, PTS_YABAUREWARD, PTS_YABAU _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PETTODAY > success");
 				#endif
 				
@@ -4394,37 +4397,37 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_YABAUCHANGE, PTS_YABAUREWARD, PTS_YABAU > error > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_YABAUCHANGE, PTS_YABAUREWARD, PTS_YABAU > error > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_YABAUCHANGE, PTS_YABAUREWARD, PTS_YABAU > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_YABAUCHANGE, PTS_YABAUREWARD, PTS_YABAU > error > 코인이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_YABAUCHANGE, PTS_YABAUREWARD, PTS_YABAU > error > 리스트를 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CANNT_CHANGE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_YABAUCHANGE, PTS_YABAUREWARD, PTS_YABAU > error > 진행 중이거나 기타 사유로 리스트를 변경할 수 없습니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_YABAUCHANGE, PTS_YABAUREWARD, PTS_YABAU > error > not found error");
 				#endif
 				break;
@@ -4433,13 +4436,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_TRADECHANGE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_TRADECHANGE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_TRADECHANGE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADECHANGE > success");
 				#endif
 				
@@ -4456,12 +4459,12 @@ public class NetworkManager : MonoBehaviour {
 				}
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADECHANGE > error > 아이디가 존재하지 않는다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADECHANGE > error > not found error");
 				#endif
 				break;
@@ -4471,13 +4474,13 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_RANKLIST:
 			{
-				#if NETDEBGU_MODE
-				Debug.Log("[C <- S] PTS_RANKLIST _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_RANKLIST _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 				#endif
 
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_RANKLIST > success");
 					#endif
 
@@ -4489,12 +4492,12 @@ public class NetworkManager : MonoBehaviour {
 
 					break;
 				case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_RANKLIST > error > 아이디가 존재하지 않는다.");
 					#endif
 					break;
 				default:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_RANKLIST > error > not found error");
 					#endif
 					break;
@@ -4504,13 +4507,13 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_ANICOMPOSEINIT:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANICOMPOSEINIT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANICOMPOSEINIT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSEINIT > success");
 				#endif
 				
@@ -4523,17 +4526,17 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSEINIT > error > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSEINIT > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSEINIT > error > not found error");
 				#endif
 				break;
@@ -4542,13 +4545,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_ANICOMPOSE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANICOMPOSE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANICOMPOSE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSE > success");
 				#endif
 				
@@ -4576,47 +4579,47 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSE > error > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSE > error > 지원하지 않습니다.(자신과교배, 지원안하는 모드)");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSE > error > 코드를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_LISTIDX_NOT_FOUND:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSE > error > 번호를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_MATCH:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSE > error > 동일한 아이템 코드가 아닙니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_HEART_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSE > error > 하트이 부족하다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSE > error > 게임코인이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSE > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANICOMPOSE > error > not found error");
 				#endif
 				break;
@@ -4627,13 +4630,13 @@ public class NetworkManager : MonoBehaviour {
 		//@@@@ start 0095
 		case Protocol.PTS_ANIPROMOTE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANIPROMOTE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANIPROMOTE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIPROMOTE > success");
 				#endif
 				
@@ -4653,52 +4656,52 @@ public class NetworkManager : MonoBehaviour {
 				}
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIPROMOTE > error > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIPROMOTE > error > 코드를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_LISTIDX_NOT_FOUND:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIPROMOTE > error > 번호를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_HEART_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIPROMOTE > error > 하트이 부족하다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIPROMOTE > error > 게임코인이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_TICKET_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIPROMOTE > error > 티켓 수량이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ANIMAL_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIPROMOTE > error > 필요동물 수량이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_DIFFERENT_GRADE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIPROMOTE > error > 다른 등급의 동물이 있습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_MATCH:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIPROMOTE > error > 동일한 아이템 코드가 아닙니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIPROMOTE > error > not found error");
 				#endif
 				break;
@@ -4708,13 +4711,13 @@ public class NetworkManager : MonoBehaviour {
 		//@@@@ end
 		case Protocol.PTS_ANIHOSLIST:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANIHOSLIST _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANIHOSLIST _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIHOSLIST > success");
 				#endif
 				
@@ -4749,12 +4752,12 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIHOSLIST > error > 아이디를 확인해라 > 다시 로그인.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIHOSLIST > error > not found error");
 				#endif
 				break;
@@ -4764,14 +4767,14 @@ public class NetworkManager : MonoBehaviour {
 			
 		case Protocol.PTS_ANIUPGRADE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANIUPGRADE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANIUPGRADE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode)
 			{
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIUPGRADE > success");
 				#endif
 				
@@ -4790,33 +4793,33 @@ public class NetworkManager : MonoBehaviour {
 				break;
 				
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIUPGRADE > error > 아이디를 확인해라 > 다시 로그인.");
 				#endif
 				break;
 				
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIUPGRADE > error > 튜토리얼 번호가 없다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_UPGRADE_FULL:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIUPGRADE > error > 업그레이드가 풀입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIUPGRADE > error > 게임코인이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_HEART_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIUPGRADE > error > 하트이 부족하다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIUPGRADE > error > not found error");
 				#endif
 				break;
@@ -4826,14 +4829,14 @@ public class NetworkManager : MonoBehaviour {
 		//@@@@ start 0080
 		case Protocol.PTS_APARTITEMCODE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_APARTITEMCODE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_APARTITEMCODE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode)
 			{
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_APARTITEMCODE > success");
 				#endif
 				//동물 -> 구매/지원 -> 코인(80%)
@@ -4887,22 +4890,22 @@ public class NetworkManager : MonoBehaviour {
 				break;
 				
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_APARTITEMCODE > error > 아이디를 확인해라 > 다시 로그인.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_APARTITEMCODE > error > 지원하지 않습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_LISTIDX_NOT_FOUND:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_APARTITEMCODE > error > 번호를 찾을수 없습니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_APARTITEMCODE > error > not found error");
 				#endif
 				break;
@@ -4913,14 +4916,14 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_UBBOXOPENOPEN:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_UBBOXOPENOPEN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_UBBOXOPENOPEN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode)
 			{
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENOPEN > success");
 				#endif
 				ServerData.InitGoldCashHeartFeedGoldTicketBattleTicket(parser.getInt("gamecost"),
@@ -4946,27 +4949,27 @@ public class NetworkManager : MonoBehaviour {
 
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENOPEN > error > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENOPEN > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_BOX:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENOPEN > error > 요청하신 슬롯에 박스가 존재하지 않습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_OPERATE_OTHER_BOX:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENOPEN > error > 다른 슬롯이 작동중입니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENOPEN > error > not found error");
 				#endif
 				break;
@@ -4978,14 +4981,14 @@ public class NetworkManager : MonoBehaviour {
 		case Protocol.PTS_UBBOXOPENCASH:		//캐쉬오픈.
 		case Protocol.PTS_UBBOXOPENGETITEM:		//시간되어서 오픈.
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_UBBOXOPENCASH _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_UBBOXOPENCASH _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode)
 			{
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENCASH > success");
 				#endif
 				ServerData.InitGoldCashHeartFeedGoldTicketBattleTicket(parser.getInt("gamecost"),
@@ -5066,42 +5069,42 @@ public class NetworkManager : MonoBehaviour {
 				}
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENCASH > error > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENCASH > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_BOX:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENCASH > error > 요청하신 슬롯에 박스가 존재하지 않습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_INVEN_FULL:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENCASH > error > 인벤이 풀입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_OPERATE_OTHER_BOX:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENCASH > error > 다른 슬롯이 작동중입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENCASH > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_TIME_REMAIN:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENCASH > error > 시간이 남았습니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBBOXOPENCASH > error > not found error");
 				#endif
 				break;
@@ -5111,14 +5114,14 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_UBSEARCH:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_UBSEARCH _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_UBSEARCH _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode)
 			{
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBSEARCH > success");
 				#endif
 
@@ -5159,12 +5162,12 @@ public class NetworkManager : MonoBehaviour {
 				}
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBSEARCH > error > 아이디를 확인해라 > 다시 로그인.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBSEARCH > error > not found error");
 				#endif
 				break;
@@ -5174,14 +5177,14 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_UBRESULT:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_UBRESULT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_UBRESULT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode)
 			{
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBRESULT > success");
 				#endif
 				
@@ -5209,12 +5212,12 @@ public class NetworkManager : MonoBehaviour {
 
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBRESULT > error > 아이디를 확인해라 > 다시 로그인.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_UBRESULT > error > not found error");
 				#endif
 				break;
@@ -5224,14 +5227,14 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_WHEEL:
 			{
-				#if NETDEBGU_MODE
-				Debug.Log("[C <- S] PTS_WHEEL _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_WHEEL _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 				#endif
 
 				switch(_resultcode)
 				{
 				case Protocol.RESULT_SUCCESS:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_WHEEL > success");
 					#endif
 
@@ -5281,32 +5284,32 @@ public class NetworkManager : MonoBehaviour {
 //					}
 					break;
 				case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_WHEEL > error > 아이디를 확인해라 > 다시 로그인.");
 					#endif
 					break;
 				case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_WHEEL > error > 지원하지 않는 모드입니다.");
 					#endif
 					break;
 				case Protocol.RESULT_ERROR_DAILY_REWARD_ALREADY:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_WHEEL > error > 1일1회 무료회전판을 2번이상 돌림");
 					#endif
 					break;
 				case Protocol.RESULT_ERROR_NOT_MATCH:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_WHEEL > error > 황금룰렛의 캐쉬가 불일치합니다.");
 					#endif
 					break;
 				case Protocol.RESULT_ERROR_CASHCOST_LACK:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_WHEEL > error > 황금룰렛의 캐쉬가 부족합니다.");
 					#endif
 					break;
 				default:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_WHEEL > error > not found error");
 					#endif
 					break;
@@ -5316,14 +5319,14 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_ZCPCHANCE:
 			{
-				#if NETDEBGU_MODE
-				Debug.Log("[C <- S] PTS_ZCPCHANCE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_ZCPCHANCE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 				#endif
 
 				switch(_resultcode)
 				{
 				case Protocol.RESULT_SUCCESS:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_ZCPCHANCE > success");
 					#endif
 
@@ -5371,7 +5374,7 @@ public class NetworkManager : MonoBehaviour {
 
 					break;
 				default:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_ZCPCHANCE > error > not found error");
 					#endif
 					break;
@@ -5381,14 +5384,14 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_ZCPBUY:
 			{
-				#if NETDEBGU_MODE
-				Debug.Log("[C <- S] PTS_ZCPBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_ZCPBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 				#endif
 
 				switch(_resultcode)
 				{
 				case Protocol.RESULT_SUCCESS:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_ZCPBUY > success");
 					#endif
 
@@ -5407,7 +5410,7 @@ public class NetworkManager : MonoBehaviour {
 
 					break;
 				default:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_ZCPBUY > error > not found error");
 					#endif
 					break;
@@ -5417,14 +5420,14 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_RKRANK:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_RKRANK _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_RKRANK _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode)
 			{
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_RKRANK > success");
 				#endif
 				
@@ -5502,7 +5505,7 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_RKRANK > error > not found error");
 				#endif
 				break;
@@ -5512,14 +5515,14 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_ANIBATTLESTART:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANIBATTLESTART _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANIBATTLESTART _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode)
 			{
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLESTART > success");
 				#endif
 				ServerData.InitGoldCashHeartFeedGoldTicketBattleTicket(parser.getInt("gamecost"), 
@@ -5553,32 +5556,32 @@ public class NetworkManager : MonoBehaviour {
 
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLESTART > error > 아이디를 확인해라 > 다시 로그인.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_USERFARM:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLESTART > 농장을 소유하고 있지 않다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_INVEN_FULL:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLESTART > error > 인벤토리가 가득찻습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_CLEAR_BEFORE_FARM:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLESTART > error > 전목장을 클리어하셔야합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_TICKET_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLESTART > error > 티켓 수량이 부족합니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLESTART > error > not found error");
 				#endif
 				break;
@@ -5588,14 +5591,14 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_ANIBATTLEPLAYCNTBUY:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANIBATTLEPLAYCNTBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANIBATTLEPLAYCNTBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode)
 			{
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLEPLAYCNTBUY > success");
 				#endif
 				
@@ -5607,22 +5610,22 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLEPLAYCNTBUY > error > 아이디를 확인해라 > 다시 로그인.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_USERFARM:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLEPLAYCNTBUY > 농장을 소유하고 있지 않다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("RESULT_ERROR_CASHCOST_LACK > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLEPLAYCNTBUY > error > not found error");
 				#endif
 				break;
@@ -5632,14 +5635,14 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_ANIBATTLERESULT:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANIBATTLERESULT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANIBATTLERESULT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode)
 			{
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLERESULT > success");
 				#endif
 				
@@ -5702,12 +5705,12 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLERESULT > error > 아이디를 확인해라 > 다시 로그인.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIBATTLERESULT > error > not found error");
 				#endif
 				break;
@@ -5717,13 +5720,13 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_KFHELPLIST:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_KFHELPLIST _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_KFHELPLIST _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_KFHELPLIST > 도움 요청리스트");
 				#endif
 				
@@ -5731,12 +5734,12 @@ public class NetworkManager : MonoBehaviour {
 				ReadListWhoNeedMyHelp ( _xml , "userfriend" , parser );
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_KFHELPLIST > 아이디가 존재하지 않는다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_KFHELPLIST > error > not found error");
 				#endif
 				break;
@@ -5745,13 +5748,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_KFRESET:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_KFRESET _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_KFRESET _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 > 성공.");
 				#endif
 				
@@ -5786,12 +5789,12 @@ public class NetworkManager : MonoBehaviour {
 				}
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 실패. > 내아이디를 찾을 수 없습니다. > 팝업처리.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 실패. > 팝업처리.");
 				#endif
 				break;
@@ -5800,13 +5803,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_ROULACC:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ROULACC _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ROULACC _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ROULACC > success");
 				#endif
 				
@@ -5844,17 +5847,17 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ROULACC > error > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ROULACC > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ROULACC > error > not found error");
 				#endif
 				break;
@@ -5863,13 +5866,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_ANIRESTORE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANIRESTORE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANIRESTORE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIRESTORE > success");
 				#endif
 				ServerData.parser_gamecostA = parser.getInt("gamecost");	//게임머니.
@@ -5879,17 +5882,17 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIRESTORE > 아이디가 존재하지 않는다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ANIMAL_IS_ALIVE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIRESTORE > 동물이 살아있다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIRESTORE > error > not found error");
 				#endif
 				break;
@@ -5898,13 +5901,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_KFHELP:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_KFHELP _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_KFHELP _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_KFHELP > 친구에게 도와줘를 요청했습니다");
 				#endif
 				
@@ -5913,17 +5916,17 @@ public class NetworkManager : MonoBehaviour {
 				ReadFriendList ( _xml ,  "userfriend"  , parser );
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_KFHELP > 아이디가 존재하지 않는다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_TIME_REMAIN:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_KFHELP > 시간이 남아있습니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_KFHELP > error > not found error");
 				#endif
 				break;
@@ -5932,13 +5935,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_KFINVITE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_KFINVITE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_KFINVITE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 > 성공.");
 				#endif
 				
@@ -5955,17 +5958,17 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 아이디가 존재하지 않는다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_TIME_REMAIN:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 시간이 남아있습니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 기타오류.");
 				#endif
 				break;
@@ -5974,13 +5977,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_KFADD:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_KFADD _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_KFADD _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 > 성공.");
 				#endif
 				
@@ -5988,12 +5991,12 @@ public class NetworkManager : MonoBehaviour {
 				ReadFriendList ( _xml, "flist" , parser );
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 실패. > 내아이디를 찾을 수 없습니다. > 팝업처리.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 실패. > 팝업처리.");
 				#endif
 				break;
@@ -6002,13 +6005,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_KCHECKNN:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_KCHECKNN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_KCHECKNN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_KCHECKNN > success");
 				#endif
 				
@@ -6016,22 +6019,22 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_KCHECKNN > error > 아이디가 존재하지 않는다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CANNOT_USED_NICKNAME:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_KCHECKNN > error > 닉네임을 다른 사람이 사용중입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_KCHECKNN > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_KCHECKNN > error > not found error");
 				#endif
 				break;
@@ -6040,14 +6043,14 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_NEWSTART:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_NEWSTART _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_NEWSTART _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode)
 			{
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 아이디삭제 > 성공.");
 				#endif
 				strCreateID = "";
@@ -6062,12 +6065,12 @@ public class NetworkManager : MonoBehaviour {
 				//Debug.Log ("PlayerPrefs.Save();, RESULT_SUCCESS");
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 아이디를 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 알수 없는 오류가 발생했습니다.");
 				#endif
 				break;
@@ -6076,18 +6079,18 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_SYSINQUIRE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_SYSINQUIRE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_SYSINQUIRE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 게임 문의를 등록했습니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 팝업처리.");
 				#endif
 				break;
@@ -6096,13 +6099,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_TUTOSTEP:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_TUTOSTEP _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_TUTOSTEP _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TUTOSTEP > success");
 				#endif
 				
@@ -6123,22 +6126,22 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TUTOSTEP > error > 아이디가 존재하지 않는다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TUTOSTEP > error > 튜토리얼 번호가 없다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_TUTORIAL_ALREADY:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TUTOSTEP > error > 이미 지급했다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TUTOSTEP > error > not found error");
 				#endif
 				break;
@@ -6147,13 +6150,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_CERTNO:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_CERTNO _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_CERTNO _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CERTNO > success");
 				#endif
 				
@@ -6177,22 +6180,22 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CERTNO > error > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_CERTNO:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CERTNO > error > 인증번호가 존재안합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ALREADY_REWARD_COUPON:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CERTNO > error > 쿠폰은 1인 1매.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CERTNO > error > not found error");
 				#endif
 				break;
@@ -6201,13 +6204,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_AGREEMENT:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_AGREEMENT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_AGREEMENT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_AGREEMENT > success:" + parser.getString("serial"));
 				#endif
 				
@@ -6216,7 +6219,7 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_AGREEMENT > error > not found error");
 				#endif
 				break;
@@ -6229,13 +6232,13 @@ public class NetworkManager : MonoBehaviour {
 		case Protocol.PTS_PETWEAR:
 		case Protocol.PTS_PETEXP:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_PETTODAY, PTS_PETROLL, PTS_PETUPGRADE, PTS_PETWEAR _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_PETTODAY, PTS_PETROLL, PTS_PETUPGRADE, PTS_PETWEAR _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PETTODAY > success");
 				#endif
 				
@@ -6267,47 +6270,47 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PETTODAY, PTS_PETROLL, PTS_PETUPGRADE, PTS_PETWEAR > error > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PETTODAY, PTS_PETROLL, PTS_PETUPGRADE, PTS_PETWEAR > error > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PETTODAY, PTS_PETROLL, PTS_PETUPGRADE, PTS_PETWEAR > error > 아이템을 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PETTODAY, PTS_PETROLL, PTS_PETUPGRADE, PTS_PETWEAR > error > 캐쉬가 부족합니다.");
 				#endif
 				break;					
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PETTODAY, PTS_PETROLL, PTS_PETUPGRADE, PTS_PETWEAR > error > 코인이 부족합니다.");
 				#endif
 				break;			
 			case Protocol.RESULT_ERROR_LISTIDX_NOT_FOUND:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PETTODAY, PTS_PETROLL, PTS_PETUPGRADE, PTS_PETWEAR > error > 아이템 리스트 번호가 존재하지 않습니다.");
 				#endif
 				break;		
 			case Protocol.RESULT_ERROR_NO_MORE_PET:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PETTODAY, PTS_PETROLL, PTS_PETUPGRADE, PTS_PETWEAR > error > 더이상 펫이 없습니다.");
 				#endif
 				break;	
 			case Protocol.RESULT_ERROR_UPGRADE_FULL:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PETTODAY, PTS_PETROLL, PTS_PETUPGRADE, PTS_PETWEAR > error > 업그레이드가 풀입니다.");
 				#endif
 				break;			
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PETTODAY, PTS_PETROLL, PTS_PETUPGRADE, PTS_PETWEAR > error > not found error");
 				#endif
 				break;					
@@ -6317,13 +6320,13 @@ public class NetworkManager : MonoBehaviour {
 		case Protocol.PTS_SCHOOLUSERTOP:
 		{
 			Ui_Debug.SetText ( "parse ok" );
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_SCHOOLUSERTOP _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_SCHOOLUSERTOP _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
 				Ui_Debug.SetText ( "in success" );
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교랭킹 > 성공.");
 				#endif
 				
@@ -6331,17 +6334,17 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교랭킹. > 아이디를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교랭킹. > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교랭킹. > 팝업처리.");
 				#endif
 				break;
@@ -6350,12 +6353,12 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_SCHOOLTOP:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_SCHOOLTOP _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_SCHOOLTOP _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교랭킹 > 성공.");
 				#endif
 				
@@ -6363,17 +6366,17 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교랭킹. > 아이디를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교랭킹. > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교랭킹. > 팝업처리.");
 				#endif
 				break;
@@ -6382,8 +6385,8 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_SCHOOLJOIN:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_SCHOOLJOIN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_SCHOOLJOIN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
@@ -6392,42 +6395,42 @@ public class NetworkManager : MonoBehaviour {
 				{
 					ServerData.parser_schoolName = parser.getString ( "schoolname" );
 				}
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교가입 > 성공.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교가입. > 아이디를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교가입. > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CANNT_CHANGEDAY_SCHOOL:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교가입. > 재가입할 수 없는 날입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CANNT_JOINDAY_SCHOOL:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교가입. > 가입 및 재가입이 불가능합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CANNT_FIND_SCHOOL:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교가입. > 학교를 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CANNT_JOINMAX_SCHOOL:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교가입. > 학교인원을 초과했습니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교가입. > 팝업처리.");
 				#endif
 				break;
@@ -6436,12 +6439,12 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_SCHOOLSEARCH:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_SCHOOLSEARCH _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_SCHOOLSEARCH _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교검색 > 성공.");
 				#endif
 				
@@ -6450,17 +6453,17 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교검색. > 아이디를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교검색. > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 학교검색 실패. > 팝업처리.");
 				#endif
 				break;
@@ -6469,13 +6472,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_TRADECONTINUE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_TRADECONTINUE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_TRADECONTINUE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADECONTINUE > success");
 				#endif
 				
@@ -6491,22 +6494,22 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADECONTINUE > error > 아이디가 존재하지 않는다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADECONTINUE > error > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADECONTINUE > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADECONTINUE > error > not found error");
 				#endif
 				break;
@@ -6515,13 +6518,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_TRADECASH:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_TRADECASH _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_TRADECASH _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADECASH > success");
 				#endif
 				ReadMoneyBase ( parser );
@@ -6529,17 +6532,17 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADECASH > error > 아이디가 존재하지 않는다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADECASH > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADECASH > error > not found error");
 				#endif
 				break;
@@ -6549,13 +6552,13 @@ public class NetworkManager : MonoBehaviour {
 		case Protocol.PTS_FBWRITE:
 		case Protocol.PTS_FBREAD:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_FBWRITE/PTS_FBREAD _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_FBWRITE/PTS_FBREAD _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 게시판 글쓰기, 읽기 > 성공.");
 				#endif
 				
@@ -6563,17 +6566,17 @@ public class NetworkManager : MonoBehaviour {
 				ReadBBS ( _xml , "boardlist" , parser );
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 내아이디를 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 팝업처리.");
 				#endif
 				break;
@@ -6582,13 +6585,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_FVISIT:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_FVISIT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_FVISIT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 > 성공.");
 				#endif
 				
@@ -6650,22 +6653,22 @@ public class NetworkManager : MonoBehaviour {
 					*/
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 실패. > 내아이디를 찾을 수 없습니다. > 팝업처리.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_OTHERID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 실패. > 친구 아이디를 찾을 수 없습니다. > 팝업처리.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구삭제 실패 > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 실패. > 팝업처리.");
 				#endif
 				break;
@@ -6674,13 +6677,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_CHANGEINFO:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_CHANGEINFO _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_CHANGEINFO _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CHANGEINFO > success");
 				#endif
 				
@@ -6707,22 +6710,22 @@ public class NetworkManager : MonoBehaviour {
 				}
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CHANGEINFO > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CHANGEINFO > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ALREADY_REWARD:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CHANGEINFO > 이미 지급했다..");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CHANGEINFO > not found error");
 				#endif
 				break;
@@ -6731,13 +6734,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_USERPARAM:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_USERPARAM _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_USERPARAM _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_USERPARAM > success");
 				#endif
 				ReadParamForRival (parser.getInt("param0"),  parser.getInt("param1"),  parser.getInt("param2"),
@@ -6746,12 +6749,12 @@ public class NetworkManager : MonoBehaviour {
 				                   parser.getInt("param9") );
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_USERPARAM > error > 아이디가 존재하지 않는다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_USERPARAM > error > not found error");
 				#endif
 				break;
@@ -6760,13 +6763,13 @@ public class NetworkManager : MonoBehaviour {
 			break;	
 		case Protocol.PTS_COMPETITION:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_COMPETITION _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_COMPETITION _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_COMPETITION > success");
 				#endif
 				//유저 정보.
@@ -6794,22 +6797,22 @@ public class NetworkManager : MonoBehaviour {
 				ReadGiftData ( _xml, "giftitem" , parser );
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_COMPETITION > error > 아이디가 존재하지 않는다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_COMPETITION > error > 튜토리얼 번호가 없다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_TUTORIAL_ALREADY:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_COMPETITION > error > 이미 지급했다.");	
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_COMPETITION > error > not found error");
 				#endif
 				break;
@@ -6820,13 +6823,13 @@ public class NetworkManager : MonoBehaviour {
 		case Protocol.PTS_FWSELL:
 		case Protocol.PTS_FWINCOME:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_FWBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_FWBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FWBUY, FWSELL, FWINCOME > success");
 				#endif
 				
@@ -6850,27 +6853,27 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FWBUY, FWSELL, FWINCOME > 아이디를 확인해라");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FWBUY, FWSELL, FWINCOME > 지원하지 않는 모드입니다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FWBUY, FWSELL, FWINCOME > 코인이 부족합니다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_USERFARM:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FWBUY, FWSELL, FWINCOME > 농장을 소유하고 있지 않다.");	
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FWBUY, FWSELL, FWINCOME > not found error");
 				#endif
 				break;
@@ -6879,13 +6882,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_FMYFRIEND:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_FMYFRIEND _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_FMYFRIEND _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구리스트 > 성공.");
 				#endif
 				
@@ -6893,12 +6896,12 @@ public class NetworkManager : MonoBehaviour {
 				ReadFriendList ( _xml, "flist" , parser );
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구삭제 실패 > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구리스트 실패. > 팝업처리.");
 				#endif
 				break;
@@ -6907,13 +6910,13 @@ public class NetworkManager : MonoBehaviour {
 			break;	
 		case Protocol.PTS_FAPPROVE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_FAPPROVE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_FAPPROVE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구승인 > 성공.");
 				#endif
 				
@@ -6922,17 +6925,17 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구승인 실패. > 아이디를 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구승인 실패. > 신청 받은 사람만이 승인 처리 할 수 있습니다");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구승인 실패. > 팝업처리.");
 				#endif
 				break;
@@ -6941,13 +6944,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_FHEART:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_FHEART _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_FHEART _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구하트주기 > 성공.");
 				#endif
 				
@@ -6967,32 +6970,32 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구하트주기 > 아이디를 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_OTHERID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구하트주기 > 친구의 정보를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구하트주기 > 신청 받은 사람만이 승인 처리 할 수 있습니다");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_TIME_REMAIN:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구하트주기 > 하트 선물 시간이 남았습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_HEART_DAILY_FULL:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구하트주기 > 1일 하트 허용량을 초과했습니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 팝업처리.");
 				#endif
 				break;
@@ -7002,38 +7005,38 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_FPROUD:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_FPROUD _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_FPROUD _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구자랑하기 > 가능하다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구자랑주기 > 아이디를 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_OTHERID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구자랑주기 > 친구의 정보를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구자랑주기 > 모드가 틀리다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_KAKAO_MESSAGE_BLOCK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구자랑주기 > 상대가 거절상태이다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 팝업처리.");
 				#endif
 				break;
@@ -7043,13 +7046,13 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_FPOINT:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_FPOINT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_FPOINT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구일꾼 > 성공.");
 				#endif
 				
@@ -7057,17 +7060,17 @@ public class NetworkManager : MonoBehaviour {
 				ServerData.parser_FPoint = parser.getInt("fpoint");			//우정포인트(110 > 1개, 10포인트)로 표현함.					
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 아이디를 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_FPOINT_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 포인트가 부족합니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 팝업처리.");
 				#endif
 				break;
@@ -7077,13 +7080,13 @@ public class NetworkManager : MonoBehaviour {
 		case Protocol.PTS_TUTORIAL:
 		{
 			//Ui_Debug.SetText ( "Protocol.PTS_TUTORIAL" );
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_TUTORIAL _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_TUTORIAL _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TUTORIAL > success");
 				#endif				
 				
@@ -7099,12 +7102,12 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TUTORIAL > error > 아이디가 존재하지 않는다.");	
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TUTORIAL > error > not found error");
 				#endif
 				break;
@@ -7113,13 +7116,13 @@ public class NetworkManager : MonoBehaviour {
 			break;	
 		case Protocol.PTS_CASHBUY:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_CASHBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_CASHBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CASHBUY > success");
 				#endif
 				
@@ -7134,37 +7137,37 @@ public class NetworkManager : MonoBehaviour {
 				ServerData.UpdateVipGrade();
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 캐쉬구매 > 지원하지 않는 모드입니다. > 팝업처리.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GIFTID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 캐쉬구매 > 선물받을 친구가 없습니다. > 팝업처리.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 캐쉬구매 > 아이디를 찾지 못했습니다. > 팝업처리.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_PASSWORD:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 캐쉬구매 > 패스워드가 일치하지 않습니다. > 팝업처리.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASH_COPY:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 캐쉬구매 > 캐쉬카피(블럭처리됩니다) > 팝업처리.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 캐쉬구매 실패. > 팝업처리.");
 				#endif
 				break;				
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CASHBUY > error > not found error");
 				#endif
 				break;
@@ -7173,13 +7176,13 @@ public class NetworkManager : MonoBehaviour {
 			break;	
 		case Protocol.PTS_ROULBUY:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ROULBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ROULBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ROULBUY > success");
 				#endif	
 				
@@ -7264,43 +7267,43 @@ public class NetworkManager : MonoBehaviour {
 
 				break;				
 			case Protocol.RESULT_ERROR_INVEN_FULL:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ROULBUY > error > 인벤이 풀로 확장되었습니다.");
 				#endif
 				break;	
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ROULBUY > error > 아이디를 확인해라.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ROULBUY > error > 코드를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ROULBUY > error > 지원하지 않습니다.(자신과교배, 지원안하는 모드)");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ROULBUY > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ROULBUY > error > 게임코인이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_HEART_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ROULBUY > error > 하트이 부족하다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ROULBUY > error > not found error");
 				#endif
 				break;
@@ -7310,13 +7313,13 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_TREASUREBUY:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_TREASUREBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_TREASUREBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREBUY > success");
 				#endif
 				
@@ -7407,44 +7410,44 @@ public class NetworkManager : MonoBehaviour {
 
 				break;
 			case Protocol.RESULT_ERROR_INVEN_FULL:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREBUY > error > 인벤이 풀로 확장되었습니다.");
 				#endif
 				break;	
 
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREBUY > error > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREBUY > error > 코드를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREBUY > error > 지원하지 않습니다.(자신과교배, 지원안하는 모드)");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREBUY > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREBUY > error > 게임코인이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_HEART_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREBUY > error > 하트이 부족하다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREBUY > error > not found error");
 				#endif
 				break;
@@ -7454,13 +7457,13 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_TREASUREWEAR:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_TREASUREWEAR _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_TREASUREWEAR _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREWEAR > success");
 				#endif
 				
@@ -7472,12 +7475,12 @@ public class NetworkManager : MonoBehaviour {
 				parser.getInt("tslistidx5");
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREWEAR > error > 아이디를 확인해라.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREWEAR > error > not found error");
 				#endif
 				break;
@@ -7487,13 +7490,13 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_TREASUREUPGRADE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_TREASUREUPGRADE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_TREASUREUPGRADE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREUPGRADE > success");
 				#endif
 				
@@ -7517,42 +7520,42 @@ public class NetworkManager : MonoBehaviour {
 				ReadTsInfo ( _xml , "tsinfo" , parser );
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREUPGRADE > error > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREUPGRADE > error > 코드를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREUPGRADE > error > 지원하지 않습니다.(자신과교배, 지원안하는 모드)");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREUPGRADE > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREUPGRADE > error > 게임코인이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_HEART_LACK:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREUPGRADE > error > 하트이 부족하다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_UPGRADE_FULL:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREUPGRADE > error > 업그레이드가 풀입니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TREASUREUPGRADE > error > not found error");
 				#endif
 				break;
@@ -7562,30 +7565,30 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_ANIURGENCY:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANIURGENCY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANIURGENCY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIURGENCY > success");
 				#endif
 				ReadMoneyBase ( parser );
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIURGENCY > error > 아이디가 존재하지 않는다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIURGENCY > error > 캐쉬가 부족합니다.");	
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIURGENCY > error > not found error");
 				#endif
 				break;
@@ -7594,13 +7597,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_PACKBUY:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_PACKBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_PACKBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PACKBUY > success");
 				#endif	
 				
@@ -7613,22 +7616,22 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PACKBUY > error > 아이디를 확인해라.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PACKBUY > error > 코드를 찾을수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PACKBUY > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PACKBUY > error > not found error");
 				#endif
 				break;
@@ -7637,13 +7640,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_SAVE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_SAVE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_SAVE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SAVE > success");
 				#endif	
 				
@@ -7655,17 +7658,17 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SAVE > error > 아이디를 확인해라.");	
 				#endif
 				break;		
 			case Protocol.RESULT_ERROR_PARAMETER:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SAVE > error > 파라미터 오류.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SAVE > error > not found error");
 				#endif
 				break;
@@ -7674,13 +7677,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_TRADE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_TRADE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_TRADE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADE > success");
 				#endif	
 				
@@ -7850,22 +7853,22 @@ public class NetworkManager : MonoBehaviour {
 
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADE > error > 아이디를 확인해라.");	
 				#endif
 				break;		
 			case Protocol.RESULT_ERROR_PARAMETER:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADE > error > 파라미터 오류.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_RESULT_COPY:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADE > error > 게임코인을 결과가 불일치합니다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_TRADE > error > not found error");
 				#endif
 				break;
@@ -7878,13 +7881,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_SEEDHARVEST:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_SEEDHARVEST _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_SEEDHARVEST _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDHARVEST > success");
 				#endif	
 				
@@ -7920,12 +7923,12 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDHARVEST > error > 아이디를 확인해라.");	
 				#endif
 				break;		
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDHARVEST > error > 정보를 못찾았습니다.");
 				#endif
 				
@@ -7937,22 +7940,22 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDHARVEST > error > 지원하지 않는 정보입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_HARVEST_TIME_REMAIN:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDHARVEST > error > 시간이 아직 남음.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDHARVEST > error > 캐쉬비용이 부족합니다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDHARVEST > error > not found error");
 				#endif
 				break;
@@ -7962,13 +7965,13 @@ public class NetworkManager : MonoBehaviour {
 		case Protocol.PTS_SEEDPLANT:
 		{
 			
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_SEEDPLANT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_SEEDPLANT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			//Debug.Log (" ????? - 0 " );
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDPLANT > success");
 				#endif	
 				
@@ -7980,17 +7983,17 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDPLANT > error > 아이디를 확인해라.");	
 				#endif
 				break;			
 			case Protocol.RESULT_ERROR_NEED_BUY:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDPLANT > error > 경작지를 구매하지 않음.");
 				#endif
 				break;	
 			case Protocol.RESULT_ERROR_PLANT_ALREADY:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDPLANT > error > 이미 씨앗이 있습니다.");
 				#endif
 				
@@ -8002,22 +8005,22 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDPLANT > error > 씨앗 정보를 못찾았습니다.");
 				#endif
 				break;		
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDPLANT > error > 캐쉬비용이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDPLANT > error > 코인비용이 부족합니다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDPLANT > error > not found error");
 				#endif
 				break;
@@ -8026,13 +8029,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_SEEDBUY:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_SEEDBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_SEEDBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDBUY > success");
 				#endif	
 				
@@ -8044,37 +8047,37 @@ public class NetworkManager : MonoBehaviour {
 				//parser.getInt("heart");	
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDBUY > error > 아이디를 확인해라.");	
 				#endif
 				break;			
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDBUY > error > 아이템 코드를 찾을 수 없습니다.");
 				#endif
 				break;				
 			case Protocol.RESULT_ERROR_BUY_ALREADY:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDBUY > error > 이미 구매한 경작지 입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_SEEDIDX:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDBUY > error > 경작지 번호가 유효하지 않습니다.");
 				#endif
 				break;		
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDBUY > error > 캐쉬비용이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDBUY > error > 코인비용이 부족합니다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_SEEDBUY > error > not found error");
 				#endif
 				break;
@@ -8083,28 +8086,28 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_DELETEID:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_DELETEID _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_DELETEID _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 아이디삭제 > 성공.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 아이디삭제 > 아이디가 존재하지 않는다. > 팝업처리.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_PASSWORD:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 아이디삭제 > 패스워드 틀렸다.. > 팝업처리.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 아이디삭제 실패. > 팝업처리.");
 				#endif
 				break;
@@ -8113,13 +8116,13 @@ public class NetworkManager : MonoBehaviour {
 			break;	
 		case Protocol.PTS_FACUPGRADE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_FACUPGRADE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_FACUPGRADE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FACUPGRADE > success");
 				#endif	
 				
@@ -8159,37 +8162,37 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FACUPGRADE > error > 아이디를 확인해라.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FACUPGRADE > error > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_UPGRADE_FULL:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FACUPGRADE > error > 업그레이드가 맥스입니다.");
 				#endif
 				break;					
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FACUPGRADE > error > 인벤이 해당 아이템 코드를 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FACUPGRADE > error > 캐쉬비용이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FACUPGRADE > error > 코인비용이 부족합니다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_FACUPGRADE > error > not found error");
 				#endif
 				break;
@@ -8198,13 +8201,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_ITEMACCNEW:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ITEMACCNEW _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ITEMACCNEW _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMACCNEW > success");
 				#endif
 				
@@ -8257,22 +8260,22 @@ public class NetworkManager : MonoBehaviour {
 				//				}
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMACCNEW > error > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMACCNEW > error > 동물없음, 악세없음, 동물병원에 있음.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMACCNEW > error > 머리, 등, 옆구리 이외에는 지원안합니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMACCNEW > error > not found error");
 				#endif
 				break;
@@ -8281,13 +8284,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_ITEMACC:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ITEMACC _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ITEMACC _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMACC > success");
 				#endif	
 				
@@ -8297,22 +8300,22 @@ public class NetworkManager : MonoBehaviour {
 				//parser.getInt("acc2");	
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMACC > error > 아이디를 확인해라.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMACC > error > 동물없음, 악세없음, 동물병원에 있음.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMACC > error > 머리, 등, 옆구리 이외에는 지원안합니다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMACC > error > not found error");
 				#endif
 				break;
@@ -8321,13 +8324,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_ITEMINVENEXP:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ITEMINVENEXP _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ITEMINVENEXP _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMINVENEXP > success");
 				#endif	
 				
@@ -8344,37 +8347,37 @@ public class NetworkManager : MonoBehaviour {
 					parser.getInt("");*/	
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMINVENEXP > error > 아이디를 확인해라.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMINVENEXP > error > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_INVEN_FULL:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMINVENEXP > error > 인벤이 풀로 확장되었습니다.");
 				#endif
 				break;					
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMINVENEXP > error > 인벤이 해당 아이템 코드를 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMINVENEXP > error > 캐쉬비용이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMINVENEXP > error > 코인비용이 부족합니다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMINVENEXP > error > not found error");
 				#endif
 				break;
@@ -8383,13 +8386,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_ITEMQUICK:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ITEMQUICK _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ITEMQUICK _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMQUICK > success");
 				#endif	
 				
@@ -8400,27 +8403,27 @@ public class NetworkManager : MonoBehaviour {
 				//parser.getInt("albalistidx");	
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMQUICK > error > 아이디를 확인해라.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMQUICK > error > 아이템을 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_ENOUGH:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMQUICK > error > 수량이 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMQUICK > error > 총알, 백신, 부스터, 알바 이외에는 안됩니다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMQUICK > error > not found error");
 				#endif
 				break;
@@ -8429,38 +8432,38 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_ANIREPREG:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANIREPREG _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANIREPREG _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 대표동물 변경 > 성공.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 대표동물 변경 > 아이디가 존재하지 않는다. > 팝업처리.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ANIMAL_NOT_FOUND:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 대표동물 변경 > 아이디가 존재하지 않는다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ANIMAL_NOT_INVEN:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 대표동물 변경 > 해당 동물아니거나 없다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ANIMAL_NOT_ALIVE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 대표동물 변경 > 해당 동물이 창고에 배치되어 있지 않다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 대표동물 변경. > 오류 팝업처리.");
 				#endif
 				break;
@@ -8469,13 +8472,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_ANIUSEITEM:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANIUSEITEM _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANIUSEITEM _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIUSEITEM > success");
 				#endif					
 				//전체 소모성 아이템만 보내드림.
@@ -8488,22 +8491,22 @@ public class NetworkManager : MonoBehaviour {
 				}
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIUSEITEM > error > 아이디가 존재하지 않는다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_ENOUGH:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIUSEITEM > error > 정보가 불충분합니다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_MATCH:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIUSEITEM > error > 소모성 정보가 불일치 합니다.");	
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIUSEITEM > error > not found error");
 				#endif
 				break;
@@ -8512,13 +8515,13 @@ public class NetworkManager : MonoBehaviour {
 			break;	
 		case Protocol.PTS_ANIREVIVAL:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANIREVIVAL _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANIREVIVAL _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIREVIVAL > success");
 				#endif
 				ServerData.parser_gamecostA = parser.getInt("gamecost");	//게임머니.
@@ -8580,32 +8583,32 @@ public class NetworkManager : MonoBehaviour {
 				}
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIREVIVAL > error > 아이디가 존재하지 않는다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIREVIVAL > error > 지원하지 않는 모드입니다..");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ANIMAL_NOT_FOUND:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIREVIVAL > error > 동물이 존재하지 않는다..");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ANIMAL_IS_ALIVE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIREVIVAL > error > 동물이 살아 있거나 해당 필드에 다른 동물이 있다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ANIMAL_FIELDIDX:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIREVIVAL > error > 입력된 필드 인덱스 오류(-1, 0 ~ 8).");	
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIREVIVAL > error > not found error");
 				#endif
 				break;
@@ -8614,13 +8617,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_FDELETE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_FDELETE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_FDELETE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구삭제 > 성공.");
 				#endif
 				
@@ -8628,12 +8631,12 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 실패. > 내아이디를 찾을 수 없습니다. > 팝업처리.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구삭제 실패. > 팝업처리.");
 				#endif
 				break;
@@ -8642,14 +8645,14 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_FADD:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_FADD _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_FADD _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode)
 			{
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 > 성공.");
 				#endif
 				
@@ -8658,27 +8661,27 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 실패. > 내아이디를 찾을 수 없습니다. > 팝업처리.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_OTHERID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 실패. > 친구 아이디를 찾을 수 없습니다. > 팝업처리.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_FRIEND_WAIT_MAX:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 실패. > 더 이상 친구 신청을 할 수 없습니다. > 팝업처리.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_FRIEND_AGREE_MAX:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 실패. > 더 이상 친구를 맺을 수 없습니다. > 팝업처리.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구추가 실패. > 팝업처리.");
 				#endif
 				break;
@@ -8687,12 +8690,12 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_FSEARCH:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_FSEARCH _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_FSEARCH _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구검색 > 성공.");
 				#endif
 				
@@ -8701,7 +8704,7 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" > 친구검색 실패. > 팝업처리.");
 				#endif
 				break;
@@ -8710,13 +8713,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_ITEMSELL:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ITEMSELL _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ITEMSELL _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){				
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMSELL > success");
 				#endif	
 				
@@ -8727,27 +8730,27 @@ public class NetworkManager : MonoBehaviour {
 				ServerData.parser_feed = parser.getInt("feed");			//건초.									
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMSELL > error > 아이디를 확인해라.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMSELL > error > 아이템을 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ITEMCOST_WRONG:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMSELL > error > 판매 단가가 이상합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_ENOUGH:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMSELL > error > 판매 수량을 초과했다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMSELL > error > not found error");
 				#endif
 				break;
@@ -8757,13 +8760,13 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_ITEMSELLLIST:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ITEMSELLLIST _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ITEMSELLLIST _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMSELLLIST > success");
 				#endif
 				
@@ -8789,17 +8792,17 @@ public class NetworkManager : MonoBehaviour {
 
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMSELLLIST > error > 아이디를 확인해라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_PARAMETER:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMSELLLIST > error > 리스트 파라미터 오류발생했습니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMSELLLIST > error > not found error");
 				#endif
 				break;
@@ -8809,13 +8812,13 @@ public class NetworkManager : MonoBehaviour {
 
 		case Protocol.PTS_ITEMBUY:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ITEMBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ITEMBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMBUY > success");
 				#endif	
 				
@@ -8837,57 +8840,57 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMBUY > error > 아이디를 확인해라.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMBUY > error > 아이템을 찾을 수 없습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_CASHCOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMBUY > error > 캐쉬가 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GAMECOST_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMBUY > error > 코인이 부족합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ITEMCOST_WRONG:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMBUY > error > 코인과 캐쉬 가격이 모두 (0)으로 이상합니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_DOUBLE_RANDSERIAL:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMBUY > error > 중복구매입니다. (씨리얼중복).");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_INVEN_FULL:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMBUY > error > 인벤이 풀입니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_MAXCOUNT:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMBUY > error > 구매수량을 초과했습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_MATCH:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMBUY > error > 링크 번호가 잘못 연결되었습니다.");
 				#endif
 				break;				
 			case Protocol.RESULT_ERROR_ANIMAL_DAILY_FULL:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMBUY > error >1일 동물 구매 수량을 초과했습니다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ITEMBUY > error > not found error");
 				#endif
 				break;
@@ -8896,27 +8899,27 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_CHANGEPW:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_CHANGEPW _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_CHANGEPW _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:				
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CHANGEPW > success > 패스워드를 새로 발급했습니다. 표시해주세요.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CHANGEPW > error > 아이디를 찾을수 없습니다. > 단순팝업처리");
 				#endif
 				break; 
 			case Protocol.RESULT_ERROR_NOT_FOUND_PHONE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CHANGEPW > error > 폰번호가 매칭이 안됩니다. > 단순팝업처리 ");
 				#endif
 				break; 
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CHANGEPW > error > not found error");
 				#endif
 				break;
@@ -8926,13 +8929,13 @@ public class NetworkManager : MonoBehaviour {
 			break;	
 		case Protocol.PTS_GIFTGAIN:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_GIFTGAIN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_GIFTGAIN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_GIFTGAIN > success");
 				#endif	
 				
@@ -8976,27 +8979,27 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_GIFTGAIN > error > 아이디를 확인해라.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GIFTITEM_NOT_FOUND:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_GIFTGAIN > error > 선물아이템 존재자체를 안함.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_GIFTITEM_ALREADY_GAIN:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_GIFTGAIN > error > 지급 및 삭제되었습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_GIFTGAIN > error > 지원하지 않는 모드값입니다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_GIFTGAIN > error > not found error");
 				#endif
 				break;
@@ -9005,14 +9008,14 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_DAILYREWARD:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_DAILYREWARD _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_DAILYREWARD _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
 				
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_DAILYREWARD > success");
 				#endif
 				
@@ -9021,17 +9024,17 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_DAILYREWARD > error > 아이디를 확인해라");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_DAILY_REWARD_ALREADY:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_DAILYREWARD > error > 데일리 보상 이미 지급했다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_DAILYREWARD > error > not found error");
 				#endif
 				break;
@@ -9040,12 +9043,12 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_LOGIN:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_LOGIN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_LOGIN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_LOGIN > success");
 				#endif
 				
@@ -9696,37 +9699,37 @@ public class NetworkManager : MonoBehaviour {
 
 				break;
 			case Protocol.RESULT_NEWVERION_CLIENT_DOWNLOAD:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_LOGIN > error > 마켓별 버젼이 틀리다. > 다시받아라.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_SERVER_CHECKING:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_LOGIN > error > 시스템 점검중입니다. > 게임 종료.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_BLOCK_USER:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_LOGIN > error > 블럭처리된 아이디입니다. > 게임 종료.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_LOGIN > error > 아이디를 확인해라 > 다시 로그인.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_PASSWORD:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_LOGIN > error > 패스워드 틀렸다. > 다시 로그인.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_DELETED_USER:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_LOGIN > error > 삭제된 아이디입니다. > 다시 로그인.");	
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_LOGIN > error > not found error");
 				#endif
 				break;
@@ -9735,18 +9738,18 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_XXXXX:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_XXXXX _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_XXXXX _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_XXXXX > success:" + parser.getString("serial"));
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_XXXXX > error > not found error");
 				#endif
 				break;
@@ -9755,13 +9758,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_NOTICE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_NOTICE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_NOTICE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_NOTICE > success:" + parser.getString("serial"));
 				#endif
 				
@@ -9814,7 +9817,7 @@ public class NetworkManager : MonoBehaviour {
 
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_NOTICE > error > not found error");
 				#endif
 				break;
@@ -9825,13 +9828,13 @@ public class NetworkManager : MonoBehaviour {
 		case Protocol.PTS_ANISET:
 		{
 			
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANISET _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANISET _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANISET > success");
 				#endif					
 				//농장에 있는 동물 번호.
@@ -9847,17 +9850,17 @@ public class NetworkManager : MonoBehaviour {
 				}
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANISET > error > 아이디가 존재하지 않는다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANISET > error > 튜토리얼 번호가 없다.");	
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANISET > error > not found error");
 				#endif
 				break;
@@ -9868,28 +9871,28 @@ public class NetworkManager : MonoBehaviour {
 			
 		case Protocol.PTS_CREATEID:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_CREATEID _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_CREATEID _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif				
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CREATEID > success");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ID_DUPLICATE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CREATEID > error > 아이디 중복");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ID_CREATE_MAX:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CREATEID > error > phone당 생성 가능한 아이디개수초과.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CREATEID > error > not found error");
 				#endif
 				break;
@@ -9898,13 +9901,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_CREATEGUEST:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_CREATEGUEST _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_CREATEGUEST _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CREATEGUEST > success");
 				#endif
 				
@@ -9918,12 +9921,12 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_ID_DUPLICATE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CREATEGUEST > error > 아이디 중복");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_ID_CREATE_MAX:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CREATEGUEST > error > phone당 생성 가능한 아이디개수초과.");
 				#endif
 				break;
@@ -9931,12 +9934,12 @@ public class NetworkManager : MonoBehaviour {
 				//@@@@ start 0091
 				strWaitTime = parser.getString("waittime");	
 				//@@@@ end
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CREATEGUEST > error > 일정시간동안 가입이 불가합니다.");
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_CREATEGUEST > error > not found error");
 				#endif
 				break;
@@ -9946,34 +9949,34 @@ public class NetworkManager : MonoBehaviour {
 			
 		case Protocol.PTS_PUSHMSG:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_PUSHMSG _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_PUSHMSG _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			string _strActionMsg;
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PUSHMSG > success > Push 정상처리하다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PUSHMSG > error > 아이디를 찾지 못했습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_OTHERID:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PUSHMSG > error > 상대가 존재하지 않습니다.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PUSHMSG > error > 지원하지 않는 모드입니다.");
 				#endif
 				break;
 			default:
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_PUSHMSG > error > not found error");
 				#endif
 				break;
@@ -9982,28 +9985,28 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_ANIDIE:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_ANIDIE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_ANIDIE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIDIE > success > 동물 병원으로 이동해주라.");
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIDIE > error > 아이디가 존재하지 않는다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIDIE > error > 튜토리얼 번호가 없다.");	
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_ANIDIE > error > not found error");
 				#endif
 				break;
@@ -10012,13 +10015,13 @@ public class NetworkManager : MonoBehaviour {
 			break;
 		case Protocol.PTS_DOGAMREWARD:
 		{
-			#if NETDEBGU_MODE
-			Debug.Log("[C <- S] PTS_DOGAMREWARD _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+			#if NET_DEBUG_MODE
+			Debug.Log("[C <- S] PTS_DOGAMREWARD _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 			#endif
 			
 			switch(_resultcode){
 			case Protocol.RESULT_SUCCESS:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_DOGAMREWARD > success");
 				#endif
 				
@@ -10037,27 +10040,27 @@ public class NetworkManager : MonoBehaviour {
 				
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_DOGAMREWARD > error > 아이디가 존재하지 않는다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_NOT_FOUND_DOGAMIDX:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_DOGAMREWARD > error > 도감 번호가 존재하지 않는다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_DOGAM_ALREADY_REWARD:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_DOGAMREWARD > error > 도감을 이미 지급했다.");	
 				#endif
 				break;
 			case Protocol.RESULT_ERROR_DOGAM_LACK:		
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_DOGAMREWARD > error > 도감 번호가 부족하다");	
 				#endif
 				break;
 			default:	
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("PTS_DOGAMREWARD > error > not found error");
 				#endif
 				break;

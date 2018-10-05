@@ -19,6 +19,7 @@ public class NetworkManager : MonoBehaviour {
 				 		 strPhoneNumber 	= null,
 				 		 strPhoneNumberC 	= null;
 
+
 	void Awake()
 	{	
 		ins 	= this;
@@ -120,6 +121,7 @@ public class NetworkManager : MonoBehaviour {
 		
 		switch(_code)
 		{
+		//@@@@ 2018-09-10 start
 		case Protocol.PTC_CREATEID:
 			{
 				#if NET_DEBUG_MODE
@@ -156,7 +158,8 @@ public class NetworkManager : MonoBehaviour {
 				StartCoroutine(Handle(new WWW(url, _form ), _onResult));
 			}
 			break;
-
+			//@@@@ 2018-09-10 end
+			//@@@@ 2018-09-13 start
 		case Protocol.PTC_LOGIN:		
 			{			
 				#if NET_DEBUG_MODE			
@@ -168,12 +171,14 @@ public class NetworkManager : MonoBehaviour {
 			
 				//2. setting form
 				strCreateID = "mtxxxx3";
-				strCreatePW = "049000s1i0n7t8445289";
+				strCreatePW	= SSUtil.setPassword( "a1s2d3f4" );
+				//Debug.Log (strCreatePW);
+				//strCreatePW = "049000s1i0n7t8445289";
 
 				_form.AddField("gameid", strCreateID);			
 				_form.AddField("password", strCreatePW);
 				_form.AddField("version", "" + Protocol.VERSION);
-				_form.AddField("password", "192.168.0.8");
+				_form.AddField("connectip", "192.168.0.8");
 			
 				//3. sending			
 				#if NET_DEBUG_MODE			
@@ -182,7 +187,8 @@ public class NetworkManager : MonoBehaviour {
 				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
 			}
 			break;
-
+			//@@@@ 2018-09-13 end
+			//@@@@ 2018-09-16 start
 		case Protocol.PTC_GIFTGAIN:
 			{
 				#if NET_DEBUG_MODE
@@ -268,6 +274,8 @@ public class NetworkManager : MonoBehaviour {
 				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
 			}
 			break;
+			//@@@@ 2018-09-16 end
+			//@@@@ 2018-09-14 start
 		case Protocol.PTC_SERVERTIME:		
 			{			
 				#if NET_DEBUG_MODE			
@@ -291,6 +299,8 @@ public class NetworkManager : MonoBehaviour {
 				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
 			}
 			break;
+			//@@@@ 2018-09-14 end
+			//@@@@ 2018-09-15 start
 		case Protocol.PTC_USERPARAM:		
 			{			
 				#if NET_DEBUG_MODE			
@@ -332,9 +342,11 @@ public class NetworkManager : MonoBehaviour {
 				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
 			}
 			break;
+			//@@@@ 2018-09-15 end
+			//@@@@ 0017 start 
 		case Protocol.PTC_SYSINQUIRE:
 			{
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("[C -> S] PTC_SYSINQUIRE");
 				#endif
 				//1. make URL
@@ -353,15 +365,17 @@ public class NetworkManager : MonoBehaviour {
 				_form.AddField("message", strMessage );					
 
 				//3. sending
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" _form:" + SSUtil.getString(_form.data));
 				#endif
 				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
 			}
 			break;
+			//@@@@ 0017 end
+			//@@@@ 0018 start 
 		case Protocol.PTC_SGREADY:
 			{
-				#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log("[C -> S] PTC_SGREADY");
 				#endif
 				//1. make URL
@@ -376,16 +390,20 @@ public class NetworkManager : MonoBehaviour {
 				_form.AddField("gameid", strCreateID );
 				_form.AddField("password", strCreatePW );
 				_form.AddField("sid", "333" );								//login에서 받은 sid
-				_form.AddField("gmode", "" + Protocol.GAME_MODE_SINGLE );	//연습, 싱글, 멀티.
+				_form.AddField("gmode", "" + Protocol.GAME_MODE_SINGLE );	//연습, 싱글, 
+																			//연습  Protocol.GAME_MODE_PRACTICE
+																			//싱글  Protocol.GAME_MODE_SINGLE
+																			//멀티  Protocol.GAME_MODE_MULTI
 				_form.AddField("listidx", "" + -1 );						//아이템은 리스트 번호.
 
 				//3. sending
-				//#if NETDEBGU_MODE
+				#if NET_DEBUG_MODE
 				Debug.Log(" _form:" + SSUtil.getString(_form.data));
-				//#endif
+				#endif
 				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
 			}
 			break;
+			//@@@@ 0018 end
 		default:
 			Debug.LogError("[error][C -> S] #### error");	
 			if ( _onResult != null )
@@ -419,6 +437,7 @@ public class NetworkManager : MonoBehaviour {
 		//3. 내부 코드.
 		switch(_code)
 		{
+		//@@@@ 2018-09-14 start
 		case Protocol.PTS_SERVERTIME:
 			{
 				#if NET_DEBUG_MODE	
@@ -443,6 +462,8 @@ public class NetworkManager : MonoBehaviour {
 				}
 			}
 			break;
+			//@@@@ 2018-09-14 end
+		//@@@@ 2018-09-10 start
 		case Protocol.PTS_CREATEID:
 			#if NET_DEBUG_MODE
 			Debug.Log("[C <- S] PTS_CREATEID _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
@@ -495,6 +516,8 @@ public class NetworkManager : MonoBehaviour {
 				break;
 			}
 			break;
+			//@@@@ 2018-09-10 end
+			//@@@@ 2018-09-13 start
 		case Protocol.PTS_LOGIN:
 			#if NET_DEBUG_MODE
 			Debug.Log("[C <- S] PTS_LOGIN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
@@ -521,7 +544,7 @@ public class NetworkManager : MonoBehaviour {
 					DateTime.Parse( _parser.getString("curdate") );	//2018-09-12 18:07:28.53
 
 					//유저 개인정보...
-					_parser.getInt("cashcost");						//캐쉬.(다이아) -> 반드시 property로 2개 이상으로 분해해서 저장하세요.
+					ServerData.cashcost = _parser.getInt("cashcost");						//캐쉬.(다이아) -> 반드시 property로 2개 이상으로 분해해서 저장하세요.
 					_parser.getInt("sid");							//세션ID값 -> 이값으로 서버에 요청하는 경우가 있다.
 					_parser.getInt("exp");							//누적된 경험치 이다.
 					_parser.getInt("level");								
@@ -529,7 +552,7 @@ public class NetworkManager : MonoBehaviour {
 
 					//유저가 가입에 입력한 정보.
 					_parser.getString("username");					//유저이름.
-					_parser.getString("birthday");					//19980801
+					ServerData.birthday = _parser.getString("birthday");					//19980801
 					_parser.getString("email");						//
 					_parser.getString("nickname");					//닉네임(중복검사된것)
 					_parser.getString("phone");						//
@@ -570,6 +593,8 @@ public class NetworkManager : MonoBehaviour {
 				//_parser.parsing ( "itemowner" );
 				//_parser.parsing ( _xml, "itemowner" );
 				//-----------------------------------------------------
+				ServerData.ReadItemOwner(_parser, _xml, "itemowner");
+				/*
 				_parser.parsing ( "itemowner" );
 				while (_parser.next ())
 				{
@@ -588,24 +613,26 @@ public class NetworkManager : MonoBehaviour {
 																	//2. 동일 제품을 구매 할 경우.
 																	// > 다른 씨리얼을 보내야한다. 안그러면 구매 안해줌...
 				}
+				*/
 
 				//-----------------------------------------------------
 				//선물정보(우편함 -> 선물, 메세지).
 				//GameData.ReadGiftItem ( parser , _xml , "giftitem" );
 				//_parser.parsing ( "giftitem" );
 				//-----------------------------------------------------
-				_parser.parsing ( "giftitem" );
-				while (_parser.next ())
-				{
-					_parser.getInt("idx");				//선물 인덱스 번호.			
-					_parser.getInt("giftkind");			//선물의 종류. (아이템선물, 메세지).
-					_parser.getString("message");		//  메세지 일경우 메세지 내용.
-					_parser.getInt("itemcode");			//  아이템 선물일 경우 아이템 코드.
-					_parser.getInt("cnt");				//            수량.
-					_parser.getString("giftdate");		//보낸날짜.
-					_parser.getString("giftid");		//보낸이.		
-				}
+				ServerData.ReadGiftItem(_parser, _xml, "giftitem");
 
+				//_parser.parsing ( "giftitem" );
+				//while (_parser.next ())
+				//{
+				//	_parser.getInt("idx");				//선물 인덱스 번호.			
+				//	_parser.getInt("giftkind");			//선물의 종류. (아이템선물, 메세지).
+				//	_parser.getString("message");		//  메세지 일경우 메세지 내용.
+				//	_parser.getInt("itemcode");			//  아이템 선물일 경우 아이템 코드.
+				//	_parser.getInt("cnt");				//            수량.
+				//	_parser.getString("giftdate");		//보낸날짜.
+				//	_parser.getString("giftid");		//보낸이.		
+				//}
 
 				//-----------------------------------------------------
 				// 공지사항 정보...
@@ -667,7 +694,8 @@ public class NetworkManager : MonoBehaviour {
 				break;
 			}
 			break;
-
+			//@@@@ 2018-09-13 end
+			//@@@@ 2018-09-16 start
 		case Protocol.PTS_GIFTGAIN:
 			{
 				#if NET_DEBUG_MODE
@@ -732,7 +760,7 @@ public class NetworkManager : MonoBehaviour {
 					Debug.Log("PTS_GIFTGAIN > error > 아이디를 확인해라.");	
 					#endif
 					break;
-				case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE:		
+				case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE_LOGOUT:		
 					Debug.LogError (" >>> 강제 로그 아웃 처리 해주세요(구현우 이것 삭제)");
 					#if NET_DEBUG_MODE
 					Debug.Log("PTS_GIFTGAIN > error > 세션이 만기 강제로 로그아웃 처리 해야합니다..");	
@@ -761,6 +789,8 @@ public class NetworkManager : MonoBehaviour {
 				}
 			}
 			break;
+			//@@@@ 2018-09-16 end
+			//@@@@ 2018-09-15 start
 		case Protocol.PTS_USERPARAM:
 			{
 				#if NET_DEBUG_MODE	
@@ -794,15 +824,17 @@ public class NetworkManager : MonoBehaviour {
 				}
 			}
 			break;
+			//@@@@ 2018-09-15 end
+			//@@@@ 0018 start 
 		case Protocol.PTS_SGREADY:
 			{
-				#if NETDEBGU_MODE
-				Debug.Log("[C <- S] PTS_SGREADY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_SGREADY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 				#endif
 
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log(" > 게임을 할려고 들어왔다.");
 					#endif
 					//************************************
@@ -814,11 +846,11 @@ public class NetworkManager : MonoBehaviour {
 
 					//유저 개인정보...
 					_parser.getInt("curturntime");		//현재 진행중인 회차.
-					_parser.getString("curturndate");	//현재 진행중인 회차가 완료되는 시간.
+					DateTime.Parse( _parser.getString("curturndate") );	//현재 진행중인 회차가 완료되는 시간.
 
 					break;
 				case Protocol.RESULT_ERROR_SERVER_CHECKING:		
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_SGREADY > error > 시스템 점검중입니다. > 게임 종료.");
 					#endif
 					break;
@@ -828,11 +860,11 @@ public class NetworkManager : MonoBehaviour {
 					#endif
 					break;
 				case Protocol.RESULT_ERROR_BLOCK_USER:		
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log("PTS_SGREADY > error > 블럭처리된 아이디입니다. > 게임 종료.");	
 					#endif
 					break;
-				case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE:		
+				case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE_LOGOUT:		
 					Debug.LogError (" >>> 강제 로그 아웃 처리 해주세요(구현우 이것 삭제)");
 					#if NET_DEBUG_MODE
 					Debug.Log("PTS_SGREADY > error > 세션이 만기 강제로 로그아웃 처리 해야합니다..");	
@@ -850,33 +882,36 @@ public class NetworkManager : MonoBehaviour {
 					#endif
 					break;
 				default:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log(" > 팝업처리.");
 					#endif
 					break;
 				}
 			}
 			break;
+			//@@@@ 0018 end
+			//@@@@ 0017 start 
 		case Protocol.PTS_SYSINQUIRE:
 			{
-				#if NETDEBGU_MODE
-				Debug.Log("[C <- S] PTS_SYSINQUIRE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _debugXml);
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_SYSINQUIRE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
 				#endif
 
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log(" > 게임 문의를 등록했습니다.");
 					#endif
 					break;
 				default:
-					#if NETDEBGU_MODE
+					#if NET_DEBUG_MODE
 					Debug.Log(" > 팝업처리.");
 					#endif
 					break;
 				}
 			}
 			break;
+			//@@@@ 0017 end
 		
 		default:
 			Debug.LogError("[error]:[C -> S] not define code\n" + _xml);

@@ -36,13 +36,17 @@ public static class ServerData {
 	//
 	//-------------------------------------------------------
 	#region 보유템.
-	public static void ReadItemOwner(SSParser _parser, string _xml, string _parseName){
+	public static void ReadItemOwner(SSParser _parser, string _xml, string _parseName){		
 		ItemOwner _itemOwner = null;
 		_parser.parsing ( _parseName );
 		while (_parser.next ())
 		{
-			_itemOwner = new ItemOwner ();
+			int _listidx = _parser.getInt("listidx");		//인벤에서의 인덱스이다. 
+			if (dicItemOwner.ContainsKey (_listidx)) {
+				continue;
+			}
 
+			_itemOwner = new ItemOwner ();
 
 			_itemOwner.listIdx 		= _parser.getInt("listidx");		//인벤에서의 인덱스이다. 
 			_itemOwner.invenkKind 	= _parser.getInt("invenkind");		//인벤의 종류...

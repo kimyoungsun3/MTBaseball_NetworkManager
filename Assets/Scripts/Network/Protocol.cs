@@ -129,6 +129,7 @@ public class Protocol{
 
 						//게임중에 부족.
 						RESULT_ERROR_CASHCOST_LACK			= -22,	//캐쉬가 부족하다.
+						RESULT_ERROR_GAMECOST_LACK			= -24, 	//볼(gamecost)가 부족.
 						RESULT_ERROR_ITEM_LACK				= -23,	//아이템이부족하다.
 
 						//아이템 구매, 변경.
@@ -176,15 +177,18 @@ public class Protocol{
 						RESULT_ERROR_PRODUCT_EXPIRE			= -165,	//해당상품이 만기되었습니다.
 						RESULT_ERROR_PRODUCT_EXHAUSTED		= -166,	//해당상품이 모두 판매되었거나 및 조기종영되었습니다.
 						RESULT_ERROR_NOT_FOUND_OTHERID		= -83,	//
-						RESULT_ERROR_SESSION_ID_EXPIRE_LOGOUT= -151,//세션이 만료되었습니다.WWW
+						RESULT_ERROR_SESSION_ID_EXPIRE_LOGOUT= -151,//세션이 만료되었습니다.
 						RESULT_ERROR_DOUBLE_IP				= -201, //IP중복...
-						RESULT_ERROR_TURNTIME_WRONG			= -203, //회차정보가 잘못되었다
+						RESULT_ERROR_TURNTIME_WRONG			= -203, //회차정보가 잘못되었다.
 						RESULT_ERROR_NOT_BET_ITEMLACK		= -204, //아이템을 배팅하지 않고 배팅할려고하였습니다.
-						RESULT_ERROR_NOT_BET_SAFETIME		= -205, //30초 ~ 결과 ~ 10초 이시간에는 배팅금지
-						RESULT_ERROR_NOT_INPUT_SUPERBALL_5TRY		= -207,	// 슈퍼볼 데이터가 아직 안들어옴… > 5초후에 다시 요청
-						RESULT_ERROR_NOT_ING_TURNTIME				= -208,	// 강제로 로그 아웃을 시켜주세요… (이미 타임을 지나간 것을 결과 요청이라서)
+						RESULT_ERROR_NOT_BET_OVERTIME		= -211, //오버타임이상에서는 배팅불가.
+						RESULT_ERROR_NOT_BET_SAFETIME		= -205, //30초 ~ 결과 ~ 10초 이시간에는 배팅금지.
+						RESULT_ERROR_NOT_INPUT_SUPERBALL_5TRY		= -207,	// 슈퍼볼 데이터가 아직 안들어옴… > 5초후에 다시 요청.
+						RESULT_ERROR_NOT_ING_TURNTIME				= -208,	// 강제로 로그 아웃을 시켜주세요… (이미 타임을 지나간 것을 결과 요청이라서).
 						RESULT_ERROR_NOT_CALCULATE_LOTTO_WAIT_LOBBY	= -209,	// 로또에서 회차 정보가 5분이 되어도 안옴… > 로비에서 대기해주세요.
-						RESULT_ERROR_NOT_CALCULATE_LOTTO_LOGOUT		= -210,	// 로또에서 회차 정보가 오버타임지나도(5+5분) 안들어옴… > 내부취소마킹, 로그아웃, 점검중…
+						RESULT_ERROR_NOT_CALCULATE_LOTTO_LOGOUT		= -210,	// 로또에서 회차 정보가 오버타임지나도(5+5분) 안들어옴… > 내부취소마킹, 로그아웃, 점검중.
+						RESULT_ERROR_ITEMCODE_GRADE_CHECK			= -212, // 아이템 등급이 잘못되었습니다.
+						RESULT_ERROR_MINUMUN_LACK					= -213,	// 최소수량보다 부족.
 
 						RESULT_XXXXXX						= -999;
 	#endregion
@@ -223,6 +227,26 @@ public class Protocol{
 						GAME_MODE_PRACTICE					= 0,	//연습모드.
 						GAME_MODE_SINGLE					= 1, 	//싱글모드.
 						GAME_MODE_MULTI						= 2,	//멀티모드.
+
+						//선택한 것들...
+						SELECT_1							= 1, 	//스트라이크, 볼.
+						SELECT_2							= 2, 	//직구, 변화구.
+						SELECT_3							= 3, 	//좌, 우.
+						SELECT_4							= 4, 	//상, 하.
+						SELECT_1_NON						= -1,	//스트라이크, 볼 : 	선택안함(-1).
+						SELECT_1_STRIKE						= 0,	//  				스트라이크(0).
+						SELECT_1_BALL						= 1,	//     				볼(1).
+						SELECT_2_NON						= -1,	//직구, 변화구 : 	선택안함(-1).
+						SELECT_2_FAST						= 0,	//  				직구(0).
+						SELECT_2_CURVE						= 1,	//     				변화구(1).
+						SELECT_3_NON						= -1,	//좌, 우. 		: 	선택안함(-1).
+						SELECT_3_LEFT						= 0,	//  				좌(0).
+						SELECT_3_RIGHT						= 1,	//     				우(1).
+						SELECT_4_NON						= -1,	//상, 하 		: 	선택안함(-1).
+						SELECT_4_UP							= 0,	//  				상(0).
+						SELECT_4_DOWN						= 1,	//     				하(1).
+
+
 
 						XXXXXXXXXXXXXXXXXXXXXXXXXX1			= -1;
 

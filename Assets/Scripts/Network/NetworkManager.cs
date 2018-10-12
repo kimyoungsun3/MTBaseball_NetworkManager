@@ -100,6 +100,14 @@ public class NetworkManager : MonoBehaviour {
 			sendCode (Protocol.PTC_SGREADY, null);
 		}
 
+		_str = "PTC_SGBET";
+		_py += _dy;
+		_rl = new Rect(_px, _py, _dx, _dy);
+		if (GUI.Button (_rl, _str)) {
+			sendCode (Protocol.PTC_SGBET, null);
+		}
+
+
 
 	}
 	#endif
@@ -201,13 +209,11 @@ public class NetworkManager : MonoBehaviour {
 				//---------------------------------------------
 				//1. 1번에 메세지 > 보았다는 상태로 변경하기.
 				//---------------------------------------------
-				_form.AddField("gameid", "xxxx2" );										//유저 아이디.
+				_form.AddField("gameid", "mtxxxx3" );										//유저 아이디.
 				_form.AddField("password", "049000s1i0n7t8445289" );					//유저 패스워드.
-				_form.AddField("sid", "333" );											//로그인때 받은 sid값
-				_form.AddField("giftkind", "" + Protocol.GIFTLIST_GIFT_KIND_MESSAGE_DEL ); //메세지 삭제(-1).				Protocol.GIFTLIST_GIFT_KIND_MESSAGE_DEL		
-																						//선물 받기(해당템만 전송)(-3)		Protocol.GIFTLIST_GIFT_KIND_GIFT_GET		
-				_form.AddField("idx", "" + 1 );											//선물번호 인덱스.
-
+				_form.AddField("sid", "333" );											//로그인때 받은 sid값	Protocol.GIFTLIST_GIFT_KIND_GIFT_GET		
+				_form.AddField("idx", "" + 238 );											//선물번호 인덱스.
+				_form.AddField("giftkind", "" + Protocol.GIFTLIST_GIFT_KIND_GIFT_GET );	//선물 받기(해당템만 전송)(-3)		Protocol.GIFTLIST_GIFT_KIND_GIFT_GET			
 				//---------------------------------------------
 				//2-1. 나무헬멧 받기 > 하나씩만 들어간다.	
 				//---------------------------------------------
@@ -219,7 +225,9 @@ public class NetworkManager : MonoBehaviour {
 				//_form.AddField("gameid", "xxxx2" );										//유저 아이디.
 				//_form.AddField("password", "049000s1i0n7t8445289" );						//유저 패스워드.
 				//_form.AddField("sid", "333" );											//로그인때 받은 sid값
-				//_form.AddField("giftkind", "" + Protocol.GIFTLIST_GIFT_KIND_GIFT_GET );	//선물 받기(해당템만 전송)(-3)		Protocol.GIFTLIST_GIFT_KIND_GIFT_GET			
+				//_form.AddField("giftkind", "" + Protocol.GIFTLIST_GIFT_KIND_MESSAGE_DEL ); //메세지 삭제(-1).				Protocol.GIFTLIST_GIFT_KIND_MESSAGE_DEL		
+				//선물 받기(해당템만 전송)(-3)	
+
 				//_form.AddField("idx", "" + 2 );											//선물번호 인덱스.
 				//
 				//---------------------------------------------
@@ -404,6 +412,80 @@ public class NetworkManager : MonoBehaviour {
 			}
 			break;
 			//@@@@ 0018 end
+			//@@@@ 0019 start 
+		case Protocol.PTC_SGBET:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C -> S] PTC_SGBET");
+				#endif
+				//1. make URL
+				url = urlbase + Protocol.PTG_SGBET;
+
+				//2. setting form
+				//---------------------------------------
+				//유저 정보.
+				strCreateID = "mtxxxx3";
+				strCreatePW = "049000s1i0n7t8445289";
+				//---------------------------------------
+				_form.AddField("gameid", strCreateID );
+				_form.AddField("password", strCreatePW );
+				_form.AddField("sid", "333" );								//login에서 받은 sid
+				_form.AddField("gmode", "" + Protocol.GAME_MODE_SINGLE );	//연습, 싱글, 
+																			//연습  Protocol.GAME_MODE_PRACTICE
+																			//싱글  Protocol.GAME_MODE_SINGLE
+																			//멀티  Protocol.GAME_MODE_MULTI
+				_form.AddField("listidx", "" + 11 );						//아이템은 리스트 번호.
+				_form.AddField("curturntime", "" + -1 );					//현재의 회차번호 (모르면 -1를 넣어주면된다).
+				_form.AddField("select", "1:0:100;2:0:100;3:0:100;4:0:100;" );//배팅조각.
+				//1. 배팅템 정보 구분자.
+				//   배팅템 정보는 순서대로 들어가며 없으면 없는 정보를 셑팅.
+				//   구분자는 (;)으로 해주시면 됩니다.
+				//   예) 배팅템정보1;배팅템정보2;배팅템정보3;배팅템정보4;
+				//
+				//2. 배팅안에 구성요소 (여기의 구분자는 : )
+				//   배팅번호:배팅선택종류:조각리스트번호:배팅수량;
+				//
+				//2-1. 배팅번호
+				//Protocol.SELECT_1 		: 스트라이크, 볼.
+				//Protocol.SELECT_2 		: 직구, 변화구.
+				//Protocol.SELECT_3 		: 좌, 우.
+				//Protocol.SELECT_4 		: 상, 하.
+				//
+				//2-2. 배팅선택 종류
+				//
+				//Protocol.SELECT_1_NON						= -1,	//스트라이크, 볼 : 	선택안함(-1).
+				//Protocol.SELECT_1_STRIKE					= 0,	//  				스트라이크(0).
+				//Protocol.SELECT_1_BALL					= 1,	//     				볼(1).
+				//
+				//Protocol.SELECT_2_NON						= -1,	//직구, 변화구 : 	선택안함(-1).
+				//Protocol.SELECT_2_FAST					= 0,	//  				직구(0).
+				//Protocol.SELECT_2_CURVE					= 1,	//     				변화구(1).
+				//
+				//Protocol.SELECT_3_NON						= -1,	//좌, 우. 		: 	선택안함(-1).
+				//Protocol.SELECT_3_LEFT					= 0,	//  				좌(0).
+				//Protocol.SELECT_3_RIGHT					= 1,	//     				우(1).
+				//
+				//Protocol.SELECT_4_NON						= -1,	//상, 하 		: 	선택안함(-1).
+				//Protocol.SELECT_4_UP						= 0,	//  				상(0).
+				//Protocol.SELECT_4_DOWN					= 1,	//     				하(1).
+				//
+				//
+				//2-3. 배팅수량
+				//     배팅한 조각의 수량.
+				//
+				//예) 1 개 배팅
+				//1:0:100;2:-1:0; 3:-1:0; 4:-1:0;
+				//예)4 개 배팅
+				//1:0:100;2:0:100;3:0:100;4:0:100;
+
+				//3. sending
+				#if NET_DEBUG_MODE
+				Debug.Log(" _form:" + SSUtil.getString(_form.data));
+				#endif
+				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
+			}
+			break;		
+			//@@@@ 0019 end
 		default:
 			Debug.LogError("[error][C -> S] #### error");	
 			if ( _onResult != null )
@@ -545,6 +627,9 @@ public class NetworkManager : MonoBehaviour {
 
 					//유저 개인정보...
 					ServerData.cashcost = _parser.getInt("cashcost");						//캐쉬.(다이아) -> 반드시 property로 2개 이상으로 분해해서 저장하세요.
+					//@@@@ 0020 start 
+					_parser.getInt("gamecost");						//볼.
+					//@@@@ 0020 end
 					_parser.getInt("sid");							//세션ID값 -> 이값으로 서버에 요청하는 경우가 있다.
 					_parser.getInt("exp");							//누적된 경험치 이다.
 					_parser.getInt("level");								
@@ -708,8 +793,10 @@ public class NetworkManager : MonoBehaviour {
 					Debug.Log("PTS_GIFTGAIN > success");
 					#endif	
 
+					//@@@@ 0020 start 
 					_parser.getInt("cashcost");		//캐쉬.
-
+					_parser.getInt("gamecost");		//볼.
+					//@@@@ 0020 end
 					//-----------------------------------------------------
 					// 로그인 선물하고 동일
 					// 1. 100개가 있어도 최대 전송 수량은 20개까지만 보내준다.
@@ -890,6 +977,139 @@ public class NetworkManager : MonoBehaviour {
 			}
 			break;
 			//@@@@ 0018 end
+
+			//@@@@ 0019 start 
+		case Protocol.PTS_SGBET:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_SGBET _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
+				#endif
+
+				switch(_resultcode){
+				case Protocol.RESULT_SUCCESS:
+					#if NET_DEBUG_MODE
+					Debug.Log(" > 게임을 할려고 들어왔다.");
+					#endif
+					//************************************
+					//이시간을 토대로 시간을 계산한다.
+					// > 가장 중요한 부분입니다. 
+					// > 별도로 시간 싱크는 계속 보내주면 별도로 맞추고 싶을 때를 위해 별도 프로 토콜을 사용할 수 있습니다.
+					//************************************
+					//@@@@ 0020 start 
+					_parser.getInt("cashcost");
+					_parser.getInt("gamecost");
+					//@@@@ 0020 end
+
+					DateTime.Parse( _parser.getString("curdate") );	//2018-09-12 18:07:28.53
+
+					//유저 개인정보...
+					_parser.getInt("curturntime");		//현재 진행중인 회차.
+					DateTime.Parse( _parser.getString("curturndate") );	//현재 진행중인 회차가 완료되는 시간.
+
+					//배팅해서 변경된 아이템정보만 다시 돌아옵니다.
+					//소모템 -> 소모템에서 변경된것.
+					//조각템 -> 배팅으로 변경된것.
+					_parser.parsing ( "itemowner" );
+					while (_parser.next ())
+					{
+						_parser.getInt("listidx");						//인벤에서의 인덱스이다. 
+						_parser.getInt("invenkind");					//인벤의 종류...
+																		//착용인벤 Protocol.USERITEM_INVENKIND_WEAR
+																		//조각인벤 Protocol.USERITEM_INVENKIND_PIECE
+																		//소비인벤 Protocol.USERITEM_INVENKIND_CONSUME
+						_parser.getInt("itemcode");						//아이템 코드.
+						_parser.getInt("cnt");							//수량.
+						_parser.getInt("randserial");					//랜덤 시리얼을 만들어 두세요...
+																		//1. 구매시에는...
+																		// SSUtil.getRandSerial() 호출해서 달리 보내면 구매동작을 합니다.
+																		// 동일한 씨리어을 보내시면 구매되어 있으면 재구매 안하고...
+																		// 안되어 있으면 구매한다.
+																		//2. 동일 제품을 구매 할 경우.
+																		// > 다른 씨리얼을 보내야한다. 안그러면 구매 안해줌...
+					}
+					break;
+				case Protocol.RESULT_ERROR_SERVER_CHECKING:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 시스템 점검중입니다. > 게임 종료.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 아이디를 확인해라.");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_BLOCK_USER:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 블럭처리된 아이디입니다. > 게임 종료.");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE_LOGOUT:		
+					Debug.LogError (" >>> 강제 로그 아웃 처리 해주세요(구현우 이것 삭제)");
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 세션이 만기 강제로 로그아웃 처리 해야합니다..");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_TURNTIME_WRONG:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 회차정보가 잘못되었다.");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_BET_OVERTIME:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 오버타임이상에서는 배팅불가");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_BET_SAFETIME:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 세이프타임에서는 배팅불가");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_SUPPORT_MODE:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 지원하지 않는 모드입니다.");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_PARAMETER:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 파라미터가 잘못되었습니다.");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_ITEMCODE_GRADE_CHECK:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 아이템의 등급을 확인해주세요.");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_MINUMUN_LACK:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 최소 수량보다 작습니다.");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_GAMECOST_LACK:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 볼이 부족합니다.");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_ITEM_LACK:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 아이템이 부족합니다.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_CALCULATE_LOTTO_WAIT_LOBBY:		
+					Debug.LogError (" ERROR 결과를 계산중이여서 (로비에서 대기해서 잠시후에 들어와주세요.)");
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGBET > error > 결과를 계산중이여서 (로비에서 대기해서 잠시후에 들어와주세요.)");	
+					#endif
+					break;
+				default:
+					#if NET_DEBUG_MODE
+					Debug.Log(" > 팝업처리.");
+					#endif
+					break;
+				}
+			}
+			break;
+			//@@@@ 0019 end
+
 			//@@@@ 0017 start 
 		case Protocol.PTS_SYSINQUIRE:
 			{

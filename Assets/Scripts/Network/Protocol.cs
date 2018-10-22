@@ -69,6 +69,8 @@ public class Protocol{
 						PTS_GIFTGAIN		= 21,
 						PTC_SYSINQUIRE		= 22, 	//sysinquire.jsp
 						PTS_SYSINQUIRE		= 22,
+						PTC_KCHECKNN		= 23, 	//kchecknn.jsp
+						PTS_KCHECKNN		= 23,
 
 						PTC_SGREADY			= 31, 	//sgready.jsp
 						PTS_SGREADY			= 31, 
@@ -94,6 +96,7 @@ public class Protocol{
 						PTG_USERPARAM		= "userparam.jsp",
 						PTG_GIFTGAIN		= "giftgain.jsp",
 						PTG_SYSINQUIRE		= "sysinquire.jsp",
+						PTG_KCHECKNN		= "kchecknn.jsp",
 
 						PTG_SGREADY			= "sgready.jsp",
 						PTG_SGBET			= "sgbet.jsp",
@@ -167,6 +170,7 @@ public class Protocol{
 						RESULT_ERROR_TIME_REMAIN			= -123, //아직 시간이 남음.
 						RESULT_ERROR_ALREADY_REWARD			= -126,	//무엇인가 이미보상했음.
 						RESULT_ERROR_NOT_FOUND_CERTNO		= -133,	//쿠폰 번호가 없음.
+						RESULT_ERROR_CANNOT_USED_NICKNAME	= -141, //닉네임 사용불가.
 						RESULT_ERROR_ALREADY_REWARD_COUPON	= -143,	//쿠폰은 1인 1매.
 						RESULT_ERROR_CANNT_CHANGE			= -146, //무엇인가를 변경할 수 없습니다.
 						RESULT_ERROR_WAIT_RETURN			= -148,	//요청 대기중입니다.
@@ -246,8 +250,20 @@ public class Protocol{
 						SELECT_4_UP							= 0,	//  				상(0).
 						SELECT_4_DOWN						= 1,	//     				하(1).
 
+	//@@@@ 0021 start 
+						//배팅결과.
+						GAME_RESULT_ING						= -1,
+						GAME_RESULT_OUT						= 0,
+						GAME_RESULT_ONEHIT					= 1,
+						GAME_RESULT_TWOHIT					= 2,
+						GAME_RESULT_THREEHIT				= 3,
+						GAME_RESULT_HOMERUN					= 4,
 
-
+						//결과 플레그정보.
+						RESULT_SELECT_NON					= -1,
+						RESULT_SELECT_LOSE					=  0,
+						RESULT_SELECT_WIN					=  1,
+	//@@@@ 0021 end
 						XXXXXXXXXXXXXXXXXXXXXXXXXX1			= -1;
 
 	public const int 	//아이템의 인벤, 대분류, 중분류.

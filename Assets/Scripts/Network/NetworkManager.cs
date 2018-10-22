@@ -107,6 +107,20 @@ public class NetworkManager : MonoBehaviour {
 			sendCode (Protocol.PTC_SGBET, null);
 		}
 
+		_str = "PTC_SGRESULT";
+		_py += _dy;
+		_rl = new Rect(_px, _py, _dx, _dy);
+		if (GUI.Button (_rl, _str)) {
+			sendCode (Protocol.PTC_SGRESULT, null);
+		}
+
+		_str = "PTC_KCHECKNN";
+		_py += _dy;
+		_rl = new Rect(_px, _py, _dx, _dy);
+		if (GUI.Button (_rl, _str)) {
+			sendCode (Protocol.PTC_KCHECKNN, null);
+		}
+
 
 
 	}
@@ -486,6 +500,68 @@ public class NetworkManager : MonoBehaviour {
 			}
 			break;		
 			//@@@@ 0019 end
+			//@@@@ 0021 start
+		case Protocol.PTC_SGRESULT:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C -> S] PTC_SGRESULT");
+				#endif
+				//1. make URL
+				url = urlbase + Protocol.PTG_SGRESULT;
+
+				//2. setting form
+				//---------------------------------------
+				//유저 정보.
+				strCreateID = "mtxxxx3";
+				strCreatePW = "049000s1i0n7t8445289";
+				//---------------------------------------
+				_form.AddField("gameid", strCreateID );
+				_form.AddField("password", strCreatePW );
+				_form.AddField("sid", "333" );								//login에서 받은 sid
+				_form.AddField("gmode", "" + Protocol.GAME_MODE_SINGLE );	//연습, 싱글,
+																			//연습  Protocol.GAME_MODE_PRACTICE
+																			//싱글  Protocol.GAME_MODE_SINGLE
+																			//멀티  Protocol.GAME_MODE_MULTI
+				_form.AddField("curturntime", "" + 830093 );				//현재의 회차번호.
+
+				//3. sending
+				#if NET_DEBUG_MODE
+				Debug.Log(" _form:" + SSUtil.getString(_form.data));
+				#endif
+				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
+			}
+			break;
+			//@@@@ 0021 end
+
+			//@@@@ 0022 start 
+		case Protocol.PTC_KCHECKNN:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C -> S] PTC_KCHECKNN");
+				#endif
+				//1. make URL
+				url = urlbase + Protocol.PTG_KCHECKNN;
+
+				//2. setting form
+				//---------------------------------------
+				//유저 정보.
+				strCreateID = "mtxxxx3";
+				strCreatePW = "049000s1i0n7t8445289";
+				//---------------------------------------
+				_form.AddField("gameid", strCreateID );
+				_form.AddField("password", strCreatePW );
+				_form.AddField("sid", "333" );								//login에서 받은 sid
+				_form.AddField("nickname", "닉네임mt3" );
+
+				//3. sending
+				#if NET_DEBUG_MODE
+				Debug.Log(" _form:" + SSUtil.getString(_form.data));
+				#endif
+				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
+			}
+			break;
+			//@@@@ 0022 end.
+
 		default:
 			Debug.LogError("[error][C -> S] #### error");	
 			if ( _onResult != null )
@@ -1110,6 +1186,150 @@ public class NetworkManager : MonoBehaviour {
 			break;
 			//@@@@ 0019 end
 
+			//@@@@ 0021 start
+		case Protocol.PTS_SGRESULT:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_SGRESULT _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
+				#endif
+
+				switch(_resultcode){
+				case Protocol.RESULT_SUCCESS:
+					#if NET_DEBUG_MODE
+					Debug.Log(" > 게임을 할려고 들어왔다.");
+					#endif
+					//************************************
+					//이시간을 토대로 시간을 계산한다.
+					// > 가장 중요한 부분입니다.
+					// > 별도로 시간 싱크는 계속 보내주면 별도로 맞추고 싶을 때를 위해 별도 프로 토콜을 사용할 수 있습니다.
+					//************************************
+					_parser.getInt("cashcost");
+					_parser.getInt("gamecost");
+					DateTime.Parse( _parser.getString("curdate") );	//2018-09-12 18:07:28.53
+
+					//유저 개인정보...
+					_parser.getInt("nextturntime");						//다음 진행중인 회차.
+					DateTime.Parse( _parser.getString("nextturndate") );//다음 진행중인 회차가 완료되는 시간.
+
+
+
+					//----------------------------------------------------
+					//나눔로또에서 데이타.ok
+					//----------------------------------------------------
+					//	SELECT_1_NON						= -1,	//스트라이크, 볼 : 	선택안함(-1).
+					//	SELECT_1_STRIKE						= 0,	//  				스트라이크(0).
+					//	SELECT_1_BALL						= 1,	//     				볼(1).
+					//	SELECT_2_NON						= -1,	//직구, 변화구 : 	선택안함(-1).
+					//	SELECT_2_FAST						= 0,	//  				직구(0).
+					//	SELECT_2_CURVE						= 1,	//     				변화구(1).
+					//	SELECT_3_NON						= -1,	//좌, 우. 		: 	선택안함(-1).
+					//	SELECT_3_LEFT						= 0,	//  				좌(0).
+					//	SELECT_3_RIGHT						= 1,	//     				우(1).
+					//	SELECT_4_NON						= -1,	//상, 하 		: 	선택안함(-1).
+					//	SELECT_4_UP							= 0,	//  				상(0).
+					//	SELECT_4_DOWN						= 1,	//     				하(1).
+					_parser.getInt("ltselect1");
+					_parser.getInt("ltselect2");
+					_parser.getInt("ltselect3");
+					_parser.getInt("ltselect4");
+
+
+					//----------------------------------------------------
+					//	//결과 플레그정보.
+					//	RESULT_SELECT_NON					= -1,
+					//	RESULT_SELECT_LOSE					=  0,
+					//	RESULT_SELECT_WIN					=  1,
+					//----------------------------------------------------
+					_parser.getInt("rselect1");
+					_parser.getInt("rselect2");
+					_parser.getInt("rselect3");
+					_parser.getInt("rselect4");
+
+
+					//----------------------------------------------------
+					// 성공하면 획득 수량...
+					//----------------------------------------------------
+					_parser.getInt("rcnt1");
+					_parser.getInt("rcnt2");
+					_parser.getInt("rcnt3");
+					_parser.getInt("rcnt4");
+
+					//----------------------------------------------------
+					//	//배팅결과.
+					//	GAME_RESULT_ING						= -1,
+					//	GAME_RESULT_OUT						= 0,
+					//	GAME_RESULT_ONEHIT					= 1,
+					//	GAME_RESULT_TWOHIT					= 2,
+					//	GAME_RESULT_THREEHIT				= 3,
+					//	GAME_RESULT_HOMERUN					= 4,
+					//----------------------------------------------------
+					_parser.getInt("gameresult");
+
+					//-----------------------------------------------------
+					//레벨업으로 박스가 선물된다.(우편함 -> 선물, 메세지).
+					//GameData.ReadGiftItem ( parser , _xml , "giftitem" );
+					//_parser.parsing ( "giftitem" );
+					//로그인하고 동일합니다. (전체를 보내드립니다.)
+					//-----------------------------------------------------
+					_parser.parsing ( "giftitem" );
+					while (_parser.next ())
+					{
+						_parser.getInt("idx");				//선물 인덱스 번호.
+						_parser.getInt("giftkind");			//선물의 종류. (아이템선물, 메세지).
+						_parser.getString("message");		//  메세지 일경우 메세지 내용.
+						_parser.getInt("itemcode");			//  아이템 선물일 경우 아이템 코드.
+						_parser.getInt("cnt");				//            수량.
+						_parser.getString("giftdate");		//보낸날짜.
+						_parser.getString("giftid");		//보낸이.
+					}
+
+					break;
+				case Protocol.RESULT_ERROR_SERVER_CHECKING:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGRESULT > error > 시스템 점검중입니다. > 게임 종료.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGRESULT > error > 아이디를 확인해라.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_BLOCK_USER:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGRESULT > error > 블럭처리된 아이디입니다. > 게임 종료.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE_LOGOUT:
+					Debug.LogError (" >>> 강제 로그 아웃 처리 해주세요(구현우 이것 삭제)");
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGRESULT > error > 세션이 만기 강제로 로그아웃 처리 해야합니다..");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_PARAMETER:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGRESULT > error > 파라미터가 잘못되었습니다.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_CALCULATE_LOTTO_LOGOUT:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGRESULT > error > 로또데이타가 안들어왔음(10분이 경과해도 그래서 강제로 로그아웃).");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_INPUT_SUPERBALL_5TRY:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_SGRESULT > error > 아직 로또 데이타가 안들어옴(5초 후에 다시 요청해주세요).");
+					#endif
+					break;
+				default:
+					#if NET_DEBUG_MODE
+					Debug.Log(" > 팝업처리.");
+					#endif
+					break;
+				}
+			}
+			break;
+			//@@@@ 0021 end
+
 			//@@@@ 0017 start 
 		case Protocol.PTS_SYSINQUIRE:
 			{
@@ -1132,7 +1352,58 @@ public class NetworkManager : MonoBehaviour {
 			}
 			break;
 			//@@@@ 0017 end
-		
+
+			//@@@@ 0022 start 
+		case Protocol.PTS_KCHECKNN:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_KCHECKNN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
+				#endif
+
+				switch(_resultcode){
+				case Protocol.RESULT_SUCCESS:
+					#if NET_DEBUG_MODE
+					Debug.Log(" > 게임을 할려고 들어왔다.");
+					#endif
+					//************************************
+					//이시간을 토대로 시간을 계산한다.
+					// > 가장 중요한 부분입니다. 
+					// > 별도로 시간 싱크는 계속 보내주면 별도로 맞추고 싶을 때를 위해 별도 프로 토콜을 사용할 수 있습니다.
+					//************************************
+					_parser.getInt("cashcost");
+					_parser.getInt("gamecost");
+
+					break;
+				case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_KCHECKNN > error > 아이디를 확인해라.");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE_LOGOUT:		
+					Debug.LogError (" >>> 강제 로그 아웃 처리 해주세요(구현우 이것 삭제)");
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_KCHECKNN > error > 세션이 만기 강제로 로그아웃 처리 해야합니다..");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_CANNOT_USED_NICKNAME:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_KCHECKNN > error > 닉네임을 누가 사용하고 있습니다.(popup)");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_CASHCOST_LACK:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_KCHECKNN > error > 캐쉬(다이아)가 부족합니다.(popup).");
+					#endif
+					break;
+				default:
+					#if NET_DEBUG_MODE
+					Debug.Log(" > 팝업처리.");
+					#endif
+					break;
+				}
+			}
+			break;
+			//@@@@ 0022 end
 		default:
 			Debug.LogError("[error]:[C -> S] not define code\n" + _xml);
 			break;

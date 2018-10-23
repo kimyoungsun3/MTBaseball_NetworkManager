@@ -1373,6 +1373,31 @@ public class NetworkManager : MonoBehaviour {
 					_parser.getInt("cashcost");
 					_parser.getInt("gamecost");
 
+					//@@@@ 0023 start
+					//-----------------------------------------------------------
+					// 닉네임 변경권이 있으면 캐쉬로 안하고 닉네임 변경권으로 한다.
+					// 리스트가 변경된것만 보내줍니다.
+					//-----------------------------------------------------------
+					_parser.parsing ( "itemowner" );
+					if (_parser.next ())
+					{
+						_parser.getInt("listidx");						//인벤에서의 인덱스이다. 
+						_parser.getInt("invenkind");					//인벤의 종류...
+																		//착용인벤 Protocol.USERITEM_INVENKIND_WEAR
+																		//조각인벤 Protocol.USERITEM_INVENKIND_PIECE
+																		//소비인벤 Protocol.USERITEM_INVENKIND_CONSUME
+						_parser.getInt("itemcode");						//아이템 코드.
+						_parser.getInt("cnt");							//수량.
+						_parser.getInt("randserial");					//랜덤 시리얼을 만들어 두세요...
+																		//1. 구매시에는...
+																		// SSUtil.getRandSerial() 호출해서 달리 보내면 구매동작을 합니다.
+																		// 동일한 씨리어을 보내시면 구매되어 있으면 재구매 안하고...
+																		// 안되어 있으면 구매한다.
+																		//2. 동일 제품을 구매 할 경우.
+																		// > 다른 씨리얼을 보내야한다. 안그러면 구매 안해줌...
+					}
+					//@@@@ 0024 end
+
 					break;
 				case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
 					#if NET_DEBUG_MODE

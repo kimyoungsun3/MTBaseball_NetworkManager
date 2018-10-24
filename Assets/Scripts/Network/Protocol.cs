@@ -79,6 +79,15 @@ public class Protocol{
 						PTC_SGRESULT		= 33, 	//sgresult.jsp
 						PTS_SGRESULT		= 33,	
 
+						//@@@@ 0025 start 
+						PTC_PTREADY			= 34, 	//ptready.jsp  
+						PTS_PTREADY			= 34,
+						PTC_PTBET			= 35, 	//ptbet.jsp
+						PTS_PTBET			= 35,
+						PTC_PTRESULT		= 36, 	//ptresult.jsp
+						PTS_PTRESULT		= 36,		
+						//@@@@ 0025 end
+
 						PTC_XXXXX			= 99,	
 						PTS_XXXXX			= 99;
 	#endregion
@@ -101,6 +110,12 @@ public class Protocol{
 						PTG_SGREADY			= "sgready.jsp",
 						PTG_SGBET			= "sgbet.jsp",
 						PTG_SGRESULT		= "sgresult.jsp",
+
+						//@@@@ 0025 start 
+						PTG_PTREADY			= "ptready.jsp",
+						PTG_PTBET			= "ptbet.jsp",
+						PTG_PTRESULT		= "ptresult.jsp",
+						//@@@@ 0025 end	
 
 						PTG_XXXXX			= "_xxxxx.jsp";
 

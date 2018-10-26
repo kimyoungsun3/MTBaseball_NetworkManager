@@ -121,6 +121,12 @@ public class NetworkManager : MonoBehaviour {
 			sendCode (Protocol.PTC_KCHECKNN, null);
 		}
 
+		//---------------------------------
+		// New Line
+		//---------------------------------
+		_px += _dx + 10;
+		_py = 10; 
+
 		_str = "PTC_PTREADY";
 		_py += _dy;
 		_rl = new Rect(_px, _py, _dx, _dy);
@@ -140,6 +146,13 @@ public class NetworkManager : MonoBehaviour {
 		_rl = new Rect(_px, _py, _dx, _dy);
 		if (GUI.Button (_rl, _str)) {
 			sendCode (Protocol.PTC_PTRESULT, null);
+		}
+
+		_str = "PTC_GAMERECORD";
+		_py += _dy;
+		_rl = new Rect(_px, _py, _dx, _dy);
+		if (GUI.Button (_rl, _str)) {
+			sendCode (Protocol.PTC_GAMERECORD, null);
 		}
 
 
@@ -553,6 +566,35 @@ public class NetworkManager : MonoBehaviour {
 			}
 			break;
 			//@@@@ 0021 end
+
+
+			//@@@@ 0030 start
+		case Protocol.PTC_GAMERECORD:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C -> S] PTC_GAMERECORD");
+				#endif
+				//1. make URL
+				url = urlbase + Protocol.PTG_GAMERECORD;
+
+				//2. setting form
+				//---------------------------------------
+				//유저 정보.
+				strCreateID = "mtxxxx3";
+				strCreatePW = "049000s1i0n7t8445289";
+				//---------------------------------------
+				_form.AddField("gameid", strCreateID );
+				_form.AddField("password", strCreatePW );
+				_form.AddField("sid", "333" );
+
+				//3. sending
+				#if NET_DEBUG_MODE
+				Debug.Log(" _form:" + SSUtil.getString(_form.data));
+				#endif
+				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
+			}
+			break;
+			//@@@@ 0030 end
 
 			//@@@@ 0025 start 
 		case Protocol.PTC_PTREADY:
@@ -1495,6 +1537,105 @@ public class NetworkManager : MonoBehaviour {
 			//@@@@ 0021 end
 
 
+			//@@@@ 0030 start 
+		case Protocol.PTS_GAMERECORD:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_GAMERECORD _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
+				#endif
+
+				switch(_resultcode){
+				case Protocol.RESULT_SUCCESS:
+					#if NET_DEBUG_MODE
+					Debug.Log(" > 게임을 할려고 들어왔다.");
+					#endif
+					_parser.getInt("cashcost");
+					_parser.getInt("gamecost");
+
+
+					//-----------------------------------------------------
+					_parser.parsing ( "gamerecord" );
+					while (_parser.next ())
+					{
+						_parser.getInt("curturntime");		//회차.
+						_parser.getString("curturndate");	//배팅한 날짜.
+
+						//-----------------------------
+						//Protocol.GAME_MODE_PRACTICE	= 0,	//연습모드.
+						//Protocol.GAME_MODE_SINGLE		= 1, 	//싱글모드.
+						//Protocol.GAME_MODE_MULTI		= 2,	//멀티모드.
+						//-----------------------------
+						_parser.getInt("gamemode");			
+
+						//----------------------------------------------------
+						// 자신이 선택한 것들
+						//----------------------------------------------------
+						//	SELECT_1_NON						= -1,	//스트라이크, 볼 : 	선택안함(-1).
+						//	SELECT_1_STRIKE						= 0,	//  				스트라이크(0).
+						//	SELECT_1_BALL						= 1,	//     				볼(1).
+						//	SELECT_2_NON						= -1,	//직구, 변화구 : 	선택안함(-1).
+						//	SELECT_2_FAST						= 0,	//  				직구(0).
+						//	SELECT_2_CURVE						= 1,	//     				변화구(1).
+						//	SELECT_3_NON						= -1,	//좌, 우. 		: 	선택안함(-1).
+						//	SELECT_3_LEFT						= 0,	//  				좌(0).
+						//	SELECT_3_RIGHT						= 1,	//     				우(1).
+						//	SELECT_4_NON						= -1,	//상, 하 		: 	선택안함(-1).
+						//	SELECT_4_UP							= 0,	//  				상(0).
+						//	SELECT_4_DOWN						= 1,	//     				하(1).
+						_parser.getInt("select1");
+						_parser.getInt("select2");
+						_parser.getInt("select3");
+						_parser.getInt("select4");
+
+						//----------------------------------------------------
+						//	//결과 플레그정보.
+						//	RESULT_SELECT_NON					= -1,	> 배팅안한것.
+						//	RESULT_SELECT_LOSE					=  0,	> 패.
+						//	RESULT_SELECT_WIN					=  1,	> 성공.
+						//----------------------------------------------------
+						_parser.getInt("rselect1");
+						_parser.getInt("rselect2");
+						_parser.getInt("rselect3");
+						_parser.getInt("rselect4");
+
+						//----------------------------------------------------
+						//배팅결과.
+						//----------------------------------------------------
+						//GAME_RESULT_OUT						= 0,	> 아웃.
+						//GAME_RESULT_ONEHIT					= 1,	> 1히트.
+						//GAME_RESULT_TWOHIT					= 2,	> 2히트.
+						//GAME_RESULT_THREEHIT					= 3,	> 3히트.
+						//GAME_RESULT_HOMERUN					= 4,	> 홈런.
+						//----------------------------------------------------
+						_parser.getInt("gameresult");						
+					}
+
+					break;
+				case Protocol.RESULT_ERROR_SERVER_CHECKING:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_GAMERECORD > error > 시스템 점검중입니다. > 게임 종료.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_GAMERECORD > error > 아이디를 확인해라.");	
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_BLOCK_USER:		
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_GAMERECORD > error > 블럭처리된 아이디입니다. > 게임 종료.");	
+					#endif
+					break;
+				default:
+					#if NET_DEBUG_MODE
+					Debug.Log(" > 팝업처리.");
+					#endif
+					break;
+				}
+			}
+			break;
+			//@@@@ 0030 end
+
 
 			//@@@@ 0025 start 
 		case Protocol.PTS_PTREADY:
@@ -1891,6 +2032,8 @@ public class NetworkManager : MonoBehaviour {
 			}
 			break;
 			//@@@@ 0022 end
+
+
 		default:
 			Debug.LogError("[error]:[C -> S] not define code\n" + _xml);
 			break;

@@ -88,6 +88,11 @@ public class Protocol{
 						PTS_PTRESULT		= 36,		
 						//@@@@ 0025 end
 
+						//@@@@ 0030 start 
+						PTC_GAMERECORD		= 37, 	//gamerecord.jsp
+						PTS_GAMERECORD		= 37,	
+						//@@@@ 0030 end
+
 						PTC_XXXXX			= 99,	
 						PTS_XXXXX			= 99;
 	#endregion
@@ -116,6 +121,10 @@ public class Protocol{
 						PTG_PTBET			= "ptbet.jsp",
 						PTG_PTRESULT		= "ptresult.jsp",
 						//@@@@ 0025 end	
+
+						//@@@@ 0030 start 
+						PTG_GAMERECORD		= "gamerecord.jsp",
+						//@@@@ 0030 end
 
 						PTG_XXXXX			= "_xxxxx.jsp";
 
@@ -265,7 +274,7 @@ public class Protocol{
 						SELECT_4_UP							= 0,	//  				상(0).
 						SELECT_4_DOWN						= 1,	//     				하(1).
 
-	//@@@@ 0021 start 
+						//@@@@ 0021 start 
 						//배팅결과.
 						GAME_RESULT_ING						= -1,
 						GAME_RESULT_OUT						= 0,
@@ -278,7 +287,7 @@ public class Protocol{
 						RESULT_SELECT_NON					= -1,
 						RESULT_SELECT_LOSE					=  0,
 						RESULT_SELECT_WIN					=  1,
-	//@@@@ 0021 end
+						//@@@@ 0021 end
 						XXXXXXXXXXXXXXXXXXXXXXXXXX1			= -1;
 
 	public const int 	//아이템의 인벤, 대분류, 중분류.

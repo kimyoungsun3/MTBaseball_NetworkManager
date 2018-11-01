@@ -155,6 +155,20 @@ public class NetworkManager : MonoBehaviour {
 			sendCode (Protocol.PTC_GAMERECORD, null);
 		}
 
+		_str = "PTC_ITEMCHANGE";
+		_py += _dy;
+		_rl = new Rect(_px, _py, _dx, _dy);
+		if (GUI.Button (_rl, _str)) {
+			sendCode (Protocol.PTC_ITEMCHANGE, null);
+		}
+
+		_str = "PTC_ITEMBUY";
+		_py += _dy;
+		_rl = new Rect(_px, _py, _dx, _dy);
+		if (GUI.Button (_rl, _str)) {
+			sendCode (Protocol.PTC_ITEMBUY, null);
+		}
+
 
 
 	}
@@ -755,6 +769,75 @@ public class NetworkManager : MonoBehaviour {
 			break;
 			//@@@@ 0022 end.
 
+			//@@@@ 0031 start
+		case Protocol.PTC_ITEMCHANGE:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C -> S] PTC_ITEMCHANGE");
+				#endif
+				//1. make URL
+				url = urlbase + Protocol.PTG_ITEMCHANGE;
+
+				//2. setting form
+				//---------------------------------------
+				//유저 정보.
+				strCreateID = "mtxxxx3";
+				strCreatePW = "049000s1i0n7t8445289";
+				//---------------------------------------
+				//1. 착용.. > 해당아이템 listidx를 보내주시면 됩니다.				
+				//2. 해제.. > 클릭한 부위의 기본 listidx를 보내주시면 됩니다.
+				// listidx를 보내주시면 해제나 착용 그리고 추가 경험치, 세트효과전부 처리해서 보내드립니다.
+				//---------------------------------------
+				_form.AddField("gameid", strCreateID );
+				_form.AddField("password", strCreatePW );
+				_form.AddField("sid", "333" );	
+				_form.AddField("listidx", "" + 39);			//착용할려는 아이템 listidx 번호... (39번 mtxxxx3 유저의 listidx : 39번)
+				_form.AddField("randserial", "" + 7777 );	//(중복변경을 방지를 위해서)랜덤 씨리얼 여기서 호출하지 마세요. 콜하는 쪽에서 호출하세요.
+
+
+				//3. sending
+				#if NET_DEBUG_MODE
+				Debug.Log(" _form:" + SSUtil.getString(_form.data));
+				#endif
+				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
+			}
+			break;
+			//@@@@ 0031 end
+
+			//@@@@ 0032 start
+		case Protocol.PTC_ITEMBUY:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C -> S] PTC_ITEMBUY");
+				#endif
+				//1. make URL
+				url = urlbase + Protocol.PTG_ITEMBUY;
+
+				//2. setting form
+				//---------------------------------------
+				//유저 정보.
+				strCreateID = "mtxxxx3";
+				strCreatePW = "049000s1i0n7t8445289";
+				//---------------------------------------
+				//itemcode > 구매할 아이템 코드 (조각박스, 조합초월주문서, 닉네임변경권, 볼 : 4종류 구매가능)
+				//조각박스중에 돌박스는 구매 불가.
+				//---------------------------------------
+				_form.AddField("gameid", strCreateID );
+				_form.AddField("password", strCreatePW );
+				_form.AddField("sid", "333" );				//세션ID.
+				_form.AddField("itemcode", "" + 4001);		//아이템 코드.
+				_form.AddField("buycnt", "" + 1);			//수량.
+				_form.AddField("randserial", "" + 7777 );	//(중복변경을 방지를 위해서)랜덤 씨리얼 여기서 호출하지 마세요. 콜하는 쪽에서 호출하세요.
+
+
+				//3. sending
+				#if NET_DEBUG_MODE
+				Debug.Log(" _form:" + SSUtil.getString(_form.data));
+				#endif
+				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
+			}
+			break;
+			//@@@@ 0032 end
 		default:
 			Debug.LogError("[error][C -> S] #### error");	
 			if ( _onResult != null )
@@ -798,7 +881,7 @@ public class NetworkManager : MonoBehaviour {
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
 					#if NET_DEBUG_MODE
-					Debug.Log(" > 서버시간 > 성공.");				
+					Debug.Log("PTS_SERVERTIME > success");	
 					#endif
 					DateTime.Parse (_parser.getString ("curdate"));
 
@@ -926,6 +1009,45 @@ public class NetworkManager : MonoBehaviour {
 					_parser.getInt("beltlistidx");					//
 					_parser.getInt("kneepadlistidx");				//
 					_parser.getInt("sockslistidx");					//
+
+					//@@@@ 0031 start 										
+					//------------------------------------------
+					// 로그인 하면 아이템을 정보는 보내줍니다.
+					// 아이템을 교체, 해제를 하면 서버에서 계산해서 알려줍니다.
+					// 아래의 정보는 참고용으로 보시면 됩니다. 
+					// (아이템 엑셀의 값을 종합해서 만든 정보입니다.)
+					//------------------------------------------															
+					_parser.getInt("wearplusexp");				// 총경험치 증가량(장비전체 + 세트효과)
+					_parser.getInt("setplusexp");				//                   세트효과
+
+					_parser.getInt("helmetexp");				// 각 장비별 증가되는 값 (아이템 엑셀의 값)					
+					_parser.getInt("shirtexp");					//참고용으로 보세요
+					_parser.getInt("pantsexp");					
+					_parser.getInt("glovesexp");				
+					_parser.getInt("shoesexp");					
+					_parser.getInt("batexp");					
+					_parser.getInt("ballexp");					
+					_parser.getInt("goggleexp");				
+					_parser.getInt("wristbandexp");				
+					_parser.getInt("elbowpadexp");				
+					_parser.getInt("beltexp");					
+					_parser.getInt("kneepadexp");				
+					_parser.getInt("socksexp");					
+
+					_parser.getInt("helmetsetnum");				//각 장비별 세트 번호 (아이템 엑셀의 값)
+					_parser.getInt("shirtsetnum");				//참고용으로 보세요
+					_parser.getInt("pantssetnum");				
+					_parser.getInt("glovessetnum");				
+					_parser.getInt("shoessetnum");					
+					_parser.getInt("batsetnum");					
+					_parser.getInt("ballsetnum");					
+					_parser.getInt("gogglesetnum");				
+					_parser.getInt("wristbandsetnum");				
+					_parser.getInt("elbowpadsetnum");				
+					_parser.getInt("beltsetnum");					
+					_parser.getInt("kneepadsetnum");				
+					_parser.getInt("sockssetnum");					
+					//@@@@ 0031 end
 
 					//개별저장 파라미터(필요에 의해 클라이언트가 저장해서 사용하시면 됩니다.)...
 					//저장을 하기 위해서 별도의 클라이언트에 저장하시지 마시고 이 변수를 통해서 저장 읽어 들이세요.
@@ -1156,7 +1278,7 @@ public class NetworkManager : MonoBehaviour {
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
 					#if NET_DEBUG_MODE
-					Debug.Log(" > 서버시간 > 성공.");				
+					Debug.Log("PTS_USERPARAM > success");		
 					#endif
 
 					//저장한 정보을 읽어서 보내준다.
@@ -1191,7 +1313,7 @@ public class NetworkManager : MonoBehaviour {
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
 					#if NET_DEBUG_MODE
-					Debug.Log(" > 게임을 할려고 들어왔다.");
+					Debug.Log("PTS_SGREADY > success");	
 					#endif
 					//************************************
 					//이시간을 토대로 시간을 계산한다.
@@ -1262,7 +1384,7 @@ public class NetworkManager : MonoBehaviour {
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
 					#if NET_DEBUG_MODE
-					Debug.Log(" > 게임을 할려고 들어왔다.");
+					Debug.Log("PTS_SGBET > success");	
 					#endif
 					//************************************
 					//이시간을 토대로 시간을 계산한다.
@@ -1394,7 +1516,7 @@ public class NetworkManager : MonoBehaviour {
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
 					#if NET_DEBUG_MODE
-					Debug.Log(" > 게임을 할려고 들어왔다.");
+					Debug.Log("PTS_SGRESULT > success");	
 					#endif
 					//************************************
 					//이시간을 토대로 시간을 계산한다.
@@ -1547,7 +1669,7 @@ public class NetworkManager : MonoBehaviour {
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
 					#if NET_DEBUG_MODE
-					Debug.Log(" > 게임을 할려고 들어왔다.");
+					Debug.Log("PTS_GAMERECORD > success");	
 					#endif
 					_parser.getInt("cashcost");
 					_parser.getInt("gamecost");
@@ -1647,7 +1769,7 @@ public class NetworkManager : MonoBehaviour {
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
 					#if NET_DEBUG_MODE
-					Debug.Log(" > 게임을 할려고 들어왔다.");
+					Debug.Log("PTS_PTREADY > success");	
 					#endif
 					//************************************
 					//이시간을 토대로 시간을 계산한다.
@@ -1714,7 +1836,7 @@ public class NetworkManager : MonoBehaviour {
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
 					#if NET_DEBUG_MODE
-					Debug.Log(" > 게임을 할려고 들어왔다.");
+					Debug.Log("PTS_PTBET > success");	
 					#endif
 					//************************************
 					//이시간을 토대로 시간을 계산한다.
@@ -1802,7 +1924,7 @@ public class NetworkManager : MonoBehaviour {
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
 					#if NET_DEBUG_MODE
-					Debug.Log(" > 게임을 할려고 들어왔다.");
+					Debug.Log("PTS_PTRESULT > success");	
 					#endif
 					//************************************
 					//이시간을 토대로 시간을 계산한다.
@@ -1943,7 +2065,7 @@ public class NetworkManager : MonoBehaviour {
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
 					#if NET_DEBUG_MODE
-					Debug.Log(" > 게임 문의를 등록했습니다.");
+					Debug.Log("PTS_SYSINQUIRE > success");	
 					#endif
 					break;
 				default:
@@ -1966,7 +2088,7 @@ public class NetworkManager : MonoBehaviour {
 				switch(_resultcode){
 				case Protocol.RESULT_SUCCESS:
 					#if NET_DEBUG_MODE
-					Debug.Log(" > 게임을 할려고 들어왔다.");
+					Debug.Log("PTS_KCHECKNN > success");	
 					#endif
 					//************************************
 					//이시간을 토대로 시간을 계산한다.
@@ -2033,7 +2155,214 @@ public class NetworkManager : MonoBehaviour {
 			break;
 			//@@@@ 0022 end
 
+			//@@@@ 0031 start
+		case Protocol.PTS_ITEMCHANGE:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_ITEMCHANGE _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
+				#endif
 
+				switch(_resultcode){
+				case Protocol.RESULT_SUCCESS:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMCHANGE > success");	
+					#endif
+					//					
+					_parser.getInt("cashcost");	//다이아(캐쉬).
+					_parser.getInt("gamecost");	//볼.
+
+					//-----------------------------------------------------
+					// > 유저의 착용정보가 들어 있음...
+					//-----------------------------------------------------
+					_parser.parsing ( _xml , "itemuserinfo" );
+					if (_parser.next ())
+					{
+						//------------------------------------------
+						// 로그인 하면 아이템을 정보는 보내줍니다.
+						// 아이템을 교체, 해제를 하면 서버에서 계산해서 알려줍니다.
+						// 아래의 정보는 참고용으로 보시면 됩니다. 
+						// (아이템 엑셀의 값을 종합해서 만든 정보입니다.)
+						//------------------------------------------	
+						//착용아이템의 리스트 인덱스 .
+						//listidx -> 유저 아이템 보유 테이블의 listidx 검색해서 해당 아이템을 찾는다.
+						_parser.getInt("helmetlistidx");				//
+						_parser.getInt("shirtlistidx");					//
+						_parser.getInt("pantslistidx");					//
+						_parser.getInt("gloveslistidx");				//
+						_parser.getInt("shoeslistidx");					//
+						_parser.getInt("batlistidx");					//
+						_parser.getInt("balllistidx");					//
+						_parser.getInt("gogglelistidx");				//
+						_parser.getInt("wristbandlistidx");				//
+						_parser.getInt("elbowpadlistidx");				//
+						_parser.getInt("beltlistidx");					//
+						_parser.getInt("kneepadlistidx");				//
+						_parser.getInt("sockslistidx");					//	
+
+						_parser.getInt("wearplusexp");				// 총경험치 증가량(장비전체 + 세트효과)
+						_parser.getInt("setplusexp");				//                   세트효과
+
+						_parser.getInt("helmetexp");				// 각 장비별 증가되는 값 (아이템 엑셀의 값)					
+						_parser.getInt("shirtexp");					//참고용으로 보세요
+						_parser.getInt("pantsexp");					
+						_parser.getInt("glovesexp");				
+						_parser.getInt("shoesexp");					
+						_parser.getInt("batexp");					
+						_parser.getInt("ballexp");					
+						_parser.getInt("goggleexp");				
+						_parser.getInt("wristbandexp");				
+						_parser.getInt("elbowpadexp");				
+						_parser.getInt("beltexp");					
+						_parser.getInt("kneepadexp");				
+						_parser.getInt("socksexp");					
+
+						_parser.getInt("helmetsetnum");				//각 장비별 세트 번호 (아이템 엑셀의 값)
+						_parser.getInt("shirtsetnum");				//참고용으로 보세요
+						_parser.getInt("pantssetnum");				
+						_parser.getInt("glovessetnum");				
+						_parser.getInt("shoessetnum");					
+						_parser.getInt("batsetnum");					
+						_parser.getInt("ballsetnum");					
+						_parser.getInt("gogglesetnum");				
+						_parser.getInt("wristbandsetnum");				
+						_parser.getInt("elbowpadsetnum");				
+						_parser.getInt("beltsetnum");					
+						_parser.getInt("kneepadsetnum");				
+						_parser.getInt("sockssetnum");		
+					}
+					break;
+				case Protocol.RESULT_ERROR_SERVER_CHECKING:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMCHANGE > error > 시스템 점검중입니다. > 게임 종료.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMCHANGE > error > 아이디를 확인해라.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_BLOCK_USER:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMCHANGE > error > 블럭처리된 아이디입니다. > 게임 종료.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE_LOGOUT:
+					Debug.LogError (" >>> 강제 로그 아웃 처리 해주세요(구현우 이것 삭제)");
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMCHANGE > error > 세션이 만기 강제로 로그아웃 처리 해야합니다..");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMCHANGE > error > 교체할 아이템이 잘못되었습니다. listidx를 다시 확인해보세요.");
+					#endif
+					break;
+				default:
+					#if NET_DEBUG_MODE
+					Debug.Log(" > 팝업처리.");
+					#endif
+					break;
+				}
+			}
+			break;
+			//@@@@ 0031 end
+
+			//@@@@ 0032 start
+		case Protocol.PTS_ITEMBUY:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_ITEMBUY _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
+				#endif
+
+				switch(_resultcode){
+				case Protocol.RESULT_SUCCESS:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMBUY > success");	
+					#endif
+					//					
+					_parser.getInt("cashcost");	//다이아(캐쉬).
+					_parser.getInt("gamecost");	//볼.
+
+
+					//-----------------------------------------------------------
+					// 구매한 아이템. 
+					//	> 템들은 기존것에 있으면 추가, 없으면 추가
+					//	> 볼은 직접 들어가서 오기때문에 아래것이 없음
+					//-----------------------------------------------------------
+					_parser.parsing ( "itemowner" );
+					if (_parser.next ())
+					{
+						_parser.getInt("listidx");						//인벤에서의 인덱스이다. 
+						_parser.getInt("invenkind");					//인벤의 종류...
+																		//착용인벤 Protocol.USERITEM_INVENKIND_WEAR
+																		//조각인벤 Protocol.USERITEM_INVENKIND_PIECE
+																		//소비인벤 Protocol.USERITEM_INVENKIND_CONSUME
+						_parser.getInt("itemcode");						//아이템 코드.
+						_parser.getInt("cnt");							//수량.
+						_parser.getInt("randserial");					//랜덤 시리얼을 만들어 두세요...
+																		//1. 구매시에는...
+																		// SSUtil.getRandSerial() 호출해서 달리 보내면 구매동작을 합니다.
+																		// 동일한 씨리어을 보내시면 구매되어 있으면 재구매 안하고...
+																		// 안되어 있으면 구매한다.
+																		//2. 동일 제품을 구매 할 경우.
+																		// > 다른 씨리얼을 보내야한다. 안그러면 구매 안해줌...
+					}
+					break;
+				case Protocol.RESULT_ERROR_SERVER_CHECKING:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMBUY > error > 시스템 점검중입니다. > 게임 종료.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMBUY > error > 아이디를 확인해라.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_BLOCK_USER:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMBUY > error > 블럭처리된 아이디입니다. > 게임 종료.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE_LOGOUT:
+					Debug.LogError (" >>> 강제 로그 아웃 처리 해주세요(구현우 이것 삭제)");
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMBUY > error > 세션이 만기 강제로 로그아웃 처리 해야합니다..");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMBUY > error > 아이템을 찾을 수 없습니다.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_BUY_ITEMCODE:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMBUY > error > 판매안되는 아이템입니다.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_CASHCOST_LACK:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMBUY > error > 다이아가 부족합니다.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_GAMECOST_LACK:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMBUY > error > 볼이 부족합니다.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_ITEMCOST_WRONG:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMBUY > error > 아이템 정보가 이상하게 존재합니다.");
+					#endif
+					break;
+				default:
+					#if NET_DEBUG_MODE
+					Debug.Log(" > 팝업처리.");
+					#endif
+					break;
+				}
+			}
+			break;
+			//@@@@ 0032 end
 		default:
 			Debug.LogError("[error]:[C -> S] not define code\n" + _xml);
 			break;

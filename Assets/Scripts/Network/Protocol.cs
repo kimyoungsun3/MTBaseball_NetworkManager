@@ -93,6 +93,15 @@ public class Protocol{
 						PTS_GAMERECORD		= 37,	
 						//@@@@ 0030 end
 
+						//@@@@ 0031 start 
+						PTC_ITEMCHANGE		= 40, 	//itemchange.jsp
+						PTS_ITEMCHANGE		= 40,	
+						//@@@@ 0031 end
+						//@@@@ 0032 start 
+						PTC_ITEMBUY			= 41, 	//itembuy.jsp
+						PTS_ITEMBUY			= 41,		
+						//@@@@ 0032 end
+
 						PTC_XXXXX			= 99,	
 						PTS_XXXXX			= 99;
 	#endregion
@@ -125,6 +134,13 @@ public class Protocol{
 						//@@@@ 0030 start 
 						PTG_GAMERECORD		= "gamerecord.jsp",
 						//@@@@ 0030 end
+
+						//@@@@ 0031 start 
+						PTG_ITEMCHANGE		= "itemchange.jsp",
+						//@@@@ 0031 end
+						//@@@@ 0032 start 
+						PTG_ITEMBUY			= "itembuy.jsp",
+						//@@@@ 0032 end
 
 						PTG_XXXXX			= "_xxxxx.jsp";
 
@@ -217,6 +233,7 @@ public class Protocol{
 						RESULT_ERROR_NOT_CALCULATE_LOTTO_LOGOUT		= -210,	// 로또에서 회차 정보가 오버타임지나도(5+5분) 안들어옴… > 내부취소마킹, 로그아웃, 점검중.
 						RESULT_ERROR_ITEMCODE_GRADE_CHECK			= -212, // 아이템 등급이 잘못되었습니다.
 						RESULT_ERROR_MINUMUN_LACK					= -213,	// 최소수량보다 부족.
+						RESULT_ERROR_NOT_BUY_ITEMCODE		= -215,	//구매불가템입니다.
 
 						RESULT_XXXXXX						= -999;
 	#endregion

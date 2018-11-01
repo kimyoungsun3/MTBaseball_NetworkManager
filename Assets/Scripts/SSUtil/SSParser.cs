@@ -87,6 +87,10 @@ public class SSParser{
 				return xmlNode[cursor].ChildNodes[j].InnerText;
 			}
 		}
+
+		#if UNITY_EDITOR
+		Debug.LogWarning ("#### SSParser param:" + _param + " 존재안함(확인해보세요)");
+		#endif
 		return null;
 	}
 

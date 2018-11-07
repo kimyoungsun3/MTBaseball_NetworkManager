@@ -102,6 +102,11 @@ public class Protocol{
 						PTS_ITEMBUY			= 41,		
 						//@@@@ 0032 end
 
+						//@@@@ 0034 start
+						PTC_ITEMOPEN		= 42, 	//itemopen.jsp
+						PTS_ITEMOPEN		= 42,		
+						//@@@@ 0034 end
+
 						PTC_XXXXX			= 99,	
 						PTS_XXXXX			= 99;
 	#endregion
@@ -141,6 +146,9 @@ public class Protocol{
 						//@@@@ 0032 start 
 						PTG_ITEMBUY			= "itembuy.jsp",
 						//@@@@ 0032 end
+						//@@@@ 0034 start
+						PTG_ITEMOPEN		= "itemopen.jsp",
+						//@@@@ 0034 end
 
 						PTG_XXXXX			= "_xxxxx.jsp";
 
@@ -305,6 +313,19 @@ public class Protocol{
 						RESULT_SELECT_LOSE					=  0,
 						RESULT_SELECT_WIN					=  1,
 						//@@@@ 0021 end
+
+						//@@@@ 0034 start
+						//박스 오픈의 성공과 실패.
+						BOX_OPEN_STATE_SUCCESS				= 1,
+						BOX_OPEN_STATE_FAIL					= -1,
+
+						//의상박스 오픈의 종류.
+						BOX_OPEN_MODE_ADVICE				= 42,
+						BOX_OPEN_MODE_PIECE					= 40,
+						BOX_OPEN_MODE_CLOTH					= 41,
+						BOX_OPEN_MODE_CASHCOST				= 48,
+						//@@@@ 0034 end
+
 						XXXXXXXXXXXXXXXXXXXXXXXXXX1			= -1;
 
 	public const int 	//아이템의 인벤, 대분류, 중분류.
@@ -348,12 +369,16 @@ public class Protocol{
 						ITEM_SUBCATEGORY_PIECE_BELT			= 25,	//벨트 조각(25)
 						ITEM_SUBCATEGORY_PIECE_KNEEPAD	    = 26,	//무릎 보호대 조각(26)
 						ITEM_SUBCATEGORY_PIECE_SOCKS	    = 27,	//양말 조각(27)
-						ITEM_SUBCATEGORY_BOX_WEAR			= 40,	//조각 랜덤박스(40)
-						ITEM_SUBCATEGORY_BOX_PIECE			= 41,	//의상 랜덤박스(41)
+
+						//@@@@ 0034 start
+						ITEM_SUBCATEGORY_BOX_PIECE			= 40,	//조각 랜덤박스(40)
+						ITEM_SUBCATEGORY_BOX_CLOTH			= 41,	//의상 랜덤박스(41)
+						//@@@@ 0034 end
+
 						ITEM_SUBCATEGORY_BOX_ADVICE			= 42,	//조언 패키지 박스(42)
 						ITEM_SUBCATEGORY_SCROLL_EVOLUTION	= 45,	//합성초월주문서(45)
 						ITEM_SUBCATEGORY_SCROLL_COMMISSION	= 46,	//수수료주문서(46)
-						ITEM_SUBCATEGORY_ETC_ITEM	= 47,	//기타템들(47)
+						ITEM_SUBCATEGORY_ETC_ITEM			= 47,	//기타템들(47)
 						ITEM_SUBCATEGORY_CASHCOST			= 50,	//다이아(50)
 						ITEM_SUBCATEGORY_STATICINFO			= 500,	//정보수집(500)
 						ITEM_SUBCATEGORY_LEVELUPREWARD		= 900,	//레벨업 보상(510)

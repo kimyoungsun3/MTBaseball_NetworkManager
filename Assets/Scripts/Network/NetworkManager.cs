@@ -169,6 +169,13 @@ public class NetworkManager : MonoBehaviour {
 			sendCode (Protocol.PTC_ITEMBUY, null);
 		}
 
+		_str = "PTC_ITEMOPEN";
+		_py += _dy;
+		_rl = new Rect(_px, _py, _dx, _dy);
+		if (GUI.Button (_rl, _str)) {
+			sendCode (Protocol.PTC_ITEMOPEN, null);
+		}
+
 
 
 	}
@@ -201,13 +208,13 @@ public class NetworkManager : MonoBehaviour {
 				url = urlbase + Protocol.PTG_CREATEID;
 
 				//2. setting form
-				strCreateID 		= "mtxxxx3";
+				strCreateID 		= "dddeee";
 				strCreatePW 		= SSUtil.setPassword( "a1s2d3f4" );
 				strUserName 		= "mtusername3";
 				strBirthday 		= "19980813";
-				strPhoneNumber		= "01012345673";
+				strPhoneNumber		= "01012345601";
 				strPhoneNumberC 	= SSUtil.setPhoneNumber (strPhoneNumber);
-				strEmail			= "mtxxxx3@xxx.xxx";
+				strEmail			= "dddeee@xxx.xxx";
 				strNickname	 		= "ntnickname3";
 				//Debug.Log ("strCreatePW :" + strCreatePW);
 				//Debug.Log ("strPhoneNumber :" + strPhoneNumber + " > " + strPhoneNumberC);
@@ -274,7 +281,7 @@ public class NetworkManager : MonoBehaviour {
 				_form.AddField("gameid", "mtxxxx3" );										//유저 아이디.
 				_form.AddField("password", "049000s1i0n7t8445289" );					//유저 패스워드.
 				_form.AddField("sid", "333" );											//로그인때 받은 sid값	Protocol.GIFTLIST_GIFT_KIND_GIFT_GET		
-				_form.AddField("idx", "" + 238 );											//선물번호 인덱스.
+				_form.AddField("idx", "" + 491 );											//선물번호 인덱스.
 				_form.AddField("giftkind", "" + Protocol.GIFTLIST_GIFT_KIND_GIFT_GET );	//선물 받기(해당템만 전송)(-3)		Protocol.GIFTLIST_GIFT_KIND_GIFT_GET			
 				//---------------------------------------------
 				//2-1. 나무헬멧 받기 > 하나씩만 들어간다.	
@@ -399,7 +406,7 @@ public class NetworkManager : MonoBehaviour {
 				_form.AddField("gameid", strCreateID);			
 				_form.AddField("password", strCreatePW);		
 				_form.AddField("mode", "" + Protocol.USERPARAM_MODE_SAVE);		
-				_form.AddField("listset", "0:0;1:1;2:2;3:3;4:4;5:5;6:6;7:7;8:8;9:9;");
+				_form.AddField("listset", "0:99;1:1;2:2;3:3;4:4;5:5;6:6;7:7;8:8;9:9;");
 				//							paramX자리 / 구분자(:) / 데이타 / 구분자(;)
 				//							paramX자리 / 구분자(:) / 데이타 / 구분자(;)
 				//							....
@@ -496,9 +503,9 @@ public class NetworkManager : MonoBehaviour {
 																			//연습  Protocol.GAME_MODE_PRACTICE
 																			//싱글  Protocol.GAME_MODE_SINGLE
 																			//멀티  Protocol.GAME_MODE_MULTI
-				_form.AddField("listidx", "" + 11 );						//아이템은 리스트 번호.
+				_form.AddField("listidx", "" + -1 );						//아이템은 리스트 번호.
 				_form.AddField("curturntime", "" + -1 );					//현재의 회차번호 (모르면 -1를 넣어주면된다).
-				_form.AddField("select", "1:0:100;2:0:100;3:0:100;4:0:100;" );//배팅조각.
+				_form.AddField("select", "1:0:100;2:0:100;3:0:100;4:-1:0;" );//배팅조각.
 				//1. 배팅템 정보 구분자.
 				//   배팅템 정보는 순서대로 들어가며 없으면 없는 정보를 셑팅.
 				//   구분자는 (;)으로 해주시면 됩니다.
@@ -570,7 +577,7 @@ public class NetworkManager : MonoBehaviour {
 																			//연습  Protocol.GAME_MODE_PRACTICE
 																			//싱글  Protocol.GAME_MODE_SINGLE
 																			//멀티  Protocol.GAME_MODE_MULTI
-				_form.AddField("curturntime", "" + 830093 );				//현재의 회차번호.
+				_form.AddField("curturntime", "" + 835804 );				//현재의 회차번호.
 
 				//3. sending
 				#if NET_DEBUG_MODE
@@ -838,6 +845,77 @@ public class NetworkManager : MonoBehaviour {
 			}
 			break;
 			//@@@@ 0032 end
+			//@@@@ 0034 start
+		case Protocol.PTC_ITEMOPEN:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C -> S] PTC_ITEMOPEN");
+				#endif
+				//1. make URL
+				url = urlbase + Protocol.PTG_ITEMOPEN;
+
+				//2. setting form
+				//---------------------------------------
+				//유저 정보.
+				strCreateID = "mtxxxx3";
+				strCreatePW = "049000s1i0n7t8445289";
+				//---------------------------------------
+				//listidx > 구매할 아이템 코드 (조언패키지 박스, 조각박스, 의상박스, 캐쉬박스 : 4종류 오픈가능)
+				//조각박스중에 돌박스는 구매 불가.
+				//---------------------------------------
+
+				//---------------------------------------
+				//조언패지키 -> listidx.
+				//---------------------------------------
+				//_form.AddField("gameid", strCreateID );
+				//_form.AddField("password", strCreatePW );
+				//_form.AddField("sid", "333" );			//세션ID.
+				//_form.AddField("listidx", "" + 28);		//아이템 리스트 번호.
+				//_form.AddField("randserial", "" + 8881 );	//(중복변경을 방지를 위해서)랜덤 씨리얼 여기서 호출하지 마세요. 콜하는 쪽에서 호출하세요.
+				//
+				//@@@@ 0035 start
+				//---------------------------------------
+				//조각 랜덤박스 -> listidx.
+				//---------------------------------------
+				//_form.AddField("gameid", strCreateID );
+				//_form.AddField("password", strCreatePW );
+				//_form.AddField("sid", "333" );			//세션ID.
+				//_form.AddField("listidx", "" + 18);		//아이템 리스트 번호.
+				//_form.AddField("randserial", "" + 8882 );	//(중복변경을 방지를 위해서)랜덤 씨리얼 여기서 호출하지 마세요. 콜하는 쪽에서 호출하세요.
+				//@@@@ 0035 end
+				//
+				//@@@@ 0036 start
+				//---------------------------------------
+				//의상 랜덤박스 -> listidx.
+				//---------------------------------------
+				//_form.AddField("gameid", strCreateID );
+				//_form.AddField("password", strCreatePW );
+				//_form.AddField("sid", "333" );			//세션ID.
+				//_form.AddField("listidx", "" + 23);		//아이템 리스트 번호.
+				//_form.AddField("randserial", "" + 8883 );	//(중복변경을 방지를 위해서)랜덤 씨리얼 여기서 호출하지 마세요. 콜하는 쪽에서 호출하세요.
+				//@@@@ 0036 end
+				//
+				//@@@@ 0037 start
+				//---------------------------------------
+				//캐쉬박스 -> listidx.
+				//---------------------------------------
+				_form.AddField("gameid", strCreateID );
+				_form.AddField("password", strCreatePW );
+				_form.AddField("sid", "333" );				//세션ID.
+				_form.AddField("listidx", "" + 17);			//아이템 리스트 번호.
+				_form.AddField("randserial", "" + 8884 );	//(중복변경을 방지를 위해서)랜덤 씨리얼 여기서 호출하지 마세요. 콜하는 쪽에서 호출하세요.
+				//@@@@ 0037 end
+
+				//3. sending
+				#if NET_DEBUG_MODE
+				Debug.Log(" _form:" + SSUtil.getString(_form.data));
+				#endif
+				StartCoroutine( Handle( new WWW( url, _form ), _onResult ) );
+			}
+			break;
+			//@@@@ 0034 end
+
+
 		default:
 			Debug.LogError("[error][C -> S] #### error");	
 			if ( _onResult != null )
@@ -1320,11 +1398,12 @@ public class NetworkManager : MonoBehaviour {
 					// > 가장 중요한 부분입니다. 
 					// > 별도로 시간 싱크는 계속 보내주면 별도로 맞추고 싶을 때를 위해 별도 프로 토콜을 사용할 수 있습니다.
 					//************************************
-					DateTime.Parse( _parser.getString("curdate") );	//2018-09-12 18:07:28.53
+					DateTime _curdate = DateTime.Parse( _parser.getString("curdate") );	//2018-09-12 18:07:28.53
 
 					//유저 개인정보...
 					_parser.getInt("curturntime");		//현재 진행중인 회차.
-					DateTime.Parse( _parser.getString("curturndate") );	//현재 진행중인 회차가 완료되는 시간.
+					DateTime _curturndate =DateTime.Parse( _parser.getString("curturndate") );	//현재 진행중인 회차가 완료되는 시간.
+					//Debug.Log(_curturndate.Second - _curdate.Second);
 
 					//@@@@ 0028 start 
 					_parser.getInt("cashcost");		//캐쉬.
@@ -2363,6 +2442,153 @@ public class NetworkManager : MonoBehaviour {
 			}
 			break;
 			//@@@@ 0032 end
+			//@@@@ 0034 start
+		case Protocol.PTS_ITEMOPEN:
+			{
+				#if NET_DEBUG_MODE
+				Debug.Log("[C <- S] PTS_ITEMOPEN _resultcode:" + _resultcode + " _msg:" + _msg + "\n" + _xml);
+				#endif
+
+				switch(_resultcode){
+				case Protocol.RESULT_SUCCESS:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMOPEN > success");
+					#endif
+					//
+					_parser.getInt("cashcost");	//다이아(캐쉬).
+					_parser.getInt("gamecost");	//볼.
+
+					int _boxopenmode = _parser.getInt("boxopenmode");
+					if(_boxopenmode == Protocol.BOX_OPEN_MODE_ADVICE){
+						//---------------------------------------------------
+						// 조언박스 오픈.
+						// 1. 조언박스 오픈 내용물.
+						// -> 7% 코치의 조언 주문서.
+						// -> 3% 감독의 조언 주문서.
+						// -> 90% 꽝.
+						// 2. 박스 개수.
+						// * 보유템은 밑에 리스트로 옵니다.
+						//---------------------------------------------------
+						Debug.Log(" >  조언박스 오픈");
+						int _openstate = _parser.getInt("openstate");						
+						//Protocol.BOX_OPEN_STATE_SUCCESS 	> 템이 나옴(코치, 감독 둘중에 하나)
+						//Protocol.BOX_OPEN_STATE_FAIL		> 꽝 안나옴...
+
+					//@@@@ 0035 start
+					}else if(_boxopenmode == Protocol.BOX_OPEN_MODE_PIECE){
+						//---------------------------------------------------
+						// 조각 박스 오픈 
+						// 1. 아이템의 확률은 아이템 테이블의 확률표에 존재함.
+						//    무조건 1개가 나옴... 조각 or 조언 소비템이 나옴.
+						// 2. 박스 잔량.
+						// * 보유템은 밑에 리스트로 옵니다.
+						//---------------------------------------------------				
+						Debug.Log(" >  조각 박스 오픈 ");
+						int _openstate = _parser.getInt("openstate");						
+						//Protocol.BOX_OPEN_STATE_SUCCESS 	> 템이 하상 나와서 항상 성공임.... (조각 or 조언 주무서가 나옴)
+					//@@@@ 0035 end
+					//@@@@ 0036 start
+					}else if(_boxopenmode == Protocol.BOX_OPEN_MODE_CLOTH){
+						//---------------------------------------------------
+						// 의상 박스 오픈 
+						// 1. -> 1/n확률.
+						//    무조건 1개가 나옴... 의상만.
+						// 2. 박스 잔량.
+						// * 보유템은 밑에 리스트로 옵니다.
+						//---------------------------------------------------	
+						int _openstate = _parser.getInt("openstate");				
+						Debug.Log(" >  의상 박스 오픈 ");				
+						//Protocol.BOX_OPEN_STATE_SUCCESS 	> 템이 하상 나와서 항상 성공임.... (의상만)
+					//@@@@ 0036 end
+					//@@@@ 0037 start
+					}else if(_boxopenmode == Protocol.BOX_OPEN_MODE_CASHCOST){
+						//---------------------------------------------------
+						// 캐쉬박스 오픈 
+						// 1. 기획자가 지정한 확률.
+						//    캐쉬(다이아)가 나옴
+						// 2. 코치, 감독, 조언 3가지가 1개씩 주어짐.
+						// 2. 박스 잔량.
+						// * 보유템은 밑에 리스트로 옵니다.
+						//---------------------------------------------------	
+						int _openstate = _parser.getInt("openstate");				
+						Debug.Log(" >  캐쉬박스 오픈  ");								
+						//Protocol.BOX_OPEN_STATE_SUCCESS 	> 캐쉬와 조언서 3가지가 나와서 항상 성공.
+
+						_parser.getInt("pluscahcost");				
+						//오픈해서 나온 캐쉬(다이아).
+					//@@@@ 0037 end
+					}
+
+
+					//-----------------------------------------------------------
+					// 오픈한 아이템 목록과 박스목록.
+					//	> 템들은 기존것에 있으면 추가, 없으면 추가
+					//	> 캐쉬(다이아)은 직접 들어가서 오기때문에 아래것이 없음
+					//-----------------------------------------------------------
+					_parser.parsing ( "itemowner" );
+					while (_parser.next ())
+					{
+						_parser.getInt("listidx");						//인벤에서의 인덱스이다.
+						_parser.getInt("invenkind");					//인벤의 종류...
+						//착용인벤 Protocol.USERITEM_INVENKIND_WEAR
+						//조각인벤 Protocol.USERITEM_INVENKIND_PIECE
+						//소비인벤 Protocol.USERITEM_INVENKIND_CONSUME
+						_parser.getInt("itemcode");						//아이템 코드.
+						_parser.getInt("cnt");							//수량.
+						_parser.getInt("randserial");					//랜덤 시리얼을 만들어 두세요...
+						//1. 구매시에는...
+						// SSUtil.getRandSerial() 호출해서 달리 보내면 구매동작을 합니다.
+						// 동일한 씨리어을 보내시면 구매되어 있으면 재구매 안하고...
+						// 안되어 있으면 구매한다.
+						//2. 동일 제품을 구매 할 경우.
+						// > 다른 씨리얼을 보내야한다. 안그러면 구매 안해줌...
+					}
+					break;
+				case Protocol.RESULT_ERROR_SERVER_CHECKING:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMOPEN > error > 시스템 점검중입니다. > 게임 종료.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_FOUND_GAMEID:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMOPEN > error > 아이디를 확인해라.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_BLOCK_USER:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMOPEN > error > 블럭처리된 아이디입니다. > 게임 종료.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_SESSION_ID_EXPIRE_LOGOUT:
+					Debug.LogError (" >>> 강제 로그 아웃 처리 해주세요(구현우 이것 삭제)");
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMOPEN > error > 세션이 만기 강제로 로그아웃 처리 해야합니다..");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_FOUND_ITEMCODE:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMOPEN > error > 아이템을 찾을 수 없습니다.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_NOT_BUY_ITEMCODE:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMOPEN > error > 판매안되는 아이템입니다.");
+					#endif
+					break;
+				case Protocol.RESULT_ERROR_ITEM_LACK:
+					#if NET_DEBUG_MODE
+					Debug.Log("PTS_ITEMOPEN > error > 아이템 수량이 부족합니다.");
+					#endif
+					break;
+				default:
+					#if NET_DEBUG_MODE
+					Debug.Log(" > 팝업처리.");
+					#endif
+					break;
+				}
+			}
+			break;
+			//@@@@ 0034 end
 		default:
 			Debug.LogError("[error]:[C -> S] not define code\n" + _xml);
 			break;

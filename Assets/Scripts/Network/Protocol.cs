@@ -107,6 +107,15 @@ public class Protocol{
 						PTS_ITEMOPEN		= 42,		
 						//@@@@ 0034 end
 
+						//@@@@ 0038 start
+						PTC_ITEMCOMBINATE	= 43, 	//itemcombinate.jsp
+						PTS_ITEMCOMBINATE	= 43,								
+						PTC_ITEMEVOLUE		= 44, 	//itemevolve.jsp
+						PTS_ITEMEVOLUE		= 44,		
+						PTC_ITEMDISAPART	= 45, 	//itemdisapart.jsp
+						PTS_ITEMDISAPART	= 45,		
+						//@@@@ 0038 end
+
 						PTC_XXXXX			= 99,	
 						PTS_XXXXX			= 99;
 	#endregion
@@ -149,6 +158,12 @@ public class Protocol{
 						//@@@@ 0034 start
 						PTG_ITEMOPEN		= "itemopen.jsp",
 						//@@@@ 0034 end
+
+						//@@@@ 0038 start
+						PTG_ITEMCOMBINATE	= "itemcombinate.jsp",				
+						PTG_ITEMEVOLUE		= "itemevolve.jsp",
+						PTG_ITEMDISAPART	= "itemdisapart.jsp",
+						//@@@@ 0038 end
 
 						PTG_XXXXX			= "_xxxxx.jsp";
 
@@ -242,7 +257,9 @@ public class Protocol{
 						RESULT_ERROR_ITEMCODE_GRADE_CHECK			= -212, // 아이템 등급이 잘못되었습니다.
 						RESULT_ERROR_MINUMUN_LACK					= -213,	// 최소수량보다 부족.
 						RESULT_ERROR_NOT_BUY_ITEMCODE		= -215,	//구매불가템입니다.
-
+						//@@@@ 0039 start
+						RESULT_ERROR_WEARING_NOT_UPGRADE	= -216, //착용중인 템은 업그레이드 불가능합니다.
+						//@@@@ 0039 end
 						RESULT_XXXXXX						= -999;
 	#endregion
 
@@ -325,6 +342,17 @@ public class Protocol{
 						BOX_OPEN_MODE_CLOTH					= 41,
 						BOX_OPEN_MODE_CASHCOST				= 48,
 						//@@@@ 0034 end
+
+						//@@@@ 0038 start
+						STATE_SUCCESS						= 1,
+						STATE_FAIL							= -1,
+						//@@@@ 0038 end
+
+						//@@@@ 0039 start
+						EVOLVE_STATE_SUCCESS				= 1,
+						EVOLVE_STATE_FAIL_ONLY				= -1,
+						EVOLVE_STATE_FAIL_EXPIRE			= -2,
+						//@@@@ 0039 end
 
 						XXXXXXXXXXXXXXXXXXXXXXXXXX1			= -1;
 

@@ -540,23 +540,26 @@ public class NetworkManager : MonoBehaviour {
 				//Protocol.SELECT_3 		: 좌, 우.
 				//Protocol.SELECT_4 		: 상, 하.
 				//
+				//@@@@ 0042 start
 				//2-2. 배팅선택 종류
 				//
+				//Protocol.SELECT_1							= 1, 	//스트라이크, 볼.
+				//Protocol.SELECT_2							= 2, 	//직구, 변화구.
+				//Protocol.SELECT_3							= 3, 	//좌, 우.
+				//Protocol.SELECT_4							= 4, 	//상, 하.
 				//Protocol.SELECT_1_NON						= -1,	//스트라이크, 볼 : 	선택안함(-1).
-				//Protocol.SELECT_1_STRIKE					= 0,	//  				스트라이크(0).
-				//Protocol.SELECT_1_BALL					= 1,	//     				볼(1).
-				//
+				//Protocol.SELECT_1_STRIKE					= 1,	//  				스트라이크(1).
+				//Protocol.SELECT_1_BALL					= 0,	//     				볼(0).
 				//Protocol.SELECT_2_NON						= -1,	//직구, 변화구 : 	선택안함(-1).
-				//Protocol.SELECT_2_FAST					= 0,	//  				직구(0).
-				//Protocol.SELECT_2_CURVE					= 1,	//     				변화구(1).
-				//
+				//Protocol.SELECT_2_FAST					= 1,	//  				직구(1).
+				//Protocol.SELECT_2_CURVE					= 0,	//     				변화구(0).
 				//Protocol.SELECT_3_NON						= -1,	//좌, 우. 		: 	선택안함(-1).
-				//Protocol.SELECT_3_LEFT					= 0,	//  				좌(0).
-				//Protocol.SELECT_3_RIGHT					= 1,	//     				우(1).
-				//
+				//Protocol.SELECT_3_LEFT					= 1,	//  				좌(1).
+				//Protocol.SELECT_3_RIGHT					= 0,	//     				우(0).
 				//Protocol.SELECT_4_NON						= -1,	//상, 하 		: 	선택안함(-1).
-				//Protocol.SELECT_4_UP						= 0,	//  				상(0).
-				//Protocol.SELECT_4_DOWN					= 1,	//     				하(1).
+				//Protocol.SELECT_4_UP						= 1,	//  				상(1).
+				//Protocol.SELECT_4_DOWN					= 0,	//     				하(0).
+				//@@@@ 0042 end
 				//
 				//
 				//2-3. 배팅수량
@@ -706,23 +709,26 @@ public class NetworkManager : MonoBehaviour {
 				//Protocol.SELECT_3 		: 좌, 우.
 				//Protocol.SELECT_4 		: 상, 하.
 				//
+				//@@@@ 0042 start
 				//2-2. 배팅선택 종류
 				//
+				//Protocol.SELECT_1							= 1, 	//스트라이크, 볼.
+				//Protocol.SELECT_2							= 2, 	//직구, 변화구.
+				//Protocol.SELECT_3							= 3, 	//좌, 우.
+				//Protocol.SELECT_4							= 4, 	//상, 하.
 				//Protocol.SELECT_1_NON						= -1,	//스트라이크, 볼 : 	선택안함(-1).
-				//Protocol.SELECT_1_STRIKE					= 0,	//  				스트라이크(0).
-				//Protocol.SELECT_1_BALL					= 1,	//     				볼(1).
-				//
+				//Protocol.SELECT_1_STRIKE					= 1,	//  				스트라이크(1).
+				//Protocol.SELECT_1_BALL					= 0,	//     				볼(0).
 				//Protocol.SELECT_2_NON						= -1,	//직구, 변화구 : 	선택안함(-1).
-				//Protocol.SELECT_2_FAST					= 0,	//  				직구(0).
-				//Protocol.SELECT_2_CURVE					= 1,	//     				변화구(1).
-				//
+				//Protocol.SELECT_2_FAST					= 1,	//  				직구(1).
+				//Protocol.SELECT_2_CURVE					= 0,	//     				변화구(0).
 				//Protocol.SELECT_3_NON						= -1,	//좌, 우. 		: 	선택안함(-1).
-				//Protocol.SELECT_3_LEFT					= 0,	//  				좌(0).
-				//Protocol.SELECT_3_RIGHT					= 1,	//     				우(1).
-				//
+				//Protocol.SELECT_3_LEFT					= 1,	//  				좌(1).
+				//Protocol.SELECT_3_RIGHT					= 0,	//     				우(0).
 				//Protocol.SELECT_4_NON						= -1,	//상, 하 		: 	선택안함(-1).
-				//Protocol.SELECT_4_UP						= 0,	//  				상(0).
-				//Protocol.SELECT_4_DOWN					= 1,	//     				하(1).
+				//Protocol.SELECT_4_UP						= 1,	//  				상(1).
+				//Protocol.SELECT_4_DOWN					= 0,	//     				하(0).
+				//@@@@ 0042 end
 
 				//3. sending
 				#if NET_DEBUG_MODE
@@ -1738,18 +1744,22 @@ public class NetworkManager : MonoBehaviour {
 					//----------------------------------------------------
 					//나눔로또에서 데이타.ok
 					//----------------------------------------------------
-					//	SELECT_1_NON						= -1,	//스트라이크, 볼 : 	선택안함(-1).
-					//	SELECT_1_STRIKE						= 0,	//  				스트라이크(0).
-					//	SELECT_1_BALL						= 1,	//     				볼(1).
-					//	SELECT_2_NON						= -1,	//직구, 변화구 : 	선택안함(-1).
-					//	SELECT_2_FAST						= 0,	//  				직구(0).
-					//	SELECT_2_CURVE						= 1,	//     				변화구(1).
-					//	SELECT_3_NON						= -1,	//좌, 우. 		: 	선택안함(-1).
-					//	SELECT_3_LEFT						= 0,	//  				좌(0).
-					//	SELECT_3_RIGHT						= 1,	//     				우(1).
-					//	SELECT_4_NON						= -1,	//상, 하 		: 	선택안함(-1).
-					//	SELECT_4_UP							= 0,	//  				상(0).
-					//	SELECT_4_DOWN						= 1,	//     				하(1).
+					//@@@@ 0042 start
+					//2-2. 배팅선택 종류
+					//
+					//Protocol.SELECT_1_NON						= -1,	//스트라이크, 볼 : 	선택안함(-1).
+					//Protocol.SELECT_1_STRIKE					= 1,	//  				스트라이크(1).
+					//Protocol.SELECT_1_BALL					= 0,	//     				볼(0).
+					//Protocol.SELECT_2_NON						= -1,	//직구, 변화구 : 	선택안함(-1).
+					//Protocol.SELECT_2_FAST					= 1,	//  				직구(1).
+					//Protocol.SELECT_2_CURVE					= 0,	//     				변화구(0).
+					//Protocol.SELECT_3_NON						= -1,	//좌, 우. 		: 	선택안함(-1).
+					//Protocol.SELECT_3_LEFT					= 1,	//  				좌(1).
+					//Protocol.SELECT_3_RIGHT					= 0,	//     				우(0).
+					//Protocol.SELECT_4_NON						= -1,	//상, 하 		: 	선택안함(-1).
+					//Protocol.SELECT_4_UP						= 1,	//  				상(1).
+					//Protocol.SELECT_4_DOWN					= 0,	//     				하(0).
+					//@@@@ 0042 end
 					_parser.getInt("ltselect1");
 					_parser.getInt("ltselect2");
 					_parser.getInt("ltselect3");
@@ -1886,18 +1896,21 @@ public class NetworkManager : MonoBehaviour {
 						//----------------------------------------------------
 						// 자신이 선택한 것들
 						//----------------------------------------------------
-						//	SELECT_1_NON						= -1,	//스트라이크, 볼 : 	선택안함(-1).
-						//	SELECT_1_STRIKE						= 0,	//  				스트라이크(0).
-						//	SELECT_1_BALL						= 1,	//     				볼(1).
-						//	SELECT_2_NON						= -1,	//직구, 변화구 : 	선택안함(-1).
-						//	SELECT_2_FAST						= 0,	//  				직구(0).
-						//	SELECT_2_CURVE						= 1,	//     				변화구(1).
-						//	SELECT_3_NON						= -1,	//좌, 우. 		: 	선택안함(-1).
-						//	SELECT_3_LEFT						= 0,	//  				좌(0).
-						//	SELECT_3_RIGHT						= 1,	//     				우(1).
-						//	SELECT_4_NON						= -1,	//상, 하 		: 	선택안함(-1).
-						//	SELECT_4_UP							= 0,	//  				상(0).
-						//	SELECT_4_DOWN						= 1,	//     				하(1).
+						//@@@@ 0042 start
+						//2-2. 배팅선택 종류
+						//Protocol.SELECT_1_NON						= -1,	//스트라이크, 볼 : 	선택안함(-1).
+						//Protocol.SELECT_1_STRIKE					= 1,	//  				스트라이크(1).
+						//Protocol.SELECT_1_BALL					= 0,	//     				볼(0).
+						//Protocol.SELECT_2_NON						= -1,	//직구, 변화구 : 	선택안함(-1).
+						//Protocol.SELECT_2_FAST					= 1,	//  				직구(1).
+						//Protocol.SELECT_2_CURVE					= 0,	//     				변화구(0).
+						//Protocol.SELECT_3_NON						= -1,	//좌, 우. 		: 	선택안함(-1).
+						//Protocol.SELECT_3_LEFT					= 1,	//  				좌(1).
+						//Protocol.SELECT_3_RIGHT					= 0,	//     				우(0).
+						//Protocol.SELECT_4_NON						= -1,	//상, 하 		: 	선택안함(-1).
+						//Protocol.SELECT_4_UP						= 1,	//  				상(1).
+						//Protocol.SELECT_4_DOWN					= 0,	//     				하(0).
+						//@@@@ 0042 end
 						_parser.getInt("select1");
 						_parser.getInt("select2");
 						_parser.getInt("select3");
@@ -2144,18 +2157,25 @@ public class NetworkManager : MonoBehaviour {
 					//----------------------------------------------------
 					//나눔로또에서 데이타.ok
 					//----------------------------------------------------
-					//	SELECT_1_NON						= -1,	//스트라이크, 볼 : 	선택안함(-1).
-					//	SELECT_1_STRIKE						= 0,	//  				스트라이크(0).
-					//	SELECT_1_BALL						= 1,	//     				볼(1).
-					//	SELECT_2_NON						= -1,	//직구, 변화구 : 	선택안함(-1).
-					//	SELECT_2_FAST						= 0,	//  				직구(0).
-					//	SELECT_2_CURVE						= 1,	//     				변화구(1).
-					//	SELECT_3_NON						= -1,	//좌, 우. 		: 	선택안함(-1).
-					//	SELECT_3_LEFT						= 0,	//  				좌(0).
-					//	SELECT_3_RIGHT						= 1,	//     				우(1).
-					//	SELECT_4_NON						= -1,	//상, 하 		: 	선택안함(-1).
-					//	SELECT_4_UP							= 0,	//  				상(0).
-					//	SELECT_4_DOWN						= 1,	//     				하(1).
+					//@@@@ 0042 start
+					//2-2. 배팅선택 종류
+					//Protocol.SELECT_1							= 1, 	//스트라이크, 볼.
+					//Protocol.SELECT_2							= 2, 	//직구, 변화구.
+					//Protocol.SELECT_3							= 3, 	//좌, 우.
+					//Protocol.SELECT_4							= 4, 	//상, 하.
+					//Protocol.SELECT_1_NON						= -1,	//스트라이크, 볼 : 	선택안함(-1).
+					//Protocol.SELECT_1_STRIKE					= 1,	//  				스트라이크(1).
+					//Protocol.SELECT_1_BALL					= 0,	//     				볼(0).
+					//Protocol.SELECT_2_NON						= -1,	//직구, 변화구 : 	선택안함(-1).
+					//Protocol.SELECT_2_FAST					= 1,	//  				직구(1).
+					//Protocol.SELECT_2_CURVE					= 0,	//     				변화구(0).
+					//Protocol.SELECT_3_NON						= -1,	//좌, 우. 		: 	선택안함(-1).
+					//Protocol.SELECT_3_LEFT					= 1,	//  				좌(1).
+					//Protocol.SELECT_3_RIGHT					= 0,	//     				우(0).
+					//Protocol.SELECT_4_NON						= -1,	//상, 하 		: 	선택안함(-1).
+					//Protocol.SELECT_4_UP						= 1,	//  				상(1).
+					//Protocol.SELECT_4_DOWN					= 0,	//     				하(0).
+					//@@@@ 0042 end
 					_parser.getInt("ltselect1");
 					_parser.getInt("ltselect2");
 					_parser.getInt("ltselect3");

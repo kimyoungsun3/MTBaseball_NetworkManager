@@ -297,24 +297,26 @@ public class Protocol{
 						GAME_MODE_PRACTICE					= 0,	//연습모드.
 						GAME_MODE_SINGLE					= 1, 	//싱글모드.
 						GAME_MODE_MULTI						= 2,	//멀티모드.
-
+						
+						//@@@@ 0042 start
 						//선택한 것들...
 						SELECT_1							= 1, 	//스트라이크, 볼.
 						SELECT_2							= 2, 	//직구, 변화구.
 						SELECT_3							= 3, 	//좌, 우.
 						SELECT_4							= 4, 	//상, 하.
 						SELECT_1_NON						= -1,	//스트라이크, 볼 : 	선택안함(-1).
-						SELECT_1_STRIKE						= 0,	//  				스트라이크(0).
-						SELECT_1_BALL						= 1,	//     				볼(1).
+						SELECT_1_STRIKE						= 1,	//  				스트라이크(1).
+						SELECT_1_BALL						= 0,	//     				볼(0).
 						SELECT_2_NON						= -1,	//직구, 변화구 : 	선택안함(-1).
-						SELECT_2_FAST						= 0,	//  				직구(0).
-						SELECT_2_CURVE						= 1,	//     				변화구(1).
+						SELECT_2_FAST						= 1,	//  				직구(1).
+						SELECT_2_CURVE						= 0,	//     				변화구(0).
 						SELECT_3_NON						= -1,	//좌, 우. 		: 	선택안함(-1).
-						SELECT_3_LEFT						= 0,	//  				좌(0).
-						SELECT_3_RIGHT						= 1,	//     				우(1).
+						SELECT_3_LEFT						= 1,	//  				좌(1).
+						SELECT_3_RIGHT						= 0,	//     				우(0).
 						SELECT_4_NON						= -1,	//상, 하 		: 	선택안함(-1).
-						SELECT_4_UP							= 0,	//  				상(0).
-						SELECT_4_DOWN						= 1,	//     				하(1).
+						SELECT_4_UP							= 1,	//  				상(1).
+						SELECT_4_DOWN						= 0,	//     				하(0).
+						//@@@@ 0042 end
 
 						//@@@@ 0021 start 
 						//배팅결과.

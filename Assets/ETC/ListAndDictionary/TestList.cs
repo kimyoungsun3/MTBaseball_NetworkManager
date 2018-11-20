@@ -13,16 +13,13 @@ namespace ListTest{
 		void Start(){
 
 			ItemOwner _itemowner;
-			for(int i = 0; i < 5; i++){
-				
+			for(int i = 0; i < 5; i++){				
 				_itemowner = new ItemOwner(i, i* 100, i+"A");
 				listItemOwner.Add (_itemowner);
-			//	Debug.Log (i);
 			}
 
 			GiftItem _giftitem;
 			for (int i = 0; i < 5; i++) {
-
 				_giftitem = new GiftItem (i, i * 100, i+1, i + "A");
 				listGiftItem.Add (_giftitem);
 				Debug.Log (i);

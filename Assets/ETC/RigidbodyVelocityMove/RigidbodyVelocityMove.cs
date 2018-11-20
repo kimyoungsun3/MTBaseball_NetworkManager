@@ -10,9 +10,7 @@ namespace RigidbodyVelocityMove{
 		public float speed = 2f;
 		// Use this for initialization
 		void Start () {
-			rb = GetComponent < Rigidbody> ();
-
-			
+			rb = GetComponent < Rigidbody> ();		
 		}
 		
 		// Update is called once per frame
@@ -23,8 +21,6 @@ namespace RigidbodyVelocityMove{
 			Vector3 velocity = new Vector3 (h, 0, v);
 			velocity = velocity.normalized;
 			rb.velocity = velocity * speed;
-
-
 		}
 	}
 }
